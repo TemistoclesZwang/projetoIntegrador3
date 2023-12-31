@@ -1,8 +1,8 @@
-// import React from "react";
-// import { Routes, Route, Navigate } from "react-router-dom";
-// // import { NotFound } from "../pages/NotFound";
-// // import { useAuth } from "../context/AuthContext";
-// import { LoginPage } from "../assets/pages/LoginPage";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+// import { NotFound } from "../pages/NotFound";
+// import { useAuth } from "../context/AuthContext";
+import { HomePage } from "../pages/HomePage";
 
 // interface ProtectedRouteProps {
 //   element: React.ReactNode;
@@ -18,15 +18,15 @@
 //   return <Navigate to="/LoginPage" />;
 // }
 
-// export const MyRouter = (
-//     <Routes>
-//       <Route path="/" element={<LoginPage />} />
-//       <Route path="/register/*" element={<RegistrationPage />} />
-//       <Route path="/pedidos/:parametro" element={<Pedidos />} />
-//       <Route path="/pagamento/*" element={<Pay />} />
-//       <Route path="/about/*" element={<ProtectedRoute element={<About />} />} />
-//       <Route path="*" element={<NotFound />} />
-//       <Route path="/cardapio/*" element={<ProtectedRoute element={<Menu />} />}
-//       />
-//     </Routes>
-// );
+export const MyRouter = (
+    <Routes>
+      {/* <Route path="/" element={<LoginPage />} /> */}
+      {/* <Route path="/register/*" element={<RegistrationPage />} /> */}
+      {/* <Route path="/pedidos/:parametro" element={<Pedidos />} /> */}
+      <Route path="/home/*" element={<HomePage />} />
+      {/* <Route path="/about/*" element={<ProtectedRoute element={<About />} />} /> */}
+      {/* <Route path="*" element={<NotFound />} /> */}
+      {/* <Route path="/cardapio/*" element={<ProtectedRoute element={<Menu />} />} */}
+      {/* /> */}
+    </Routes>
+);

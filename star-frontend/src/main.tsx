@@ -13,24 +13,20 @@ const theme = extendTheme({
     heading: "Times New Roman, serif",
   },
   textStyles: {
-    responsiveText: {
-      base: {
-        fontSize: { base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '28px' }, // Tamanho base do texto
-      },
-      sm: {
-        fontSize: { base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '28px' }, // Tamanho para resoluções pequenas
-      },
-      md: {
-        fontSize: { base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '28px' }, // Tamanho para resoluções médias
-      }
-    }
+    linkSize: {
+      base: "15px",
+      sm: "18px",
+      md: "21px",
+      lg: "25px",
+      xl: "30px",
+    },
   },
   colors: {
     brand: {
       900: 'black',
     },
     highlights: {
-      50: '#98FB98',
+      50: '#CDFF16',
       80: '#4848d9',
       100: '#191970',
       // Add more shades as needed

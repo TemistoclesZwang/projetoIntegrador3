@@ -1,4 +1,8 @@
 import { FaBars } from "react-icons/fa";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
+import { useTheme } from "@chakra-ui/react";
+
 import {
   Text,
   Box,
@@ -12,6 +16,7 @@ import {
 
 // Componente da Navbar
 export function NavBar() {
+  const theme = useTheme(); 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -27,7 +32,7 @@ export function NavBar() {
       <Link href="/login">Logo</Link>
       <Spacer />
       <Box
-        display={{ base: 'block', md: 'none' }}
+        display={{ base: "block", md: "none" }}
         className="hamburger"
         onClick={isOpen ? onClose : onOpen}
       >
@@ -36,37 +41,49 @@ export function NavBar() {
           color={"highlights.50"}
           icon={<FaBars />}
           bg="transparewhitent"
-          _hover={{ bg: 'transparent' }}
+          _hover={{ bg: "transparent" }}
         />
       </Box>
 
       <Box
-        display={{ base: isOpen ? 'block' : 'none', md: 'flex' }}
+        display={{ base: isOpen ? "block" : "none", md: "flex" }}
         alignItems="flex-end"
-        flexBasis={{ base: '100%', md: 'auto' }}
+        flexBasis={{ base: "100%", md: "auto" }}
       >
-
         <VStack
           spacing={4}
           alignItems="flex-end"
-          textAlign={{ base: 'center', md: 'right' }}
-          flexDirection={{ base: 'column', md: 'row' }}
+          textAlign={{ base: "center", md: "right" }}
+          flexDirection={{ base: "column", md: "row" }}
           color={"highlights.50"}
-
-          mt={{ base: 4, md: 0 }}          
+          mt={{ base: 4, md: 0 }}
         >
           {/* Adicione aqui os itens do menu */}
-          <Text fontSize={{ base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '30px' }}>Página 1</Text>
-          <Text fontSize={{ base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '30px' }}>Página 2</Text>
-          <Text fontSize={{ base: '16px', sm: '18px', md: '20px', lg: '24px', xl: '30px' }}>Página 3</Text>
+          <ChakraLink as={ReactRouterLink} to="/home">
+          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+            Página 1
+          </Text>
+          </ChakraLink>
+          <ChakraLink as={ReactRouterLink} to="/home">
+          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+            Página 2
+          </Text>
+          </ChakraLink>
+          <ChakraLink as={ReactRouterLink} to="/home">
+          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+            Página 3
+          </Text>
+          </ChakraLink>
+          <ChakraLink as={ReactRouterLink} to="/home">
+          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+            Página 4
+          </Text>
+          </ChakraLink>
         </VStack>
       </Box>
-    {/* conteudo abaixo da navbar */}
-    <Box className="content"
-        bg="white"
-        position="relative"
-        >
-    </Box>
+      {/* conteudo abaixo da navbar */}
+      <Box className="content" bg="white" position="relative"></Box>
     </Flex>
   );
+
 }

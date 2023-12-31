@@ -2,13 +2,22 @@ import './App.css'
 import {LoginPage} from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
 import YourComponent from './hooks/api/useGet'
+import { BrowserRouter } from "react-router-dom";
+import { MyRouter } from "./routes";
+
+
 
 function App() {
   return (
     <>
+      <BrowserRouter>
+
     {/* <LoginPage></LoginPage> */}
-    <HomePage></HomePage>
+    {/* <HomePage></HomePage> */}
     <YourComponent></YourComponent>
+    {MyRouter}
+    </BrowserRouter>
+
     </>
   )
 }
