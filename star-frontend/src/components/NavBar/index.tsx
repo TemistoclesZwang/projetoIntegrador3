@@ -2,6 +2,7 @@ import { FaBars } from "react-icons/fa";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
+import { IoSparklesSharp } from "react-icons/io5";
 
 import {
   Text,
@@ -16,7 +17,7 @@ import {
 
 // Componente da Navbar
 export function NavBar() {
-  const theme = useTheme(); 
+  const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -29,7 +30,23 @@ export function NavBar() {
       bg="gray.900"
       color="white"
     >
-      <Link href="/login">Logo</Link>
+      <Flex>
+        <Link
+          href="/home"
+          display="flex"
+          alignItems="center"
+          _hover={{ textDecoration: "none" }}
+        >
+          <IoSparklesSharp color={"#98FB98"} fontSize={40} />
+          <Text
+            textStyle={"linkSize"}
+            fontSize={theme.textStyles.linkSize}
+            ml={2}
+          >
+            Star
+          </Text>
+        </Link>
+      </Flex>
       <Spacer />
       <Box
         display={{ base: "block", md: "none" }}
@@ -55,29 +72,29 @@ export function NavBar() {
           alignItems="flex-end"
           textAlign={{ base: "center", md: "right" }}
           flexDirection={{ base: "column", md: "row" }}
-          color={"highlights.50"}
+          color={"white"}
           mt={{ base: 4, md: 0 }}
         >
           {/* Adicione aqui os itens do menu */}
-          <ChakraLink as={ReactRouterLink} to="/home">
-          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-            Página 1
-          </Text>
+          <ChakraLink as={ReactRouterLink} to="/login">
+            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+              Entrar
+            </Text>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/home">
-          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-            Página 2
-          </Text>
+            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+              Página 2
+            </Text>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/home">
-          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-            Página 3
-          </Text>
+            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+              Página 3
+            </Text>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/home">
-          <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-            Página 4
-          </Text>
+            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
+              Página 4
+            </Text>
           </ChakraLink>
         </VStack>
       </Box>
@@ -85,5 +102,4 @@ export function NavBar() {
       <Box className="content" bg="white" position="relative"></Box>
     </Flex>
   );
-
 }

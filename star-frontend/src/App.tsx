@@ -4,6 +4,7 @@ import { HomePage } from './pages/HomePage'
 import YourComponent from './hooks/api/useGet'
 import { BrowserRouter } from "react-router-dom";
 import { MyRouter } from "./routes";
+import { GMaps } from './components/GoogleMapsApi'; 
 
 
 

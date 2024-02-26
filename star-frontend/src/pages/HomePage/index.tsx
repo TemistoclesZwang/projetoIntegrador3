@@ -1,78 +1,76 @@
-import { IoSparklesSharp } from "react-icons/io5";
+import React from "react";
 import {
   Card,
   Image,
   Box,
   Flex,
   Text,
-  CardHeader,
-  Heading,
-  CardBody,
+  useTheme,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { NavBar } from "../../components/NavBar";
 import parking from "../../assets/HomePage/parking.jpg";
-import { SimpleCard } from "../../components/NavBar/SimpleCard";
+import { GoogleMapsCard } from "../../components/GoogleMapsCard";
+import { SimpleCard } from "../../components/SimpleCard";
 
-const fontSizeResponsive = {
-  base: "18px",
-  sm: "37px",
-  md: "50px",
-  lg: "75px",
-  xl: "100px",
-};
+export function HomePage() {
+  const theme = useTheme();
 
-export function ExampleCard() {
   const handleButtonClick = () => {
-    // Implement the button click functionality here
     console.log("Button clicked!");
   };
 
   return (
-    <Box
-      display="flex"
-      // justifyContent="center"
-      // alignItems="center"
-      // h="100vh"
-      position="absolute"
-      backgroundColor={"white"}
-    >
-      <SimpleCard
-        showImage={false} // Altere para false para desativar a imagem
-        imageSrc="https://via.placeholder.com/300"
-        title="Example Card"
-        buttonText="Click me"
-        onButtonClick={handleButtonClick}
-      />
-    </Box>
-  );
-}
-export function HomePage() {
-  return (
     <>
-      <NavBar></NavBar>
-
-      <Card className="mainCard" position="relative">
-        <CardBody position="relative" zIndex={0} overflow="hidden">
-          <Flex>
-            <Box position="relative" width="100%" mt={10}>
-              <ExampleCard />
-              <Image src={parking} alt="Parking" borderRadius={"xl"} />
-              <IoSparklesSharp color={"#98FB98"} fontSize={40} />
+      <NavBar />
+      <Flex justify="center" mt={10}>
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} width="100%">
+          <Card className="mainCard" m={5}>
+            <Box position="relative" mt={10} m={2}>
+              <Image
+                src={parking}
+                alt="Parking"
+                borderRadius={"xl"}
+                w={"100%"}
+                h={"80%"}
+              />
               <Text
-                fontSize={fontSizeResponsive}
+                textStyle={"titleSize"}
+                fontSize={theme.textStyles?.titleSize}
                 position="absolute"
                 top="-1%"
                 left="50%"
                 transform="translate(-50%, -50%)"
                 color="black"
-                w={"90%"}
+                w={"100%"}
               >
-                Gerencie, estacione, avance
+                Gerencie, lucre, avance
               </Text>
+              <Box
+              position="absolute"
+              top="20%"
+              // left="50%"
+              // transform="translate(-50%, -50%)"
+              // backgroundColor={"white"}
+              // border
+            >
+              <SimpleCard
+                showImage={true} // Altere para false para desativar a imagem
+                imageSrc="https://via.placeholder.com/300"
+                title="Descubra o que podemos fazer juntos"
+                buttonText="Click me"
+                onButtonClick={handleButtonClick}
+              />
             </Box>
-          </Flex>
-        </CardBody>
-      </Card>
+            </Box>
+          </Card>
+          <Card>
+            <Flex>
+              <GoogleMapsCard />
+            </Flex>
+          </Card>
+        </SimpleGrid>
+      </Flex>
     </>
   );
 }

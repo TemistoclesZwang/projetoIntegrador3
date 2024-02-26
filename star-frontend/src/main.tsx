@@ -20,13 +20,20 @@ const theme = extendTheme({
       lg: "25px",
       xl: "30px",
     },
+    titleSize: {
+      base: "28px",
+      sm: "40px",
+      md: "45px",
+      // lg: "55px",
+      xl: "56px",
+    },
   },
   colors: {
     brand: {
       900: 'black',
     },
     highlights: {
-      50: '#CDFF16',
+      50: '#98FB98',
       80: '#4848d9',
       100: '#191970',
       // Add more shades as needed
