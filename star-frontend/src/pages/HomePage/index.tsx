@@ -22,9 +22,9 @@ export function HomePage() {
 
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
       <Flex justify="center" mt={10}>
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} width="100%">
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={1} width="100%">
           <Card className="mainCard" m={5}>
             <Box position="relative" mt={10} m={2}>
               <Image
@@ -64,7 +64,7 @@ export function HomePage() {
             </Box>
             </Box>
           </Card>
-          <Card>
+          <Card m={5} mb={5}>
             <Flex>
               <GoogleMapsCard />
             </Flex>

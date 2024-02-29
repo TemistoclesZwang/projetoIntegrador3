@@ -33,7 +33,7 @@ const theme = extendTheme({
       900: 'black',
     },
     highlights: {
-      50: '#98FB98',
+      50: '#98FB98', 
       80: '#4848d9',
       100: '#191970',
       // Add more shades as needed

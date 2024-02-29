@@ -21,17 +21,19 @@ export function GoogleMapsCard() {
     console.log("Button clicked!");
   };
   return (
-    <Card m={15}>
+    <Card>
         
-    <CardHeader m={15}>
+    <CardHeader>
     <Text
     textStyle={"titleSize"} // Estilo de texto personalizado
     fontSize={theme.textStyles?.titleSize}
+    m={-14}
+    ml={1}
     >
     Os melhores preços
     </Text>
     </CardHeader>
-    <Flex w={"200"} align={"center"} m={15}>
+    <Flex w={"200"} align={"center"} m={5}>
       <GMaps ></GMaps>
       <Box
         display="flex"
