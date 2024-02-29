@@ -1,6 +1,6 @@
 import { FaBars } from "react-icons/fa";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { Link as ChakraLink, LinkProps } from "@chakra-ui/react";
+import { Avatar, Button, Link as ChakraLink, LinkProps, WrapItem } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
 import { IoSparklesSharp } from "react-icons/io5";
 
@@ -20,6 +20,12 @@ export function NavBar() {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const handleClick = () => {
+    console.log('Avatar clicked');
+    // Implemente a lógica do clique aqui
+  };
+  
+
   return (
     <Flex
       as="nav"
@@ -29,6 +35,13 @@ export function NavBar() {
       padding="1.5rem"
       bg="gray.900"
       color="white"
+      position="fixed" // Fixa a navbar no topo
+      top={0} // Define o topo da navbar
+      left={0} // Alinha a navbar à esquerda
+      right={0} // Alinha a navbar à direita
+      width="100%" // Garante que a navbar ocupe a largura total
+      zIndex={1} // Garante que a navbar fique acima dos outros elementos
+      mb={20}
     >
       <Flex>
         <Link
@@ -96,6 +109,11 @@ export function NavBar() {
               Página 4
             </Text>
           </ChakraLink>
+          <WrapItem>
+            <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+            <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov"/>
+            </div>
+          </WrapItem>
         </VStack>
       </Box>
       {/* conteudo abaixo da navbar */}
