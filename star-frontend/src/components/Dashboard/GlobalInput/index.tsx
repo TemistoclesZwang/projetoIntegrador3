@@ -1,8 +1,14 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, InfoIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
+  IconButton,
   Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Stack,
   Switch,
@@ -14,35 +20,29 @@ export function GlobalInput() {
   const theme = useTheme();
 
   return (
-    <Stack
-      spacing={3}
-      direction={"row"}
-      maxW={"600"}
-      // mb={5}
-      mt={5}
-      p={5}
-      backgroundColor={"gray.100"}
-      borderRadius={"md"}
+    <Flex justifyContent={'space-between'}>
+      <Flex
+        gap={5}
+        direction={"row"}
+        maxW={"570"}
+        // mb={5}
+        mt={5}
+        p={5}
+        backgroundColor={"gray.100"}
+        borderRadius={"lg"}
+      >
 
-    >
-      <Text fontSize="lg">Duração mínima</Text>
-      <Select
-        bg="teal.50"
-        // color="white"
-        placeholder="Basic usage"
-      />
-      <Flex>
-        <Switch colorScheme="teal" size="lg" />
+        <Text fontSize="lg">Quantidade de vagas por seção</Text>
+        <NumberInput defaultValue={1} min={1} size="lg" maxW={20}>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
       </Flex>
-      <Text fontSize="lg">Quantidade de vagas</Text>
-      <Select
-        bg="teal.50"
-        // color="white"
-        placeholder="Basic usage"
-      />
-      <Flex>
-        <Switch colorScheme="teal" size="lg" />
-      </Flex>
-    </Stack>
+
+      
+    </Flex>
   );
 }

@@ -23,7 +23,7 @@ export function HomePage() {
   return (
     <>
       {/* <NavBar /> */}
-      <Flex justify="center" mt={10}>
+      <Flex justify="center" mt={40}>
         <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={1} width="100%">
           <Card className="mainCard" m={5}>
             <Box position="relative" mt={10} m={2}>

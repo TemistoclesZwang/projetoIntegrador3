@@ -15,9 +15,10 @@ import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 
 type ParkingRecord = {
+  Status: string;
   Placa: string;
   Nome: string;
-  Status: string;
+  Pagamento: string;
   Duração: string;
   Entrada: string;
   Saída: string;
@@ -35,10 +36,14 @@ const extractTitlesFromRecord = (record: ParkingRecord): string[] => {
 
 export function TableValues({ records }: TableValuesProps) {
   const [sortedRecords, setSortedRecords] = useState(records);
+  const [sortOrderValor, setSortOrderValor] = useState<"asc" | "desc" | "">("");
   const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
-  const [sortOrderStatus, setSortOrderStatus] = useState<"asc" | "desc" | "">(
+  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
   );
+  const [sortOrderPagamento, setSortOrderPagamento] = useState<
+    "asc" | "desc" | ""
+  >("");
   const thTitles =
     records.length > 0 ? extractTitlesFromRecord(records[0]) : [];
   const [sortOrderDuration, setSortOrderDuration] = useState<
@@ -89,17 +94,72 @@ export function TableValues({ records }: TableValuesProps) {
     }
   };
 
-  const sortByStatus = () => {
-    if (sortOrderStatus === "asc" || sortOrderStatus === "") {
+  const sortByPagamento = () => {
+    if (sortOrderPagamento === "asc" || sortOrderPagamento === "") {
       setSortedRecords(
-        [...sortedRecords].sort((a, b) => a.Status.localeCompare(b.Status))
+        [...sortedRecords].sort((a, b) =>
+          a.Pagamento.localeCompare(b.Pagamento)
+        )
       );
-      setSortOrderStatus("desc");
+      setSortOrderPagamento("desc");
     } else {
       setSortedRecords(
-        [...sortedRecords].sort((a, b) => b.Status.localeCompare(a.Status))
+        [...sortedRecords].sort((a, b) =>
+          b.Pagamento.localeCompare(a.Pagamento)
+        )
       );
-      setSortOrderStatus("asc");
+      setSortOrderPagamento("asc");
+    }
+  };
+  
+  const sortByEntrada = () => {
+    const convertDateFromString = (dateStr: string) => {
+      const [day, month, year] = dateStr.split("/").map(Number);
+      return new Date(year, month - 1, day);
+    };
+
+    if (sortOrderEntrada === "asc" || sortOrderEntrada === "") {
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            convertDateFromString(a.Entrada).getTime() -
+            convertDateFromString(b.Entrada).getTime()
+        )
+      );
+      setSortOrderEntrada("desc");
+    } else {
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            convertDateFromString(b.Entrada).getTime() -
+            convertDateFromString(a.Entrada).getTime()
+        )
+      );
+      setSortOrderEntrada("asc");
+    }
+  };
+
+  const convertMoneyToNumber = (money: string) => {
+    return parseFloat(money.replace(",", "."));
+  };
+
+  const sortByValor = () => {
+    if (sortOrderValor === "asc" || sortOrderValor === "") {
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            convertMoneyToNumber(a.Valor) - convertMoneyToNumber(b.Valor)
+        )
+      );
+      setSortOrderValor("desc");
+    } else {
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            convertMoneyToNumber(b.Valor) - convertMoneyToNumber(a.Valor)
+        )
+      );
+      setSortOrderValor("asc");
     }
   };
 
@@ -113,6 +173,7 @@ export function TableValues({ records }: TableValuesProps) {
             colorScheme="teal"
             variant="solid"
             size="xs"
+            fontSize={"8"}
             ml={2}
             icon={
               sortOrderName === "asc" ? (
@@ -124,21 +185,22 @@ export function TableValues({ records }: TableValuesProps) {
             aria-label={"Ordenar por nome"}
           />
         )}
-        {title === "Status" && (
+        {title === "Pagamento" && (
           <IconButton
-            onClick={sortByStatus}
+            onClick={sortByPagamento}
             colorScheme="teal"
             variant="solid"
             size="xs"
+            fontSize={"8"}
             ml={2}
             icon={
-              sortOrderStatus === "asc" ? (
+              sortOrderPagamento === "asc" ? (
                 <TriangleUpIcon />
               ) : (
                 <TriangleDownIcon />
               )
             }
-            aria-label={"Ordenar por status"}
+            aria-label={"Ordenar por Pagamento"}
           />
         )}
         {title === "Duração" && (
@@ -147,6 +209,7 @@ export function TableValues({ records }: TableValuesProps) {
             colorScheme="teal"
             variant="solid"
             size="xs"
+            fontSize={"8"}
             ml={2}
             icon={
               sortOrderDuration === "asc" ? (
@@ -156,6 +219,42 @@ export function TableValues({ records }: TableValuesProps) {
               )
             }
             aria-label={"Ordenar por duração"}
+          />
+        )}
+        {title === "Entrada" && (
+          <IconButton
+            onClick={sortByEntrada}
+            colorScheme="teal"
+            variant="solid"
+            size="xs"
+            fontSize={"8"}
+            ml={2}
+            icon={
+              sortOrderEntrada === "asc" ? (
+                <TriangleUpIcon />
+              ) : (
+                <TriangleDownIcon />
+              )
+            }
+            aria-label={"Ordenar por entrada"}
+          />
+        )}
+        {title === "Valor" && (
+          <IconButton
+            onClick={sortByValor}
+            aria-label="Ordenar por valor"
+            icon={
+              sortOrderValor === "asc" ? (
+                <TriangleUpIcon />
+              ) : (
+                <TriangleDownIcon />
+              )
+            }
+            ml={2}
+            colorScheme="teal"
+            variant="solid"
+            size="xs"
+            fontSize="8"
           />
         )}
       </Th>
