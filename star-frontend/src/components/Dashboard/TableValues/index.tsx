@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   Thead,
@@ -13,105 +13,110 @@ import {
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
+import { useGet } from "../../../hooks/api/useGet";
+import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 
-type ParkingRecord = {
-  Status: string;
-  Placa: string;
-  Nome: string;
-  Pagamento: string;
-  Duração: string;
-  Entrada: string;
-  Saída: string;
-  Valor: string;
-  Vaga: string;
-};
+interface Vaga { //retirar essa interface daqui é usada em mais de um lugar
+  vagaId: number;
+  status: string;
+  placa: string;
+  nome: string;
+  pagamento: string;
+  duracao: number;
+  entrada: string;
+  saida: string;
+  valor: string;
+  vaga: string;
+}
 
-type TableValuesProps = {
-  records: ParkingRecord[];
-};
-
-const extractTitlesFromRecord = (record: ParkingRecord): string[] => {
+const extractTitlesFromRecord = (record: Vaga): string[] => {
   return Object.keys(record) as string[];
 };
 
-export function TableValues({ records }: TableValuesProps) {
-  const [sortedRecords, setSortedRecords] = useState(records);
+export function TableValues() {
+  const {
+    data: records,
+    error,
+    isLoading,
+  } = useGet<Vaga[]>({
+    url: "http://localhost:3000/vagas",
+  });
+
+  useEffect(() => {
+    if (records) {
+      setSortedRecords(records);
+    }
+  }, [records]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (!records || records.length === 0) {
+    return <div>No data available</div>;
+  }
+
+  const thTitles = extractTitlesFromRecord(records[0]);
+
+  // Inicialize todos os estados antes de qualquer lógica condicional
+  const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const [sortOrderValor, setSortOrderValor] = useState<"asc" | "desc" | "">("");
-  const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
+  // const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
+  const { sortedByName, sortOrderName } = useSortByName<Vaga>();
+  const [sortOrderDuration, setSortOrderDuration] = useState<
+    "asc" | "desc" | ""
+  >("");
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
   );
   const [sortOrderPagamento, setSortOrderPagamento] = useState<
     "asc" | "desc" | ""
   >("");
-  const thTitles =
-    records.length > 0 ? extractTitlesFromRecord(records[0]) : [];
-  const [sortOrderDuration, setSortOrderDuration] = useState<
-    "asc" | "desc" | ""
-  >("");
+  //. todos os estados tem que ser inicializados antes de qualquer lógica de uso
 
-  const convertDurationToMinutes = (duration: string) => {
-    const hoursMatch = duration.match(/(\d+)h/);
-    const minutesMatch = duration.match(/(\d+)min/);
-    const hours = hoursMatch ? parseInt(hoursMatch[1]) * 60 : 0;
-    const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
-    return hours + minutes;
-  };
+
 
   const sortByDuration = () => {
     if (sortOrderDuration === "asc" || sortOrderDuration === "") {
       setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            convertDurationToMinutes(a.Duração) -
-            convertDurationToMinutes(b.Duração)
-        )
+        [...sortedRecords].sort((a, b) => a.duracao - b.duracao)
       );
       setSortOrderDuration("desc");
     } else {
       setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            convertDurationToMinutes(b.Duração) -
-            convertDurationToMinutes(a.Duração)
-        )
+        [...sortedRecords].sort((a, b) => b.duracao - a.duracao)
       );
       setSortOrderDuration("asc");
     }
   };
 
-  const sortByName = () => {
-    if (sortOrderName === "asc" || sortOrderName === "") {
-      setSortedRecords(
-        [...sortedRecords].sort((a, b) => a.Nome.localeCompare(b.Nome))
-      );
-      setSortOrderName("desc");
-    } else {
-      setSortedRecords(
-        [...sortedRecords].sort((a, b) => b.Nome.localeCompare(a.Nome))
-      );
-      setSortOrderName("asc");
-    }
+  const handleSortByName = () => {
+    const newSortedRecords = sortedByName(sortedRecords);
+    setSortedRecords(newSortedRecords);
   };
 
   const sortByPagamento = () => {
     if (sortOrderPagamento === "asc" || sortOrderPagamento === "") {
       setSortedRecords(
         [...sortedRecords].sort((a, b) =>
-          a.Pagamento.localeCompare(b.Pagamento)
+          a.pagamento.localeCompare(b.pagamento)
         )
       );
       setSortOrderPagamento("desc");
     } else {
       setSortedRecords(
         [...sortedRecords].sort((a, b) =>
-          b.Pagamento.localeCompare(a.Pagamento)
+          b.pagamento.localeCompare(a.pagamento)
         )
       );
       setSortOrderPagamento("asc");
     }
   };
-  
+
   const sortByEntrada = () => {
     const convertDateFromString = (dateStr: string) => {
       const [day, month, year] = dateStr.split("/").map(Number);
@@ -122,8 +127,8 @@ export function TableValues({ records }: TableValuesProps) {
       setSortedRecords(
         [...sortedRecords].sort(
           (a, b) =>
-            convertDateFromString(a.Entrada).getTime() -
-            convertDateFromString(b.Entrada).getTime()
+            convertDateFromString(a.entrada).getTime() -
+            convertDateFromString(b.entrada).getTime()
         )
       );
       setSortOrderEntrada("desc");
@@ -131,8 +136,8 @@ export function TableValues({ records }: TableValuesProps) {
       setSortedRecords(
         [...sortedRecords].sort(
           (a, b) =>
-            convertDateFromString(b.Entrada).getTime() -
-            convertDateFromString(a.Entrada).getTime()
+            convertDateFromString(b.entrada).getTime() -
+            convertDateFromString(a.entrada).getTime()
         )
       );
       setSortOrderEntrada("asc");
@@ -148,7 +153,7 @@ export function TableValues({ records }: TableValuesProps) {
       setSortedRecords(
         [...sortedRecords].sort(
           (a, b) =>
-            convertMoneyToNumber(a.Valor) - convertMoneyToNumber(b.Valor)
+            convertMoneyToNumber(a.valor) - convertMoneyToNumber(b.valor)
         )
       );
       setSortOrderValor("desc");
@@ -156,20 +161,20 @@ export function TableValues({ records }: TableValuesProps) {
       setSortedRecords(
         [...sortedRecords].sort(
           (a, b) =>
-            convertMoneyToNumber(b.Valor) - convertMoneyToNumber(a.Valor)
+            convertMoneyToNumber(b.valor) - convertMoneyToNumber(a.valor)
         )
       );
       setSortOrderValor("asc");
     }
   };
 
-  const generateTableHeaders = (titles: string[]) => {
+  const generateTableHeaders = (titles: string[]) => { // muito código repetido refazer lógica
     return titles.map((title, index) => (
       <Th key={index}>
         {title}
-        {title === "Nome" && (
+        {title === "nome" && (
           <IconButton
-            onClick={sortByName}
+            onClick={handleSortByName}
             colorScheme="teal"
             variant="solid"
             size="xs"
@@ -182,10 +187,11 @@ export function TableValues({ records }: TableValuesProps) {
                 <TriangleDownIcon />
               )
             }
-            aria-label={"Ordenar por nome"}
+            aria-label="Ordenar por nome"
+            // Adicione quaisquer outras props necessárias para estilização aqui
           />
         )}
-        {title === "Pagamento" && (
+        {title === "pagamento" && (
           <IconButton
             onClick={sortByPagamento}
             colorScheme="teal"
@@ -203,7 +209,7 @@ export function TableValues({ records }: TableValuesProps) {
             aria-label={"Ordenar por Pagamento"}
           />
         )}
-        {title === "Duração" && (
+        {title === "duração" && (
           <IconButton
             onClick={sortByDuration}
             colorScheme="teal"
@@ -221,7 +227,7 @@ export function TableValues({ records }: TableValuesProps) {
             aria-label={"Ordenar por duração"}
           />
         )}
-        {title === "Entrada" && (
+        {title === "entrada" && (
           <IconButton
             onClick={sortByEntrada}
             colorScheme="teal"
@@ -239,7 +245,7 @@ export function TableValues({ records }: TableValuesProps) {
             aria-label={"Ordenar por entrada"}
           />
         )}
-        {title === "Valor" && (
+        {title === "valor" && (
           <IconButton
             onClick={sortByValor}
             aria-label="Ordenar por valor"
@@ -263,7 +269,7 @@ export function TableValues({ records }: TableValuesProps) {
 
   return (
     <TableContainer>
-      <Table variant="striped" colorScheme="teal">
+      <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
           <Tr>{generateTableHeaders(thTitles)}</Tr>
