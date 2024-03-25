@@ -15,11 +15,12 @@ import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 import { useGet } from "../../../hooks/api/useGet";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
-import {useSortByPagamento} from "../../../hooks/TableValues/useSortByPagamento";
-import {useSortByValor} from "../../../hooks/TableValues/useSortByValor";
+import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
+import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 
-interface Vaga { //retirar essa interface daqui é usada em mais de um lugar
+interface Vaga {
+  //retirar essa interface daqui é usada em mais de um lugar
   vagaId: number;
   status: string;
   placa: string;
@@ -33,24 +34,23 @@ interface Vaga { //retirar essa interface daqui é usada em mais de um lugar
 }
 
 const extractTitlesFromRecord = (record: Vaga): string[] => {
-  return Object.keys(record) as string[];
+  return Object.keys(record).filter((key) => key !== "vagaId"); // Exclui 'vagaId' da lista de chaves
 };
 
 export function TableValues() {
-//   const {
-//     data: records,
-//     error,
-//     isLoading,
-//   } = useGet<Vaga[]>({
-//     url: "http://localhost:3000/vagas",
-//   });
+  //   const {
+  //     data: records,
+  //     error,
+  //     isLoading,
+  //   } = useGet<Vaga[]>({
+  //     url: "http://localhost:3000/vagas",
+  //   });
 
   const { records, isLoading, error } = useVagas();
 
-
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
-  
+
   // const [sortOrderValor, setSortOrderValor] = useState<"asc" | "desc" | "">("");
   // const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -63,7 +63,6 @@ export function TableValues() {
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
 
-
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
   //. todos os estados tem que ser inicializados antes de qualquer lógica de uso
@@ -74,7 +73,8 @@ export function TableValues() {
     }
   }, [records]);
 
-  if (isLoading) { //colocar skeleton e erros chakra
+  if (isLoading) {
+    //colocar skeleton e erros chakra
     return <div>Loading...</div>;
   }
 
@@ -107,7 +107,6 @@ export function TableValues() {
     setSortedRecords(newSortedRecords);
   };
 
-
   const sortByEntrada = () => {
     const convertDateFromString = (dateStr: string) => {
       const [day, month, year] = dateStr.split("/").map(Number);
@@ -135,10 +134,8 @@ export function TableValues() {
     }
   };
 
+  type SortableKeys = "nome" | "pagamento" | "duração" | "entrada" | "valor";
 
-
-  type SortableKeys = 'nome' | 'pagamento' | 'duração' | 'entrada' | 'valor';
-  
   const handleSortByPagamento = () => {
     const newSortedRecords = sortByPagamento(sortedRecords);
     setSortedRecords(newSortedRecords);
@@ -156,7 +153,7 @@ export function TableValues() {
     entrada: sortByEntrada,
     valor: handleSortByValor,
   };
-  
+
   const sortOrder: Record<SortableKeys, "asc" | "desc" | ""> = {
     nome: sortOrderName,
     pagamento: sortOrderPagamento,
@@ -164,7 +161,7 @@ export function TableValues() {
     entrada: sortOrderEntrada,
     valor: sortOrderValor,
   };
-  
+
   const generateTableHeaders = (titles: string[]) => {
     return titles.map((title, index) => (
       <Th key={index}>
@@ -172,16 +169,17 @@ export function TableValues() {
         {(title as SortableKeys) in sortActions && (
           <IconButton
             onClick={sortActions[title as SortableKeys]} // Casting 'title' como 'SortableKeys'
-            colorScheme="teal"
+            // colorScheme="gray.100"
+            color="gray.100"
             variant="solid"
             size="xs"
             fontSize="8"
             ml={2}
             icon={
               sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon />
+                <TriangleUpIcon color={"black"} />
               ) : (
-                <TriangleDownIcon />
+                <TriangleDownIcon color={"black"} />
               )
             }
             aria-label={`Ordenar por ${title}`}
@@ -201,9 +199,13 @@ export function TableValues() {
         <Tbody>
           {sortedRecords.map((record, index) => (
             <Tr key={index}>
-              {Object.values(record).map((value, idx) => (
-                <Td key={idx}>{value}</Td>
-              ))}
+              {Object.entries(record).map(([key, value], idx) => {
+                // Filtra a propriedade vagaId para não renderizar na tabela
+                if (key !== "vagaId") {
+                  return <Td key={idx}>{value}</Td>;
+                }
+                return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
+              })}
               <Td>
                 <TableIcons iconName={"email"} />
                 <TableIcons iconName={"add"} />
@@ -213,6 +215,7 @@ export function TableValues() {
             </Tr>
           ))}
         </Tbody>
+
         <Tfoot>
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Tfoot>
