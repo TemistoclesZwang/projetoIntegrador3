@@ -161,6 +161,19 @@ export function TableValues() {
     entrada: sortOrderEntrada,
     valor: sortOrderValor,
   };
+  function formatDate(dateString: string | number | Date) {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString("pt-BR", options).replace(",", "");
+  }
 
   const generateTableHeaders = (titles: string[]) => {
     return titles.map((title, index) => (
@@ -202,6 +215,10 @@ export function TableValues() {
               {Object.entries(record).map(([key, value], idx) => {
                 // Filtra a propriedade vagaId para não renderizar na tabela
                 if (key !== "vagaId") {
+                  // Verifica se a chave é uma das colunas de data
+                  if (key === "entrada" || key === "saida") {
+                    return <Td key={idx}>{formatDate(value)}</Td>;
+                  }
                   return <Td key={idx}>{value}</Td>;
                 }
                 return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
