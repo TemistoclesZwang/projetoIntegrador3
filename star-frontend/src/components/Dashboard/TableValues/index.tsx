@@ -17,6 +17,7 @@ import { useGet } from "../../../hooks/api/useGet";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import {useSortByPagamento} from "../../../hooks/TableValues/useSortByPagamento";
 import {useSortByValor} from "../../../hooks/TableValues/useSortByValor";
+import { useVagas } from "../../../context/TableValues/VagasContext";
 
 interface Vaga { //retirar essa interface daqui é usada em mais de um lugar
   vagaId: number;
@@ -36,14 +37,8 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 };
 
 export function TableValues() {
-  const {
-    data: records,
-    error,
-    isLoading,
-  } = useGet<Vaga[]>({
-    url: "http://localhost:3000/vagas",
-  });
 
+  const { records, isLoading, error } = useVagas();
 
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional

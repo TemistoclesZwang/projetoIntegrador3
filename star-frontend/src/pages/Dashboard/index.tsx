@@ -21,6 +21,7 @@ import { TableInputProvider } from "../../context/TableInput/TableInputContext";
 import { CombinedContextButton } from "../../context/Matrix/CombinedContext";
 import { SearchPlate } from "../../components/Dashboard/SearchPlate";
 import { PhoneIcon, Search2Icon } from "@chakra-ui/icons";
+import { VagasProvider } from "../../context/TableValues/VagasContext";
 // import { useGet } from "../../hooks/api/useGet";
 
 export function Dashboard() {
@@ -29,6 +30,7 @@ export function Dashboard() {
 
   return (
     <>
+    <VagasProvider>
       <MatrixProvider>
         <OccupiedProvider>
           <TableInputProvider>
@@ -68,23 +70,14 @@ export function Dashboard() {
                 </Text>
               </AbsoluteCenter>
             </Box>
-            <InputGroup size="md" maxW={"lg"}>
-              <Input  placeholder="Buscar placa, exemplo: A234-44" />
-              <InputRightElement >
-                <Button
-                  // h="1.75rem"
-                  size="sm"
-                  fontSize={"lg"}
-                  rightIcon={<Search2Icon></Search2Icon>}
-                ></Button>
-              </InputRightElement>
-            </InputGroup>
+            <SearchPlate></SearchPlate>
             <Flex direction={"column"} m={5}>
               <TableValues/>
             </Flex>
           </TableInputProvider>
         </OccupiedProvider>
       </MatrixProvider>
+      </VagasProvider>
     </>
   );
 }
