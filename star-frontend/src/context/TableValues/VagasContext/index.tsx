@@ -15,11 +15,13 @@ export interface Vaga {
   vaga: string;
 }
 interface VagasContextType {
-    records: Vaga[];
-    isLoading: boolean;
-    error: Error | null;
-    setSearchResults: (results: Vaga[]) => void; // Defina essa função para aceitar um array de Vaga
-  }
+  records: Vaga[];
+  isLoading: boolean;
+  error: Error | null;
+  setSearchResults: (results: Vaga[] | null) => void; // Permitir null como argumento
+  originalRecords: Vaga[] | null;
+}
+
 
 // Criando o contexto
 export const VagasContext = createContext<VagasContextType>({
@@ -27,32 +29,33 @@ export const VagasContext = createContext<VagasContextType>({
     isLoading: false,
     error: null,
     setSearchResults: () => {}, // Implementação dummy
+    originalRecords:[]
   });
 
 export const useVagas = () => useContext(VagasContext);
-
-export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const {
-    data: records,
-    error,
-    isLoading,
-  } = useGet<Vaga[]>({
+export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { data: originalRecords, error, isLoading } = useGet<Vaga[]>({
     url: "http://localhost:3000/vagas",
   });
-  const [searchResults, setSearchResults] = useState<Vaga[]>([]);
+  const [allRecords, setAllRecords] = useState<Vaga[]>([]);
+
+  useEffect(() => {
+    setAllRecords(originalRecords ?? []);
+  }, [originalRecords]);
+
+  const setSearchResults = (results: Vaga[] | null) => {
+    if (results === null) {
+      // Reset para mostrar todos os registros se a busca for limpa
+      setAllRecords(originalRecords ?? []);
+    } else {
+      // Atualiza para mostrar resultados da busca
+      setAllRecords(results);
+    }
+  };
 
   return (
-    <VagasContext.Provider
-      value={{
-        records: searchResults.length > 0 ? searchResults : records ?? [],
-        isLoading,
-        error,
-        setSearchResults,
-      }}
-    >
-      {children}
-    </VagasContext.Provider>
+    <VagasContext.Provider value={{ records: allRecords, isLoading, error, setSearchResults, originalRecords }}>
+    {children}
+  </VagasContext.Provider>
   );
 };

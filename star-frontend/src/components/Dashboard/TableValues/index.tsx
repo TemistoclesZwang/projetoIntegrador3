@@ -37,6 +37,13 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 };
 
 export function TableValues() {
+//   const {
+//     data: records,
+//     error,
+//     isLoading,
+//   } = useGet<Vaga[]>({
+//     url: "http://localhost:3000/vagas",
+//   });
 
   const { records, isLoading, error } = useVagas();
 
