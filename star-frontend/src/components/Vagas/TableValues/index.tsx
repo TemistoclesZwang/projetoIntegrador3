@@ -108,31 +108,15 @@ export function TableValues() {
   };
 
   const sortByEntrada = () => {
-    const convertDateFromString = (dateStr: string) => {
-      const [day, month, year] = dateStr.split("/").map(Number);
-      return new Date(year, month - 1, day);
-    };
-
     if (sortOrderEntrada === "asc" || sortOrderEntrada === "") {
-      setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            convertDateFromString(a.entrada).getTime() -
-            convertDateFromString(b.entrada).getTime()
-        )
-      );
+      setSortedRecords([...sortedRecords].sort((a, b) => new Date(a.entrada).getTime() - new Date(b.entrada).getTime()));
       setSortOrderEntrada("desc");
     } else {
-      setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            convertDateFromString(b.entrada).getTime() -
-            convertDateFromString(a.entrada).getTime()
-        )
-      );
+      setSortedRecords([...sortedRecords].sort((a, b) => new Date(b.entrada).getTime() - new Date(a.entrada).getTime()));
       setSortOrderEntrada("asc");
     }
   };
+  
 
   type SortableKeys = "nome" | "pagamento" | "duração" | "entrada" | "valor";
 
@@ -181,26 +165,22 @@ export function TableValues() {
         {title}
         {(title as SortableKeys) in sortActions && (
           <IconButton
-            onClick={sortActions[title as SortableKeys]} // Casting 'title' como 'SortableKeys'
-            // colorScheme="gray.100"
-            color="gray.100"
+            onClick={sortActions[title as SortableKeys]}
+            aria-label={`Ordenar por ${title}`}
+            colorScheme="teal"
             variant="solid"
             size="xs"
             fontSize="8"
             ml={2}
             icon={
-              sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon color={"black"} />
-              ) : (
-                <TriangleDownIcon color={"black"} />
-              )
+              sortOrder[title as SortableKeys] === "asc" ? <TriangleUpIcon /> : <TriangleDownIcon />
             }
-            aria-label={`Ordenar por ${title}`}
           />
         )}
       </Th>
     ));
   };
+  
 
   return (
     <TableContainer>
@@ -226,7 +206,7 @@ export function TableValues() {
               <Td>
                 <TableIcons iconName={"email"} />
                 <TableIcons iconName={"add"} />
-                <TableIcons iconName={"check"} />
+                <TableIcons iconName={"check"} vagaId={record.vagaId}/>
                 <TableIcons iconName={"info"} />
               </Td>
             </Tr>

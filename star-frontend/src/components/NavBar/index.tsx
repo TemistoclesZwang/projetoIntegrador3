@@ -95,7 +95,7 @@ export function NavBar() {
         >
           <ChakraLink as={ReactRouterLink} to="/login">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-              Dashboard
+              Vagas
             </Text>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/home">

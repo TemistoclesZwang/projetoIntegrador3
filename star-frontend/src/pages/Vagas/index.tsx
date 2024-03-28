@@ -1,33 +1,23 @@
 import {
   AbsoluteCenter,
   Box,
-  Button,
   Divider,
   Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightElement,
   Text,
   useTheme,
 } from "@chakra-ui/react";
-import { TableValues } from "../../components/Dashboard/TableValues";
-import { TableInput } from "../../components/Dashboard/TableInput";
-import { Matrix } from "../../components/Dashboard/Matrix";
+import { TableValues } from "../../components/Vagas/TableValues";
+import { TableInput } from "../../components/Vagas/TableInput";
+import { Matrix } from "../../components/Vagas/Matrix";
 import { MatrixProvider } from "../../context/Matrix/MatrixContext";
 import { OccupiedProvider } from "../../context/Matrix/OccupiedContext";
 import { TableInputProvider } from "../../context/TableInput/TableInputContext";
-import { CombinedContextButton } from "../../context/Matrix/CombinedContext";
-import { SearchPlate } from "../../components/Dashboard/SearchPlate";
-import { PhoneIcon, Search2Icon } from "@chakra-ui/icons";
+import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { VagasProvider } from "../../context/TableValues/VagasContext";
-// import { useGet } from "../../hooks/api/useGet";
 
-export function Dashboard() {
+
+export function Vagas() {
   const theme = useTheme();
-
-
   return (
     <>
     <VagasProvider>
@@ -40,7 +30,7 @@ export function Dashboard() {
                 mt={24}
                 fontSize={theme.textStyles?.titleSize}
               >
-                Dashboard
+                Vagas
               </Text>
               <Box position="relative" padding="10">
                 <Divider />

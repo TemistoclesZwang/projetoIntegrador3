@@ -1,6 +1,6 @@
 // TableInputContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import { LastOccupiedButton } from "../../../components/Dashboard/Matrix/LastOccupiedButton";
+import { LastOccupiedButton } from "../../../components/Vagas/Matrix/LastOccupiedButton";
 
 interface ITableInputContext {
   name: string;

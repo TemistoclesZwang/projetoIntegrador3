@@ -12,7 +12,7 @@ interface UsePostResponse<T> {
   isLoading: boolean;
 }
 
-export function usePost<T, U>({ url, method, body }: RequestOptions<U>): UsePostResponse<T> {
+export function useEndpoint<T, U>({ url, method, body }: RequestOptions<U>): UsePostResponse<T> {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setLoading] = useState<boolean>(false);
