@@ -38,21 +38,13 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 };
 
 export function TableValues() {
-  //   const {
-  //     data: records,
-  //     error,
-  //     isLoading,
-  //   } = useGet<Vaga[]>({
-  //     url: "http://localhost:3000/vagas",
-  //   });
 
   const { records, isLoading, error } = useVagas();
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
 
-  // const [sortOrderValor, setSortOrderValor] = useState<"asc" | "desc" | "">("");
-  // const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
+
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
   const [sortOrderDuration, setSortOrderDuration] = useState<
     "asc" | "desc" | ""
@@ -181,7 +173,29 @@ export function TableValues() {
     ));
   };
   
-
+  const fetchAndUpdateVaga = async (vagaId: number) => {
+    try {
+      // Fazendo a requisição GET para obter os dados atualizados
+      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`);
+      if (!response.ok) {
+        throw new Error('Falha na requisição');
+      }
+      const updatedVaga = await response.json();
+  
+      // Atualizando o registro na lista de records
+      const updatedRecords = sortedRecords.map(vaga => 
+        vaga.vagaId === vagaId ? updatedVaga : vaga
+      );
+  
+      setSortedRecords(updatedRecords); // Atualizando o estado para refletir a mudança
+    } catch (error) {
+      console.error("Erro ao atualizar a vaga:", error);
+    }
+  };
+  const handleUpdate = (updatedVaga: any) => {
+    setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
+  };
+  
   return (
     <TableContainer>
       <Table variant="striped" colorScheme="gray">
@@ -206,8 +220,9 @@ export function TableValues() {
               <Td>
                 <TableIcons iconName={"email"} />
                 <TableIcons iconName={"add"} />
-                <TableIcons iconName={"check"} vagaId={record.vagaId}/>
+                <TableIcons iconName={"check"} vagaId={record.vagaId} onUpdate={handleUpdate}/>
                 <TableIcons iconName={"info"} />
+                {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
               </Td>
             </Tr>
           ))}

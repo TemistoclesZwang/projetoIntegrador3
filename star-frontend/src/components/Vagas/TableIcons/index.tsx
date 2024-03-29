@@ -1,51 +1,52 @@
-import React, { useEffect } from 'react';
-import { IconButton } from '@chakra-ui/react';
-import { EmailIcon, AddIcon, CheckIcon, InfoIcon } from '@chakra-ui/icons';
-import { useIconClick } from '../../../hooks/TableIcons';
-import { useEndpoint } from '../../../hooks/api/useEndpoint';
+import { useEffect } from "react";
+import { IconButton } from "@chakra-ui/react";
+import { EmailIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
+import { useIconClick } from "../../../hooks/TableIcons";
+import { useEndpoint } from "../../../hooks/api/useEndpoint";
 
 type TableIconsProps = {
-  iconName: 'email' | 'add' | 'check' | 'info';
+  iconName: "email" | "add" | "check" | "info";
   vagaId?: number;
+  onUpdate?: (updatedVaga: any) => void; // Adicionado prop para notificar atualização
 };
 
 const iconMapping = {
   email: <EmailIcon />,
   add: <AddIcon />,
   check: <CheckIcon />,
-  info: <InfoIcon />
+  info: <InfoIcon />,
 };
 
-//. utilizar o useEnpoint
-//. atualizar as informações da respectiva linha atualizada, re renderizar a tabela
-export function TableIcons({ iconName, vagaId }: TableIconsProps) {
+export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
   const { handleClick, shouldPost } = useIconClick(iconName);
-  
+
   useEffect(() => {
-    // Este useEffect agora apenas observa mudanças em shouldPost e iconName
-    if (shouldPost && iconName === 'check' && vagaId) {
-      postToEndpoint(vagaId);
+    if (shouldPost && iconName === "check" && vagaId) {
+      postAndFetchVaga(vagaId);
     }
   }, [shouldPost, iconName, vagaId]);
 
-  // Uma função separada para realizar a requisição POST
-  const postToEndpoint = async (vagaId: number) => {
-    const url = `http://localhost:3000/vagas/${vagaId}`; // Certifique-se de que a URL está correta
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: null, // O POST não envia nenhum corpo neste caso
-    });
+  const postAndFetchVaga = async (vagaId: number) => {
+    try {
+      // POST
+      await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: null,
+      });
 
-    if (!response.ok) {
-      // Handle response error
-      console.error('Network response was not ok');
-    } else {
-      // Handle success
-      const result = await response.json();
-      console.log('Success:', result);
+      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`);
+      if (!response.ok) {
+        throw new Error("Falha ao obter vaga atualizada");
+      }
+      const updatedVaga = await response.json();
+      if (onUpdate) {
+        onUpdate(updatedVaga); // Chama função de atualização passada via props
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar a vaga:", error);
     }
   };
 
@@ -63,4 +64,3 @@ export function TableIcons({ iconName, vagaId }: TableIconsProps) {
     />
   );
 }
-
