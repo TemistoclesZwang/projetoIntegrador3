@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { IconButton } from "@chakra-ui/react";
 import { EmailIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
-import { useEndpoint } from "../../../hooks/api/useEndpoint";
 
 type TableIconsProps = {
   iconName: "email" | "add" | "check" | "info";
