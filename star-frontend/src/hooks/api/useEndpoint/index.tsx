@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface RequestOptions<T> {
   url: string;
-  method: "POST" | "PUT" | "PATCH";
+  method: 'POST' | 'PUT' | 'PATCH';
   body?: T;
 }
 
@@ -12,12 +12,7 @@ interface UsePostResponse<T> {
   isLoading: boolean;
 }
 
-export function useEndpoint<T, U>({
-  url,
-  method,
-  body,
-}: RequestOptions<U>): UsePostResponse<T> {
-  
+export function useEndpoint<T, U>({ url, method, body }: RequestOptions<U>): UsePostResponse<T> {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -29,13 +24,13 @@ export function useEndpoint<T, U>({
         const response = await fetch(url, {
           method,
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(body),
         });
 
         if (!response.ok) {
-          throw new Error("Network response was not ok.");
+          throw new Error('Network response was not ok.');
         }
 
         const result = await response.json();

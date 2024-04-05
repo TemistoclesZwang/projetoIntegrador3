@@ -18,9 +18,9 @@ import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
-import { TableRow } from "../TableValuesMap";
 
 interface Vaga {
+  //retirar essa interface daqui é usada em mais de um lugar
   vagaId: number;
   status: string;
   placa: string;
@@ -38,10 +38,12 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 };
 
 export function TableValues() {
+
   const { records, isLoading, error } = useVagas();
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
+
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
   const [sortOrderDuration, setSortOrderDuration] = useState<
@@ -99,23 +101,14 @@ export function TableValues() {
 
   const sortByEntrada = () => {
     if (sortOrderEntrada === "asc" || sortOrderEntrada === "") {
-      setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            new Date(a.entrada).getTime() - new Date(b.entrada).getTime()
-        )
-      );
+      setSortedRecords([...sortedRecords].sort((a, b) => new Date(a.entrada).getTime() - new Date(b.entrada).getTime()));
       setSortOrderEntrada("desc");
     } else {
-      setSortedRecords(
-        [...sortedRecords].sort(
-          (a, b) =>
-            new Date(b.entrada).getTime() - new Date(a.entrada).getTime()
-        )
-      );
+      setSortedRecords([...sortedRecords].sort((a, b) => new Date(b.entrada).getTime() - new Date(a.entrada).getTime()));
       setSortOrderEntrada("asc");
     }
   };
+  
 
   type SortableKeys = "nome" | "pagamento" | "duração" | "entrada" | "valor";
 
@@ -172,26 +165,37 @@ export function TableValues() {
             fontSize="8"
             ml={2}
             icon={
-              sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon />
-              ) : (
-                <TriangleDownIcon />
-              )
+              sortOrder[title as SortableKeys] === "asc" ? <TriangleUpIcon /> : <TriangleDownIcon />
             }
           />
         )}
       </Th>
     ));
   };
-
-  const handleUpdate = (updatedVaga: any) => {
-    setSortedRecords((records) =>
-      records.map((vaga) =>
-        vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga
-      )
-    );
+  
+  const fetchAndUpdateVaga = async (vagaId: number) => {
+    try {
+      // Fazendo a requisição GET para obter os dados atualizados
+      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`);
+      if (!response.ok) {
+        throw new Error('Falha na requisição');
+      }
+      const updatedVaga = await response.json();
+  
+      // Atualizando o registro na lista de records
+      const updatedRecords = sortedRecords.map(vaga => 
+        vaga.vagaId === vagaId ? updatedVaga : vaga
+      );
+  
+      setSortedRecords(updatedRecords); // Atualizando o estado para refletir a mudança
+    } catch (error) {
+      console.error("Erro ao atualizar a vaga:", error);
+    }
   };
-
+  const handleUpdate = (updatedVaga: any) => {
+    setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
+  };
+  
   return (
     <TableContainer>
       <Table variant="striped" colorScheme="gray">
@@ -200,13 +204,27 @@ export function TableValues() {
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Thead>
         <Tbody>
-          {sortedRecords.map((record) => (
-            <TableRow
-              key={record.vagaId}
-              record={record}
-              handleUpdate={handleUpdate}
-              formatDate={formatDate}
-            />
+          {sortedRecords.map((record, index) => (
+            <Tr key={index}>
+              {Object.entries(record).map(([key, value], idx) => {
+                // Filtra a propriedade vagaId para não renderizar na tabela
+                if (key !== "vagaId") {
+                  // Verifica se a chave é uma das colunas de data
+                  if (key === "entrada" || key === "saida") {
+                    return <Td key={idx}>{formatDate(value)}</Td>;
+                  }
+                  return <Td key={idx}>{value}</Td>;
+                }
+                return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
+              })}
+              <Td>
+                <TableIcons iconName={"email"} />
+                <TableIcons iconName={"add"} />
+                <TableIcons iconName={"check"} vagaId={record.vagaId} onUpdate={handleUpdate}/>
+                <TableIcons iconName={"info"} />
+                {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
+              </Td>
+            </Tr>
           ))}
         </Tbody>
 
