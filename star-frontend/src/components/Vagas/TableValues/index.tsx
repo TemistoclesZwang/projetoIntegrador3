@@ -33,6 +33,7 @@ interface Vaga {
   vaga: string;
 }
 
+
 const extractTitlesFromRecord = (record: Vaga): string[] => {
   return Object.keys(record).filter((key) => key !== "vagaId"); // Exclui 'vagaId' da lista de chaves
 };
@@ -137,7 +138,12 @@ export function TableValues() {
     entrada: sortOrderEntrada,
     valor: sortOrderValor,
   };
-  function formatDate(dateString: string | number | Date) {
+  function formatDate(dateString: string | number | Date | null) {
+    if (dateString === null || dateString === '') {
+      // Retorna uma string vazia ou algum outro placeholder se a data for null
+      return '';
+    }
+    
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "2-digit",
@@ -147,7 +153,13 @@ export function TableValues() {
       second: "2-digit",
       hour12: false,
     };
+    
     const date = new Date(dateString);
+    // Verifica se a data é inválida antes de tentar formatá-la
+    if (isNaN(date.getTime())) {
+      return ''; // Retorna string vazia ou placeholder para datas inválidas
+    }
+    
     return date.toLocaleDateString("pt-BR", options).replace(",", "");
   }
 
@@ -173,27 +185,17 @@ export function TableValues() {
     ));
   };
   
-  const fetchAndUpdateVaga = async (vagaId: number) => {
-    try {
-      // Fazendo a requisição GET para obter os dados atualizados
-      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`);
-      if (!response.ok) {
-        throw new Error('Falha na requisição');
-      }
-      const updatedVaga = await response.json();
+
+  // const atualizarInfosVagaLiberada = (updatedVaga: any) => {
+  //   setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
+  // };
   
-      // Atualizando o registro na lista de records
-      const updatedRecords = sortedRecords.map(vaga => 
-        vaga.vagaId === vagaId ? updatedVaga : vaga
-      );
-  
-      setSortedRecords(updatedRecords); // Atualizando o estado para refletir a mudança
-    } catch (error) {
-      console.error("Erro ao atualizar a vaga:", error);
-    }
-  };
-  const handleUpdate = (updatedVaga: any) => {
-    setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
+  const atualizarInfosVagaLiberada = (updatedVaga: any) => {
+    setSortedRecords(records => 
+      records.map(vaga => 
+        vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga
+      )
+    );
   };
   
   return (
@@ -218,9 +220,9 @@ export function TableValues() {
                 return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
               })}
               <Td>
-                <TableIcons iconName={"email"} />
+                <TableIcons iconName={"email"} vagaId={record.vagaId} onUpdate={atualizarInfosVagaLiberada}/>
                 <TableIcons iconName={"add"} />
-                <TableIcons iconName={"check"} vagaId={record.vagaId} onUpdate={handleUpdate}/>
+                <TableIcons iconName={"check"} vagaId={record.vagaId} onUpdate={atualizarInfosVagaLiberada}/>
                 <TableIcons iconName={"info"} />
                 {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
               </Td>

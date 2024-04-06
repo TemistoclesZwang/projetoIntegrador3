@@ -16,42 +16,14 @@ const iconMapping = {
   check: <CheckIcon />,
   info: <InfoIcon />,
 };
-
 export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
-  const { handleClick, shouldPost } = useIconClick(iconName);
+  const { handleAction, isProcessing } = useIconClick(iconName, vagaId, onUpdate);
 
-  useEffect(() => {
-    if (shouldPost && iconName === "check" && vagaId) {
-      postAndFetchVaga(vagaId);
-    }
-  }, [shouldPost, iconName, vagaId]);
-
-  const postAndFetchVaga = async (vagaId: number) => {
-    try {
-      // POST
-      await fetch(`http://localhost:3000/vagas/${vagaId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: null,
-      });
-
-      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`);
-      if (!response.ok) {
-        throw new Error("Falha ao obter vaga atualizada");
-      }
-      const updatedVaga = await response.json();
-      if (onUpdate) {
-        onUpdate(updatedVaga); // Chama função de atualização passada via props
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar a vaga:", error);
-    }
-  };
+  // Usar `handleAction` no lugar de `handleClick`, removendo useEffect anterior
 
   return (
     <IconButton
+      isLoading={isProcessing} // Adicionado para indicar carregamento
       isRound={true}
       variant="solid"
       colorScheme="teal"
@@ -60,7 +32,7 @@ export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
       size="sm"
       ml={1}
       icon={iconMapping[iconName]}
-      onClick={handleClick}
+      onClick={handleAction} // Atualizado para usar handleAction
     />
   );
 }
