@@ -41,7 +41,6 @@ export function useIconClick(iconName: IconType, vagaId?: number, onUpdate?: (up
               valorPagar: 'valor',
             };
     
-            // Agora você chama updatedThisFields com a resposta, vagaId, e o mapeamento dos campos
             await updatedThisFields(response, vagaId || 0, camposMapeamento);
           
           break;

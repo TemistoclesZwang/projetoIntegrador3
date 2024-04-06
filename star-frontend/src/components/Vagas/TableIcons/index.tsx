@@ -7,7 +7,7 @@ import { useEndpoint } from "../../../hooks/api/useEndpoint";
 type TableIconsProps = {
   iconName: "email" | "add" | "check" | "info";
   vagaId?: number;
-  onUpdate?: (updatedVaga: any) => void; // Adicionado prop para notificar atualização
+  onUpdate?: (updatedVaga: any) => void;
 };
 
 const iconMapping = {
@@ -16,14 +16,25 @@ const iconMapping = {
   check: <CheckIcon />,
   info: <InfoIcon />,
 };
+
 export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
   const { handleAction, isProcessing } = useIconClick(iconName, vagaId, onUpdate);
 
-  // Usar `handleAction` no lugar de `handleClick`, removendo useEffect anterior
+  useEffect(() => {
+    // Verifica se o iconName é "email" para iniciar a atualização automática
+    if (iconName === "email") {
+      const intervalId = setInterval(() => {
+        handleAction();
+      }, 60000); // 60000 ms = 1 minuto
+
+      // Limpa o intervalo quando o componente é desmontado
+      return () => clearInterval(intervalId);
+    }
+  }, [iconName, handleAction, vagaId]); // Inclui vagaId nas dependências, caso ele influencie a ação
 
   return (
     <IconButton
-      isLoading={isProcessing} // Adicionado para indicar carregamento
+      isLoading={isProcessing}
       isRound={true}
       variant="solid"
       colorScheme="teal"
@@ -32,7 +43,7 @@ export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
       size="sm"
       ml={1}
       icon={iconMapping[iconName]}
-      onClick={handleAction} // Atualizado para usar handleAction
+      onClick={handleAction} // Ainda permite atualizações manuais via clique
     />
   );
 }
