@@ -93,17 +93,17 @@ export function NavBar() {
           color={"white"}
           mt={{ base: 4, md: 0 }}
         >
-          <ChakraLink as={ReactRouterLink} to="/login">
+          <ChakraLink as={ReactRouterLink} to="/vagas">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
               Vagas
             </Text>
           </ChakraLink>
-          <ChakraLink as={ReactRouterLink} to="/home">
+          <ChakraLink as={ReactRouterLink} to="/estatistica">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
               Estatísticas
             </Text>
           </ChakraLink>
-          <ChakraLink as={ReactRouterLink} to="/home">
+          <ChakraLink as={ReactRouterLink} to="/incidentes">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
               Incidentes
             </Text>
