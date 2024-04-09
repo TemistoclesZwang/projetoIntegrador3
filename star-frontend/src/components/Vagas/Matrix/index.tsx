@@ -7,7 +7,7 @@ import { LastOccupiedButton } from "./LastOccupiedButton";
 export function Matrix() {
   const { sizeX, setSizeX, sizeY, setSizeY } = useMatrix();
   const [buttons, setButtons] = useState<JSX.Element[]>([]);
-  const {occupied, setOccupied} = useOccupied();
+  const { occupied, setOccupied } = useOccupied();
   const [free, setFree] = useState<string[]>([]);
   const [highlighted, setHighlighted] = useState("");
 
@@ -22,7 +22,7 @@ export function Matrix() {
       setOccupied([...occupied, buttonLabel]);
     }
   };
-  
+
   const generateMatrix = () => {
     const matrixSizeX = Math.min(
       typeof sizeX === "number" ? sizeX : parseInt(sizeX)
@@ -92,8 +92,6 @@ export function Matrix() {
         <List>
           {occupied.map((item) => (
             <ListItem key={item} isTruncated>
-              {" "}
-              {/* Trunca texto se for muito longo */}
               {item}
             </ListItem>
           ))}

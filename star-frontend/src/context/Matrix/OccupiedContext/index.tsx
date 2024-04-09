@@ -1,5 +1,5 @@
 // OccupiedContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
 interface IOccupiedContext {
   occupied: string[];
@@ -19,8 +19,26 @@ interface OccupiedProviderProps {
   children: ReactNode;
 }
 
+async function fetchOccupied(): Promise<string[]> {
+  const response = await fetch('http://localhost:3000/vagas/todas-posicoes');
+  const data = await response.json();
+  // Converter o objeto para um array de valores
+  const occupiedArray = Object.values(data) as string[];
+  return occupiedArray;
+}
+
 export const OccupiedProvider: React.FC<OccupiedProviderProps> = ({ children }) => {
   const [occupied, setOccupied] = useState<string[]>([]);
+  useEffect(() => {
+    // Função assíncrona dentro do useEffect para buscar os dados
+    const initializeOccupied = async () => {
+      const occupiedData = await fetchOccupied();
+      setOccupied(occupiedData);
+    };
+    
+    // Chamando a função assíncrona
+    initializeOccupied();
+  }, []);
 
   const handleLastOccupiedClick = () => {
     if (occupied.length > 0) {

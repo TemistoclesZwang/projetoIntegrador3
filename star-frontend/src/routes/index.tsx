@@ -25,7 +25,7 @@ export const MyRouter = (
       {/* <Route path="/register/*" element={<RegistrationPage />} /> */}
       {/* <Route path="/pedidos/:parametro" element={<Pedidos />} /> */}
       <Route path="/home/*" element={<HomePage />} />
-      <Route path="/dashboard/*" element={<Vagas />} />
+      <Route path="/vagas/*" element={<Vagas />} />
       {/* <Route path="/about/*" element={<ProtectedRoute element={<About />} />} /> */}
       {/* <Route path="*" element={<NotFound />} /> */}
       {/* <Route path="/cardapio/*" element={<ProtectedRoute element={<Menu />} />} */}
