@@ -4,11 +4,12 @@ import { EmailIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
 
-type TableIconsProps = {
+interface TableIconsProps {
   iconName: "email" | "add" | "check" | "info";
   vagaId?: number;
   onUpdate?: (updatedVaga: any) => void;
-};
+  isAutoUpdateEnabled?: boolean; // Adicione esta linha
+}
 
 const iconMapping = {
   email: <EmailIcon />,
@@ -16,21 +17,21 @@ const iconMapping = {
   check: <CheckIcon />,
   info: <InfoIcon />,
 };
-
-export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
+export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: TableIconsProps) {
   const { handleAction, isProcessing } = useIconClick(iconName, vagaId, onUpdate);
 
   useEffect(() => {
-    // Verifica se o iconName é "email" para iniciar a atualização automática
-    if (iconName === "email") {
-      const intervalId = setInterval(() => {
+    let intervalId: number | undefined;
+    if (iconName === "email" && isAutoUpdateEnabled) { // Verifica se a atualização automática está habilitada
+      intervalId = setInterval(() => {
         handleAction();
-      }, 6000); // 60000 ms = 1 minuto
-
-      // Limpa o intervalo quando o componente é desmontado
-      return () => clearInterval(intervalId);
+      }, 60000); // Define o intervalo para 1 minuto
     }
-  }, [iconName, handleAction, vagaId]); // Inclui vagaId nas dependências, caso ele influencie a ação
+
+    return () => {
+      if (intervalId) clearInterval(intervalId); // Limpa o intervalo quando o componente é desmontado ou se isAutoUpdateEnabled muda
+    };
+  }, [iconName, handleAction, isAutoUpdateEnabled]); // Adiciona isAutoUpdateEnabled às dependências
 
   return (
     <IconButton
@@ -43,7 +44,7 @@ export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
       size="sm"
       ml={1}
       icon={iconMapping[iconName]}
-      onClick={handleAction} // Ainda permite atualizações manuais via clique
+      onClick={handleAction}
     />
   );
 }

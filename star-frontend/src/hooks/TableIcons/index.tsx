@@ -32,7 +32,7 @@ export function useIconClick(iconName: IconType, vagaId?: number, onUpdate?: (up
       switch (iconName) {
         case 'email':
           // Chamar endpoint específico para email
-          console.log('Chamada API para email', vagaId);
+          // console.log('Chamada API para email', vagaId);
           // Simulação de chamada API
           response = await fetch(`http://localhost:3000/vagas/previa-valor/${vagaId}`, { method: "GET" });
           // if (response && response.ok) {
@@ -71,7 +71,7 @@ export function useIconClick(iconName: IconType, vagaId?: number, onUpdate?: (up
         throw new Error('Falha ao processar ação');
       }
     } catch (error) {
-      console.error('Erro ao processar ação:', error);
+      // console.error('Erro ao processar ação:', error); //.!corrigir
     } finally {
       setIsProcessing(false);
     }
