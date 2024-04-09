@@ -25,7 +25,7 @@ export function TableIcons({ iconName, vagaId, onUpdate }: TableIconsProps) {
     if (iconName === "email") {
       const intervalId = setInterval(() => {
         handleAction();
-      }, 60000); // 60000 ms = 1 minuto
+      }, 6000); // 60000 ms = 1 minuto
 
       // Limpa o intervalo quando o componente é desmontado
       return () => clearInterval(intervalId);
