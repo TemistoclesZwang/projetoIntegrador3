@@ -6,7 +6,7 @@ interface IOccupiedContext {
   setOccupied: React.Dispatch<React.SetStateAction<string[]>>;
   handleLastOccupiedClick: () => void;
 }
-
+const lista = ['1A', '2A', '3A', '4A'];
 export const OccupiedContext = createContext<IOccupiedContext>({
   occupied: [],
   setOccupied: () => {},
@@ -20,7 +20,8 @@ interface OccupiedProviderProps {
 }
 
 export const OccupiedProvider: React.FC<OccupiedProviderProps> = ({ children }) => {
-  const [occupied, setOccupied] = useState<string[]>([]);
+  // const [occupied, setOccupied] = useState<string[]>([]);
+  const [occupied, setOccupied] = useState<string[]>(lista);
 
   const handleLastOccupiedClick = () => {
     if (occupied.length > 0) {
