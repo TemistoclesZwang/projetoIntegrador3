@@ -60,8 +60,8 @@ export function Vagas() {
                 </Text>
               </AbsoluteCenter>
             </Box>
+            <Flex direction={"column"} m={5} height={'500'}>
             <SearchPlate></SearchPlate>
-            <Flex direction={"column"} m={5}>
               <TableValues/>
             </Flex>
           </TableInputProvider>
