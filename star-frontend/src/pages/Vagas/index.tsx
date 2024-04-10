@@ -15,58 +15,59 @@ import { TableInputProvider } from "../../context/TableInput/TableInputContext";
 import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { VagasProvider } from "../../context/TableValues/VagasContext";
 
-
 export function Vagas() {
   const theme = useTheme();
   return (
     <>
-    <VagasProvider>
-      <MatrixProvider>
-        <OccupiedProvider>
-          <TableInputProvider>
-            <Flex direction={"column"} m={5}>
-              <Text
-                textStyle={"titleSize"}
-                mt={24}
-                fontSize={theme.textStyles?.titleSize}
-              >
-                Vagas
-              </Text>
+      <VagasProvider>
+        <MatrixProvider>
+          <OccupiedProvider>
+            <TableInputProvider>
+              <Flex direction={"column"} m={5}>
+                <Text
+                  textStyle={"titleSize"}
+                  mt={24}
+                  fontSize={theme.textStyles?.titleSize}
+                >
+                  Vagas
+                </Text>
+                <Box position="relative" padding="10">
+                  <Divider />
+                  <AbsoluteCenter bg="white" px="4">
+                    <Text fontSize={theme.textStyles?.linkSize}>
+                      Adição de vagas
+                    </Text>
+                  </AbsoluteCenter>
+                </Box>
+
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  mb={5}
+                  justifyContent={"center"}
+                >
+                  <TableInput></TableInput>
+                  {/* <GlobalInput></GlobalInput> */}
+
+                  <Matrix></Matrix>
+                </Flex>
+              </Flex>
               <Box position="relative" padding="10">
                 <Divider />
                 <AbsoluteCenter bg="white" px="4">
                   <Text fontSize={theme.textStyles?.linkSize}>
-                    Adição de vagas
+                    Vagas Ocupadas
                   </Text>
                 </AbsoluteCenter>
               </Box>
-
-              <Flex
-                direction={{ base: "column", md: "row" }}
-                mb={5}
-                justifyContent={"center"}
-              >
-                <TableInput></TableInput>
-                {/* <GlobalInput></GlobalInput> */}
-
-                <Matrix></Matrix>
-              </Flex>
-            </Flex>
-            <Box position="relative" padding="10">
-              <Divider />
-              <AbsoluteCenter bg="white" px="4">
-                <Text fontSize={theme.textStyles?.linkSize}>
-                  Vagas Ocupadas
-                </Text>
-              </AbsoluteCenter>
-            </Box>
-            <Flex direction={"column"} m={5} height={'500'}>
-            <SearchPlate></SearchPlate>
-              <TableValues/>
-            </Flex>
-          </TableInputProvider>
-        </OccupiedProvider>
-      </MatrixProvider>
+              <Box m={5} maxH="80vh" overflowY="auto">
+  <SearchPlate />
+  <Box minH="60vh"> {/* Garantir um mínimo de altura para TableValues */}
+    <TableValues />
+  </Box>
+</Box>
+            </TableInputProvider>
+          </OccupiedProvider>
+        </MatrixProvider>
       </VagasProvider>
     </>
   );
