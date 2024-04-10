@@ -1,16 +1,21 @@
-import React from 'react';
-import { Button } from '@chakra-ui/react'; // Supondo que você está usando o Chakra UI
-import { useTableInput } from "../../TableInput/TableInputContext"; // Ajuste o caminho conforme necessário
-import { useOccupied } from "../OccupiedContext"; // Ajuste o caminho conforme necessário
+import React from "react";
+import { Button } from "@chakra-ui/react";
+import { useTableInput } from "../../TableInput/TableInputContext";
+import { useOccupied } from "../OccupiedContext";
 
-export function CombinedContextButton(props: React.PropsWithChildren<React.ComponentProps<typeof Button>>) {
+export function CombinedContextButton(
+  props: React.PropsWithChildren<React.ComponentProps<typeof Button>>
+) {
   const { name, plate, durationHours, durationMinutes } = useTableInput();
   const { occupied } = useOccupied();
 
-  const handleButtonClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleButtonClick = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     // Converter horas e minutos para total de minutos
-    const durationInMinutes = (durationHours * 60) + durationMinutes;
-    const lastOccupied = occupied.length > 0 ? occupied[occupied.length - 1] : ''; // Pega a última vaga ocupada, se houver
+    const durationInMinutes = durationHours * 60 + durationMinutes;
+    const lastOccupied =
+      occupied.length > 0 ? occupied[occupied.length - 1] : ""; // Pega a última vaga ocupada, se houver
 
     // Log para debug
     console.log(name, plate, durationInMinutes, lastOccupied);
@@ -20,15 +25,15 @@ export function CombinedContextButton(props: React.PropsWithChildren<React.Compo
       nome: name,
       placa: plate,
       duracao: durationInMinutes,
-      vaga: lastOccupied
+      vaga: lastOccupied,
     };
 
     // Enviar a requisição POST
     try {
-      const response = await fetch('http://localhost:3000/vagas/criar', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/vagas/criar", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
@@ -38,11 +43,10 @@ export function CombinedContextButton(props: React.PropsWithChildren<React.Compo
       }
 
       const responseData = await response.json();
-      console.log('Resposta do servidor:', responseData);
+      console.log("Resposta do servidor:", responseData);
       // Tratar a resposta aqui
-
     } catch (error) {
-      console.error('Erro ao enviar os dados:', error);
+      console.error("Erro ao enviar os dados:", error);
     }
 
     // Chama o onClick fornecido por props, se existir

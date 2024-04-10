@@ -10,6 +10,10 @@ import {
   TableContainer,
   TableCaption,
   IconButton,
+  FormControl,
+  FormLabel,
+  Switch,
+  Stack,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
@@ -33,18 +37,16 @@ interface Vaga {
   vaga: string;
 }
 
-
 const extractTitlesFromRecord = (record: Vaga): string[] => {
   return Object.keys(record).filter((key) => key !== "vagaId"); // Exclui 'vagaId' da lista de chaves
 };
 
 export function TableValues() {
-
   const { records, isLoading, error } = useVagas();
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
-
+  const [isAutoUpdateEnabled, setIsAutoUpdateEnabled] = useState(false);
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
   const [sortOrderDuration, setSortOrderDuration] = useState<
@@ -52,6 +54,20 @@ export function TableValues() {
   >("");
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
+  );
+  const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
+
+  const AutoUpdateToggle = () => (
+    <FormControl display="flex" alignItems="center">
+      <FormLabel htmlFor="auto-update-toggle" mb="0">
+        Atualização Automática:
+      </FormLabel>
+      <Switch
+        id="auto-update-toggle"
+        isChecked={isAutoUpdateEnabled}
+        onChange={toggleAutoUpdate}
+      />
+    </FormControl>
   );
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
@@ -102,14 +118,23 @@ export function TableValues() {
 
   const sortByEntrada = () => {
     if (sortOrderEntrada === "asc" || sortOrderEntrada === "") {
-      setSortedRecords([...sortedRecords].sort((a, b) => new Date(a.entrada).getTime() - new Date(b.entrada).getTime()));
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            new Date(a.entrada).getTime() - new Date(b.entrada).getTime()
+        )
+      );
       setSortOrderEntrada("desc");
     } else {
-      setSortedRecords([...sortedRecords].sort((a, b) => new Date(b.entrada).getTime() - new Date(a.entrada).getTime()));
+      setSortedRecords(
+        [...sortedRecords].sort(
+          (a, b) =>
+            new Date(b.entrada).getTime() - new Date(a.entrada).getTime()
+        )
+      );
       setSortOrderEntrada("asc");
     }
   };
-  
 
   type SortableKeys = "nome" | "pagamento" | "duração" | "entrada" | "valor";
 
@@ -139,11 +164,11 @@ export function TableValues() {
     valor: sortOrderValor,
   };
   function formatDate(dateString: string | number | Date | null) {
-    if (dateString === null || dateString === '') {
+    if (dateString === null || dateString === "") {
       // Retorna uma string vazia ou algum outro placeholder se a data for null
-      return '';
+      return "";
     }
-    
+
     const options: Intl.DateTimeFormatOptions = {
       year: "numeric",
       month: "2-digit",
@@ -153,13 +178,13 @@ export function TableValues() {
       second: "2-digit",
       hour12: false,
     };
-    
+
     const date = new Date(dateString);
     // Verifica se a data é inválida antes de tentar formatá-la
     if (isNaN(date.getTime())) {
-      return ''; // Retorna string vazia ou placeholder para datas inválidas
+      return ""; // Retorna string vazia ou placeholder para datas inválidas
     }
-    
+
     return date.toLocaleDateString("pt-BR", options).replace(",", "");
   }
 
@@ -177,63 +202,80 @@ export function TableValues() {
             fontSize="8"
             ml={2}
             icon={
-              sortOrder[title as SortableKeys] === "asc" ? <TriangleUpIcon /> : <TriangleDownIcon />
+              sortOrder[title as SortableKeys] === "asc" ? (
+                <TriangleUpIcon />
+              ) : (
+                <TriangleDownIcon />
+              )
             }
           />
         )}
       </Th>
     ));
   };
-  
 
   // const atualizarInfosVagaLiberada = (updatedVaga: any) => {
   //   setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
   // };
-  
+
   const atualizarInfosVagaLiberada = (updatedVaga: any) => {
-    setSortedRecords(records => 
-      records.map(vaga => 
+    setSortedRecords((records) =>
+      records.map((vaga) =>
         vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga
       )
     );
   };
-  
-  return (
-    <TableContainer>
-      <Table variant="striped" colorScheme="gray">
-        <TableCaption>Registro de Estacionamento</TableCaption>
-        <Thead>
-          <Tr>{generateTableHeaders(thTitles)}</Tr>
-        </Thead>
-        <Tbody>
-          {sortedRecords.map((record, index) => (
-            <Tr key={index}>
-              {Object.entries(record).map(([key, value], idx) => {
-                // Filtra a propriedade vagaId para não renderizar na tabela
-                if (key !== "vagaId") {
-                  // Verifica se a chave é uma das colunas de data
-                  if (key === "entrada" || key === "saida") {
-                    return <Td key={idx}>{formatDate(value)}</Td>;
-                  }
-                  return <Td key={idx}>{value}</Td>;
-                }
-                return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
-              })}
-              <Td>
-                <TableIcons iconName={"email"} vagaId={record.vagaId} onUpdate={atualizarInfosVagaLiberada}/>
-                <TableIcons iconName={"add"} />
-                <TableIcons iconName={"check"} vagaId={record.vagaId} onUpdate={atualizarInfosVagaLiberada}/>
-                <TableIcons iconName={"info"} />
-                {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
 
-        <Tfoot>
-          <Tr>{generateTableHeaders(thTitles)}</Tr>
-        </Tfoot>
-      </Table>
-    </TableContainer>
+  return (
+    <>
+      <Stack direction="row" justifyContent="end" mb={4}>
+        <AutoUpdateToggle />
+      </Stack>
+      <TableContainer>
+        <Table variant="striped" colorScheme="gray">
+          <TableCaption>Registro de Estacionamento</TableCaption>
+          <Thead>
+            <Tr>{generateTableHeaders(thTitles)}</Tr>
+          </Thead>
+          <Tbody>
+            {sortedRecords.map((record, index) => (
+              <Tr key={index}>
+                {Object.entries(record).map(([key, value], idx) => {
+                  // Filtra a propriedade vagaId para não renderizar na tabela
+                  if (key !== "vagaId") {
+                    // Verifica se a chave é uma das colunas de data
+                    if (key === "entrada" || key === "saida") {
+                      return <Td key={idx}>{formatDate(value)}</Td>;
+                    }
+                    return <Td key={idx}>{value}</Td>;
+                  }
+                  return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
+                })}
+                <Td>
+                  <TableIcons
+                    iconName={"email"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
+                  <TableIcons iconName={"add"} />
+                  <TableIcons
+                    iconName={"check"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                  />
+                  <TableIcons iconName={"info"} />
+                  {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+
+          <Tfoot>
+            <Tr>{generateTableHeaders(thTitles)}</Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
