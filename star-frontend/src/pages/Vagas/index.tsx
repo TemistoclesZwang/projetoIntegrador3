@@ -24,14 +24,14 @@ export function Vagas() {
           <OccupiedProvider>
             <TableInputProvider>
               <Flex direction={"column"} m={5}>
-                <Text
+                {/* <Text
                   textStyle={"titleSize"}
                   mt={24}
                   fontSize={theme.textStyles?.titleSize}
                 >
                   Vagas
-                </Text>
-                <Box position="relative" padding="10">
+                </Text> */}
+                <Box position="relative" padding="10" mt={10}>
                   <Divider />
                   <AbsoluteCenter bg="white" px="4">
                     <Text fontSize={theme.textStyles?.linkSize}>
@@ -39,16 +39,23 @@ export function Vagas() {
                     </Text>
                   </AbsoluteCenter>
                 </Box>
-
                 <Flex
-                  direction={{ base: "column", md: "row" }}
+                  direction={{ base: "column", md: "row" }} // Mantém a direção atual
                   mb={5}
-                  justifyContent={"center"}
+                  // alignItems="center" // Assegura o alinhamento vertical ao centro
+                  justifyContent="center" // Centraliza os itens horizontalmente em todas as situações
+                  // alignContent={'center'}
+                  ml={{ base: "auto", md: "28" }}
+                  // w="full" // Garante que o Flex ocupe toda a largura disponível
                 >
-                  <TableInput></TableInput>
-                  {/* <GlobalInput></GlobalInput> */}
-
-                  <Matrix></Matrix>
+                  <TableInput />
+                  {/* Para garantir que os itens tenham espaçamento uniforme entre eles e estejam centralizados, 
+  você pode envolver cada um em seu próprio Box ou Flex com padding/margin conforme necessário */}
+                  <Box px={{ base: "0", md: "4" }}>
+                    {" "}
+                    {/* Adiciona um espaçamento horizontal somente em telas md e acima */}
+                    <Matrix />
+                  </Box>
                 </Flex>
               </Flex>
               <Box position="relative" padding="10">
@@ -59,12 +66,21 @@ export function Vagas() {
                   </Text>
                 </AbsoluteCenter>
               </Box>
-              <Box m={5} maxH="80vh" overflowY="auto">
-  <SearchPlate />
-  <Box minH="60vh"> {/* Garantir um mínimo de altura para TableValues */}
-    <TableValues />
-  </Box>
-</Box>
+              <Box
+                m={5}
+                maxH="80vh"
+                overflowY="auto"
+                // bgColor={theme.colors.highlights[50]}
+                borderRadius={"md"}
+                // p={5}
+              >
+                <SearchPlate />
+                <Box minH="60vh">
+                  {" "}
+                  {/* Garantir um mínimo de altura para TableValues */}
+                  <TableValues />
+                </Box>
+              </Box>
             </TableInputProvider>
           </OccupiedProvider>
         </MatrixProvider>

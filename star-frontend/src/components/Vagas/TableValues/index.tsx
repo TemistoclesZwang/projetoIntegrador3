@@ -14,6 +14,8 @@ import {
   FormLabel,
   Switch,
   Stack,
+  useTheme,
+  background,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
@@ -42,6 +44,8 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 };
 
 export function TableValues() {
+  const theme = useTheme();
+
   const { records, isLoading, error } = useVagas();
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
@@ -197,13 +201,13 @@ export function TableValues() {
             onClick={sortActions[title as SortableKeys]}
             aria-label={`Ordenar por ${title}`}
             colorScheme="teal"
-            variant="solid"
+            variant="ghost"
             size="xs"
-            fontSize="8"
+            fontSize="15"
             ml={2}
             icon={
               sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon />
+                <TriangleUpIcon/>
               ) : (
                 <TriangleDownIcon />
               )
@@ -213,7 +217,6 @@ export function TableValues() {
       </Th>
     ));
   };
-
   // const atualizarInfosVagaLiberada = (updatedVaga: any) => {
   //   setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
   // };
@@ -231,7 +234,7 @@ export function TableValues() {
       <Stack direction="row" justifyContent="end" mb={4}>
         <AutoUpdateToggle />
       </Stack>
-      <TableContainer>
+      <TableContainer backgroundColor={"gray.300"}  borderRadius={'md'}>
         <Table variant="striped" colorScheme="gray">
           <TableCaption>Registro de Estacionamento</TableCaption>
           <Thead>
@@ -257,6 +260,7 @@ export function TableValues() {
                     vagaId={record.vagaId}
                     onUpdate={atualizarInfosVagaLiberada}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
+                    
                   />
                   <TableIcons iconName={"add"} />
                   <TableIcons

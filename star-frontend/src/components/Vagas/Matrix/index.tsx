@@ -78,7 +78,7 @@ export function Matrix() {
           </Flex>
         </Flex>
       </Flex>
-      <Flex
+      {/* <Flex
         mt="5"
         ml="6"
         flexDirection="column"
@@ -104,7 +104,7 @@ export function Matrix() {
             </ListItem>
           ))}
         </List>
-      </Flex>
+      </Flex> */}
       {/* <HandleSubmit></HandleSubmit> */}
     </>
   );

@@ -35,7 +35,7 @@ const theme = extendTheme({
     highlights: {
       50: '#98FB98', 
       80: '#4848d9',
-      100: '#191970',
+      100: '#9ce805',
       // Add more shades as needed
     },
     

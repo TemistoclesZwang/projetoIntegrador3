@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // import { useAuth } from "../context/AuthContext";
 import { HomePage } from "../pages/HomePage";
 import { Vagas } from "../pages/Vagas";
+import { LoginPage } from "../pages/LoginPage";
 
 // interface ProtectedRouteProps {
 //   element: React.ReactNode;
@@ -26,6 +27,7 @@ export const MyRouter = (
       {/* <Route path="/pedidos/:parametro" element={<Pedidos />} /> */}
       <Route path="/home/*" element={<HomePage />} />
       <Route path="/vagas/*" element={<Vagas />} />
+      <Route path="/login/*" element={<LoginPage />} />
       {/* <Route path="/about/*" element={<ProtectedRoute element={<About />} />} /> */}
       {/* <Route path="*" element={<NotFound />} /> */}
       {/* <Route path="/cardapio/*" element={<ProtectedRoute element={<Menu />} />} */}

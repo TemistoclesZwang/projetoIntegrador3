@@ -80,4 +80,3 @@ export function useIconClick(iconName: IconType, vagaId?: number, onUpdate?: (up
   // Retorna o manipulador de ação e o estado de processamento
   return { handleAction, isProcessing };
 }
-
