@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link as LinkRouter} from "react-router-dom";
 import {
   Box,
   Button,
@@ -63,9 +64,7 @@ export function LoginPage() {
             >
               Sign in
             </Button>
-            <Link href="/register" color="highlights.80">
-              Create an account
-            </Link>
+            <LinkRouter to="/register">Create an account</LinkRouter>
           </VStack>
         </Box>
       </VStack>
