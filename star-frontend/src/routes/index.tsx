@@ -6,6 +6,7 @@ import { HomePage } from "../pages/HomePage";
 import { Vagas } from "../pages/Vagas";
 import { LoginPage } from "../pages/LoginPage";
 import { Register } from "../components/Login/register";
+import { Estatisticas } from "../pages/Estatisticas";
 
 // interface ProtectedRouteProps {
 //   element: React.ReactNode;
@@ -30,6 +31,7 @@ export const MyRouter = (
       <Route path="/vagas/*" element={<Vagas />} />
       <Route path="/login/*" element={<LoginPage />} />
       <Route path="/register/*" element={<Register />} />
+      <Route path="/estatisticas/*" element={<Estatisticas />} />
       
       {/* <Route path="/about/*" element={<ProtectedRoute element={<About />} />} /> */}
       {/* <Route path="*" element={<NotFound />} /> */}

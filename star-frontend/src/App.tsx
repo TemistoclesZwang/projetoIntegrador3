@@ -9,6 +9,7 @@ import { NavBar } from "./components/NavBar";
 import { Register } from "./components/Login/register";
 import { LayoutManager } from "./hooks/App";
 import { Vagas } from "./pages/Vagas";
+import { Estatisticas } from "./pages/Estatisticas";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/vagas" element={<Vagas />} />
+          <Route path="/estatisticas" element={<Estatisticas />} />
           {/* Adicione outras rotas conforme necessário */}
         </Routes>
       </LayoutManager>
