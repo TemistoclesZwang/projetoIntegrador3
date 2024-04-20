@@ -13,6 +13,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
+// import BarChart, { LineChart } from "../../components/Estatisticas/Charts";
+// import BarChartMeu from "../../components/Estatisticas/Charts";
+import Panel from "../../components/Estatisticas/Panel";
+import { LineChart } from "../../components/Estatisticas/Charts";
 
 export function Estatisticas() {
   const theme = useTheme();
@@ -37,16 +41,8 @@ export function Estatisticas() {
         overflow="hidden"
         mb={'5rem'}
       >
-        <Flex
-          bgColor="gray.100"
-          w={{ base: "100%", md: "39rem" }}
-          h={{ base: "47rem", md: "37rem" }}
-
-          alignItems={"center"}
-          borderRadius={"lg"}
-          flexDirection={"column"}
-        >
-          <Text m={"1rem"}> Gráficos</Text>
+        {/* <Flex */}
+        <Panel title="Gráficos">
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               Actions
@@ -59,32 +55,32 @@ export function Estatisticas() {
               <MenuItem>Attend a Workshop</MenuItem>
             </MenuList>
           </Menu>
-        </Flex>
+          <LineChart></LineChart>
+        </Panel>
 
-        <Flex
-          bgColor="gray.100"
-          w={{ base: "100%", md: "39rem" }}
-          h={{ base: "47rem", md: "37rem" }}
+        <Panel title="Carros" children={undefined}>
+        </Panel>
 
-          borderRadius={"lg"}
-          alignItems={"center"}
-          flexDirection={"column"}
-        >
-          <Text m={"1rem"}> Carros</Text>
-        </Flex>
 
-        <Flex
-          bgColor="gray.100"
-          w={{ base: "100%", md: "39rem" }}
-          h={{ base: "47rem", md: "37rem" }}
-
-          borderRadius={"lg"}
-          alignItems={"center"}
-          flexDirection={"column"}
-        >
-          <Text m={"1rem"}> Heatmap</Text>
-        </Flex>
+        <Panel title="Heatmap" children={undefined}>
+        </Panel>
       </Flex>
     </Flex>
   );
 }
+
+//gráficos
+    // meses mais movimentados
+    // tempo médio de permanência
+    // placas mais frequentes
+    // horário de maior movimento
+    
+    //gráfico duplo para desempenho financeiro
+
+    //top 10 modelos de carros mais usados
+
+    //heatmap das vagas mais usadas
+
+// opções
+    //exportar dados
+
