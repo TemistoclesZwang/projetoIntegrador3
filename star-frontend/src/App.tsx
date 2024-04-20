@@ -8,6 +8,7 @@ import { GMaps } from "./components/GoogleMapsApi";
 import { NavBar } from "./components/NavBar";
 import { Register } from "./components/Login/register";
 import { LayoutManager } from "./hooks/App";
+import { Vagas } from "./pages/Vagas";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/vagas" element={<Vagas />} />
           {/* Adicione outras rotas conforme necessário */}
         </Routes>
       </LayoutManager>

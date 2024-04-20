@@ -23,7 +23,7 @@ export function Vagas() {
         <MatrixProvider>
           <OccupiedProvider>
             <TableInputProvider>
-              <Flex direction={"column"} m={5}>
+              <Flex direction={"column"} bgColor={'blackAlpha.900'} w={'100%'}>
                 {/* <Text
                   textStyle={"titleSize"}
                   mt={24}
@@ -58,7 +58,7 @@ export function Vagas() {
                   </Box>
                 </Flex>
               </Flex>
-              <Box position="relative" padding="10">
+              <Box position="relative" padding="10" bgColor={'blackAlpha.800'}>
                 <Divider />
                 <AbsoluteCenter bg="white" px="4">
                   <Text fontSize={theme.textStyles?.linkSize}>
@@ -72,6 +72,7 @@ export function Vagas() {
                 overflowY="auto"
                 // bgColor={theme.colors.highlights[50]}
                 borderRadius={"md"}
+                bgColor={'blackAlpha.800'}
                 // p={5}
               >
                 <SearchPlate />
