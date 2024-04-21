@@ -98,7 +98,7 @@ export function NavBar() {
               Vagas
             </Text>
           </ChakraLink>
-          <ChakraLink as={ReactRouterLink} to="/estatistica">
+          <ChakraLink as={ReactRouterLink} to="/estatisticas">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
               Estatísticas
             </Text>

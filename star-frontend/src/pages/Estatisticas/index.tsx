@@ -17,6 +17,7 @@ import { useTheme } from "@chakra-ui/react";
 // import BarChartMeu from "../../components/Estatisticas/Charts";
 import Panel from "../../components/Estatisticas/Panel";
 import { LineChart } from "../../components/Estatisticas/Charts";
+import { LineChart2 } from "../../components/Estatisticas/Charts/Meses_mais_movimentados";
 
 export function Estatisticas() {
   const theme = useTheme();
@@ -45,23 +46,21 @@ export function Estatisticas() {
         <Panel title="Gráficos">
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              Actions
+              Escolha o gráfico
             </MenuButton>
             <MenuList>
-              <MenuItem>Download</MenuItem>
-              <MenuItem>Create a Copy</MenuItem>
-              <MenuItem>Mark as Draft</MenuItem>
-              <MenuItem>Delete</MenuItem>
-              <MenuItem>Attend a Workshop</MenuItem>
+              <MenuItem>Meses mais movimentados</MenuItem>
+              <MenuItem>Tempo médio de permanência</MenuItem>
+              <MenuItem>Placas mais frequentes</MenuItem>
+              <MenuItem>Horários de maior movimento</MenuItem>
+              <MenuItem>Horários de menor movimento</MenuItem>
             </MenuList>
           </Menu>
-          <LineChart></LineChart>
+          <LineChart2 endpoint={"http://localhost:3000/vagas"} ></LineChart2>
         </Panel>
 
         <Panel title="Carros" children={undefined}>
         </Panel>
-
-
         <Panel title="Heatmap" children={undefined}>
         </Panel>
       </Flex>
