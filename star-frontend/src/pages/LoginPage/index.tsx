@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useContext, useEffect } from "react";
+import { useAuth } from "../../context/Auth";
+import { useState } from "react";
 import { Link as LinkRouter, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -15,17 +17,24 @@ import {
 } from "@chakra-ui/react";
 import usePost from "../../hooks/LoginPage/index";
 
+//! passos
+//proteger rotas do react router ver código p2
+// ao logar receber token e role
+// enviar token e role para um context
+// consumior context com token e role nos demais endpoints
+
 export function LoginPage() {
   const theme = useTheme();
-
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { postData, isLoading, error } = usePost();
   const toast = useToast();
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const handleLogin = async () => {
-    const url = "http://localhost:3000/auth/login"; // Substitua pela sua URL de API
+    const url = "http://localhost:3000/auth/login";
     const data = { email, password };
     const result = await postData(url, data);
 
@@ -37,7 +46,10 @@ export function LoginPage() {
         duration: 9000,
         isClosable: true,
       });
-    } else if (result) {
+    } else if (result && result.access_token) {
+      
+      login(result.access_token, result.role);
+      
       toast({
         title: "Login Successful",
         description: "You have successfully logged in.",
@@ -47,7 +59,13 @@ export function LoginPage() {
       });
       navigate("/vagas");
     }
+
   };
+
+//   useEffect(() => {
+//     console.log('O estado de isLoggedIn foi atualizado:', isLoggedIn);
+//     // Você pode colocar mais lógica aqui que deve ser executada quando isLoggedIn mudar
+// }, [isLoggedIn]); 
 
   return (
     <Flex height="100vh" alignItems="center" justifyContent="center" bgColor={'blackAlpha.900'}>

@@ -16,8 +16,8 @@ import { useTheme } from "@chakra-ui/react";
 // import BarChart, { LineChart } from "../../components/Estatisticas/Charts";
 // import BarChartMeu from "../../components/Estatisticas/Charts";
 import Panel from "../../components/Estatisticas/Panel";
-import { LineChart } from "../../components/Estatisticas/Charts";
-import { LineChart2 } from "../../components/Estatisticas/Charts/Meses_mais_movimentados";
+// import { LineChart } from "../../components/Estatisticas/Charts";
+// import { LineChart2 } from "../../components/Estatisticas/Charts/Meses_mais_movimentados";
 
 export function Estatisticas() {
   const theme = useTheme();
@@ -56,7 +56,7 @@ export function Estatisticas() {
               <MenuItem>Horários de menor movimento</MenuItem>
             </MenuList>
           </Menu>
-          <LineChart2 endpoint={"http://localhost:3000/vagas"} ></LineChart2>
+          {/* <LineChart2 endpoint={"http://localhost:3000/vagas"} ></LineChart2> */}
         </Panel>
 
         <Panel title="Carros" children={undefined}>

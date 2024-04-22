@@ -19,6 +19,7 @@ export function Vagas() {
   const theme = useTheme();
   return (
     <>
+    
       <VagasProvider>
         <MatrixProvider>
           <OccupiedProvider>
