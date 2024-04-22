@@ -20,17 +20,17 @@ export const useAuth = () => {
   return context;
 }
 
-export const AuthProvider = ({ children }:{children:React.ReactNode}) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, setAuthState] = useState({
-    accessToken: localStorage.getItem('accessToken') || '',
+    accessToken: sessionStorage.getItem('accessToken') || '',
     role: localStorage.getItem('role') || '',
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true'
   });
 
-  const login = (accessToken:string, role:string) => {
-    localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('role', role);
-    localStorage.setItem('isLoggedIn', 'true');
+  const login = (accessToken: string, role: string) => {
+    sessionStorage.setItem('accessToken', accessToken); // Salvar accessToken no sessionStorage
+    localStorage.setItem('role', role);               // Manter role no localStorage
+    localStorage.setItem('isLoggedIn', 'true');       // Manter isLoggedIn no localStorage
     setAuthState({
       accessToken,
       role,
@@ -39,9 +39,9 @@ export const AuthProvider = ({ children }:{children:React.ReactNode}) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('role');
-    localStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('accessToken');         // Remover accessToken do sessionStorage
+    localStorage.removeItem('role');                  // Remover role do localStorage
+    localStorage.removeItem('isLoggedIn');            // Remover isLoggedIn do localStorage
     setAuthState({
       accessToken: '',
       role: '',
@@ -55,4 +55,3 @@ export const AuthProvider = ({ children }:{children:React.ReactNode}) => {
     </AuthContext.Provider>
   );
 };
-

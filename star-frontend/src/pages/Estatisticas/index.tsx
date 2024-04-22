@@ -13,14 +13,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
-// import BarChart, { LineChart } from "../../components/Estatisticas/Charts";
-// import BarChartMeu from "../../components/Estatisticas/Charts";
 import Panel from "../../components/Estatisticas/Panel";
-// import { LineChart } from "../../components/Estatisticas/Charts";
-// import { LineChart2 } from "../../components/Estatisticas/Charts/Meses_mais_movimentados";
+import { MesesMaisMovimentados } from "../../components/Estatisticas/Charts/MesesMaisMovimentados";
+import { useState } from "react";
+
 
 export function Estatisticas() {
   const theme = useTheme();
+  const [showChart,setShowChart] = useState(false);
+
   return (
     <Flex
       bgColor="blackAlpha.900"
@@ -49,14 +50,14 @@ export function Estatisticas() {
               Escolha o gráfico
             </MenuButton>
             <MenuList>
-              <MenuItem>Meses mais movimentados</MenuItem>
+              <MenuItem onClick={()=> setShowChart(true)}>Meses mais movimentados</MenuItem>
               <MenuItem>Tempo médio de permanência</MenuItem>
               <MenuItem>Placas mais frequentes</MenuItem>
               <MenuItem>Horários de maior movimento</MenuItem>
               <MenuItem>Horários de menor movimento</MenuItem>
             </MenuList>
           </Menu>
-          {/* <LineChart2 endpoint={"http://localhost:3000/vagas"} ></LineChart2> */}
+          {showChart && <MesesMaisMovimentados endpoint="http://localhost:3000/vagas" />}
         </Panel>
 
         <Panel title="Carros" children={undefined}>
