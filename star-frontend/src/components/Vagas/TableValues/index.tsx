@@ -62,16 +62,16 @@ export function TableValues() {
   const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
 
   const AutoUpdateToggle = () => (
-    <FormControl display="flex" alignItems="center">
-      <FormLabel htmlFor="auto-update-toggle" mb="0">
-        Atualização Automática:
-      </FormLabel>
-      <Switch
-        id="auto-update-toggle"
-        isChecked={isAutoUpdateEnabled}
-        onChange={toggleAutoUpdate}
-      />
-    </FormControl>
+<FormControl display="flex" alignItems="center">
+  <FormLabel htmlFor="auto-update-toggle" mb="0" color="white"> {/* Altere a cor conforme necessário */}
+    Atualização Automática:
+  </FormLabel>
+  <Switch
+    id="auto-update-toggle"
+    isChecked={isAutoUpdateEnabled}
+    onChange={toggleAutoUpdate}
+  />
+</FormControl>
   );
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
