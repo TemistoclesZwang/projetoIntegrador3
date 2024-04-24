@@ -1,28 +1,29 @@
-import './App.css'
-import {LoginPage} from './pages/LoginPage'
-import { HomePage } from './pages/HomePage'
+import "./App.css";
+import { LoginPage } from "./pages/LoginPage";
+import { HomePage } from "./pages/HomePage";
 // import YourComponent from './hooks/api/useGet'
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { MyRouter } from "./routes";
-import { GMaps } from './components/GoogleMapsApi'; 
-import { NavBar } from './components/NavBar';
-
-
+import { GMaps } from "./components/GoogleMapsApi";
+import { NavBar } from "./components/NavBar";
+import { Register } from "./components/Login/register";
+import { LayoutManager } from "./hooks/App";
+import { Vagas } from "./pages/Vagas";
+import { Estatisticas } from "./pages/Estatisticas";
+import { AuthProvider } from "./context/Auth";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-      <NavBar />
-
-    {/* <LoginPage></LoginPage> */}
-    {/* <HomePage></HomePage> */}
-    {/* <YourComponent></YourComponent> */}
-    {MyRouter}
-    </BrowserRouter>
-
+      <AuthProvider>
+        <BrowserRouter>
+          <LayoutManager>
+            {MyRouter} {/* Usar o MyRouter aqui */}
+          </LayoutManager>
+        </BrowserRouter>
+      </AuthProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

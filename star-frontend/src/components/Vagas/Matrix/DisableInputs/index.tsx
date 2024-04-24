@@ -27,7 +27,7 @@ export function DisableInput() {
       }
     };
   return (
-    <Flex flexDirection={'row'}>
+    <Flex flexDirection={'row'} bgColor={'gray.100'}>
       <FormControl mb="4">
         <FormLabel htmlFor="input-disabled" mb="0">
           Disable Inputs
@@ -42,7 +42,7 @@ export function DisableInput() {
         value={sizeX}
         onChange={handleSizeChange("x")}
         placeholder="Enter X-axis size"
-        maxW="80px"
+        w={'3rem'}
         mr="2"
         isDisabled={inputDisabled}
         min={1}
@@ -52,7 +52,7 @@ export function DisableInput() {
         value={sizeY}
         onChange={handleSizeChange("y")}
         placeholder="Enter Y-axis size"
-        maxW="80px"
+        w="3rem"
         isDisabled={inputDisabled}
         min={1}
       />

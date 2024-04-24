@@ -50,8 +50,10 @@ export function TableInput() {
       mt={5}
       backgroundColor={"gray.100"}
     >
-      <Text fontSize="lg">Nome</Text>
+      <Text fontSize="sm">Nome</Text>
       <Input
+        size={"sm"}
+
         placeholder="Digite o nome"
         bg={"teal.50"}
         color={"white"}
@@ -60,8 +62,9 @@ export function TableInput() {
         onChange={(e) => setName(e.target.value)}
       />
 
-      <Text fontSize="lg">Placa</Text>
+      <Text fontSize="sm">Placa</Text>
       <Input
+        size={"sm"}
         placeholder="Digite a placa"
         bg={"teal.50"}
         color={"white"}
@@ -71,13 +74,13 @@ export function TableInput() {
       />
 
       <Flex gap={5} direction={"row"}>
-        <Text fontSize="lg">Duração</Text>
+        <Text fontSize="sm">Duração</Text>
         <NumberInput
           value={durationHours}
           onChange={(valueString) => setDurationHours(parseInt(valueString))}
           min={0}
           max={23}
-          size="md"
+          size="sm"
           maxW={20}
         >
           <NumberInputField />
@@ -91,7 +94,7 @@ export function TableInput() {
           onChange={(valueString) => setDurationMinutes(parseInt(valueString))}
           min={0}
           max={59}
-          size="md"
+          size="sm"
           maxW={20}
         >
           <NumberInputField />
@@ -111,9 +114,9 @@ export function TableInput() {
       <Flex flexDirection={'row'}  alignItems={'center'} justifyContent={'space-between'} gap={3}>
       <Box>
       Valor:
-      <Badge fontSize={'md'} borderRadius={'lg'} variant='solid' colorScheme='green' ml={2}>R$23,00</Badge>
+      <Badge fontSize={'sm'} borderRadius={'lg'} variant='solid' colorScheme='green' ml={2}>R$23,00</Badge>
       </Box>
-      <CombinedContextButton colorScheme="teal" size={'lg'} p={'2'} gap={2}>
+      <CombinedContextButton colorScheme="teal" size={'sm'} p={'2'} gap={2}>
         Add
         <AddIcon />
       </CombinedContextButton>

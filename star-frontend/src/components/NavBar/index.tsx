@@ -39,13 +39,13 @@ export function NavBar() {
       padding="0.5rem"
       bg="gray.900"
       color="white"
-      position="fixed" // Fixa a navbar no topo
+      position="sticky" // Fixa a navbar no topo
       top={0} // Define o topo da navbar
       left={0} // Alinha a navbar à esquerda
       right={0} // Alinha a navbar à direita
       width="100%" // Garante que a navbar ocupe a largura total
       zIndex={1} // Garante que a navbar fique acima dos outros elementos
-      mb={10}
+      // mb={10}
       
     >
       <Flex>
@@ -98,7 +98,7 @@ export function NavBar() {
               Vagas
             </Text>
           </ChakraLink>
-          <ChakraLink as={ReactRouterLink} to="/estatistica">
+          <ChakraLink as={ReactRouterLink} to="/estatisticas">
             <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
               Estatísticas
             </Text>
