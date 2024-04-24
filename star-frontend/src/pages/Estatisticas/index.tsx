@@ -15,12 +15,17 @@ import {
 import { useTheme } from "@chakra-ui/react";
 import Panel from "../../components/Estatisticas/Panel";
 import { MesesMaisMovimentados } from "../../components/Estatisticas/Charts/MesesMaisMovimentados";
+import {PlacasMaisUsadas} from "../../components/Estatisticas/Charts/PlacasMaisUsadas";
 import { useState } from "react";
-
+import { ValorPorMes } from "../../components/Estatisticas/Charts/ValoresMensais";
 
 export function Estatisticas() {
   const theme = useTheme();
-  const [showChart,setShowChart] = useState(false);
+  const [selectedChart, setSelectedChart] = useState("");
+
+  const handleMenuClick = (chartName: string) => {
+    setSelectedChart(chartName);
+  };
 
   return (
     <Flex
@@ -28,41 +33,41 @@ export function Estatisticas() {
       h={{ base: "2100px", md: "100vh" }}
       pt="1rem"
       justifyContent="center"
-      //   w="100vw"
       pl="1rem"
       pr="1rem"
-      //   overflow="auto"
       flexDirection={{ base: "column", md: "row" }}
     >
       <Flex
-        gap={{ base: "0.5rem", md: "1rem" }} // Define o gap responsivamente
+        gap={{ base: "0.5rem", md: "1rem" }}
         h={{ base: "auto", md: "86vh" }}
         flexDirection={{ base: "column", md: "row" }}
-        // maxW="10vw"
         alignItems="center"
         overflow="hidden"
         mb={'5rem'}
       >
-        {/* <Flex */}
         <Panel title="Gráficos">
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               Escolha o gráfico
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={()=> setShowChart(true)}>Meses mais movimentados</MenuItem>
-              <MenuItem>Tempo médio de permanência</MenuItem>
-              <MenuItem>Placas mais frequentes</MenuItem>
-              <MenuItem>Horários de maior movimento</MenuItem>
-              <MenuItem>Horários de menor movimento</MenuItem>
+              <MenuItem onClick={() => handleMenuClick("mesesMovimentados")}>Meses mais movimentados</MenuItem>
+              <MenuItem onClick={() => handleMenuClick("tempoPermanencia")}>Tempo médio de permanência</MenuItem>
+              <MenuItem onClick={() => handleMenuClick("placasFrequentes")}>Placas mais frequentes</MenuItem>
+              <MenuItem onClick={() => handleMenuClick("horarioMaiorMovimento")}>Horários de maior movimento</MenuItem>
+              <MenuItem onClick={() => handleMenuClick("horarioMenorMovimento")}>Horários de menor movimento</MenuItem>
             </MenuList>
           </Menu>
-          {showChart && <MesesMaisMovimentados endpoint="http://localhost:3000/vagas" />}
+          {selectedChart === "mesesMovimentados" && <MesesMaisMovimentados endpoint="http://localhost:3000/vagas" />}
+          {selectedChart === "placasFrequentes" && <PlacasMaisUsadas endpoint="http://localhost:3000/vagas" />}
+          <ValorPorMes endpoint="http://localhost:3000/vagas" />
         </Panel>
 
         <Panel title="Carros" children={undefined}>
+          
         </Panel>
         <Panel title="Heatmap" children={undefined}>
+          
         </Panel>
       </Flex>
     </Flex>
