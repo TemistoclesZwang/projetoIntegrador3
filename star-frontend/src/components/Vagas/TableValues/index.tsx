@@ -59,20 +59,32 @@ export function TableValues() {
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
   );
-  const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
+  // const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
 
-  const AutoUpdateToggle = () => (
-<FormControl display="flex" alignItems="center">
-  <FormLabel htmlFor="auto-update-toggle" mb="0" color="white"> {/* Altere a cor conforme necessário */}
-    Atualização Automática:
-  </FormLabel>
-  <Switch
-    id="auto-update-toggle"
-    isChecked={isAutoUpdateEnabled}
-    onChange={toggleAutoUpdate}
-  />
-</FormControl>
-  );
+  // const AutoUpdateToggle = () => (
+  //   <FormControl
+  //     display="flex"
+  //     alignItems="center"
+  //     bgColor={"gray.100"}
+  //     w={"15rem"}
+  //     borderRadius={"md"}
+  //     p={"0.5rem"}
+  //     justifyContent={"center"}
+
+  //     // alignSelf={'flex-start'}
+  //   >
+  //     <FormLabel htmlFor="auto-update-toggle" mb="0" color="black">
+  //       {" "}
+  //       {/* Altere a cor conforme necessário */}
+  //       Atualização automática:
+  //     </FormLabel>
+  //     <Switch
+  //       id="auto-update-toggle"
+  //       isChecked={isAutoUpdateEnabled}
+  //       onChange={toggleAutoUpdate}
+  //     />
+  //   </FormControl>
+  // );
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
 
@@ -207,7 +219,7 @@ export function TableValues() {
             ml={2}
             icon={
               sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon/>
+                <TriangleUpIcon />
               ) : (
                 <TriangleDownIcon />
               )
@@ -231,10 +243,17 @@ export function TableValues() {
 
   return (
     <>
-      <Stack direction="row" justifyContent="end" mb={4}>
+      {/* <Stack
+        direction="row"
+        justifyContent="end"
+        mb={4}
+        // position={"fixed"}
+        // w={"100%"}
+        
+      >
         <AutoUpdateToggle />
-      </Stack>
-      <TableContainer backgroundColor={"gray.300"}  borderRadius={'md'}>
+      </Stack> */}
+      <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
         <Table variant="striped" colorScheme="gray">
           <TableCaption>Registro de Estacionamento</TableCaption>
           <Thead>
@@ -260,7 +279,6 @@ export function TableValues() {
                     vagaId={record.vagaId}
                     onUpdate={atualizarInfosVagaLiberada}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
-                    
                   />
                   <TableIcons iconName={"add"} />
                   <TableIcons

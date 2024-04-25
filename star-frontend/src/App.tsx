@@ -15,6 +15,7 @@ import { AuthProvider } from "./context/Auth";
 function App() {
   return (
     <>
+    
       <AuthProvider>
         <BrowserRouter>
           <LayoutManager>
