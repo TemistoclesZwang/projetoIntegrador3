@@ -20,6 +20,7 @@ import {
   Stack,
   Text,
   Textarea,
+  Tooltip,
   useDisclosure,
   useTheme,
 } from "@chakra-ui/react";
@@ -54,17 +55,25 @@ export function Vagas() {
         pb={"1rem"}
       >
         <Box>
-          <SearchPlate />
+          {/* <SearchPlate /> */}
         </Box>
+      <SearchPlate></SearchPlate>
         <Box>
+        <Tooltip hasArrow label='Criar vaga' bg='gray.300' color='black' placement="bottom">
+
           <Button
             leftIcon={<AddIcon />}
-            colorScheme="teal"
+            // colorScheme="teal"
+            bg={theme.colors.highlights[50]}
+            color={'black'}
             onClick={onOpen}
+            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
             w={"xsm"}
+            _hover={'black'}
           >
             Criar vaga
           </Button>
+          </Tooltip>
         </Box>
         <Drawer
           isOpen={isOpen}

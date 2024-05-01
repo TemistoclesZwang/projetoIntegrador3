@@ -16,14 +16,16 @@ import {
   Stack,
   useTheme,
   background,
+  Flex,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { AddIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 import { useGet } from "../../../hooks/api/useGet";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
+import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
 
 interface Vaga {
   //retirar essa interface daqui é usada em mais de um lugar
@@ -253,7 +255,32 @@ export function TableValues() {
       >
         <AutoUpdateToggle />
       </Stack> */}
+
       <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
+        <Flex
+          w={"100%"}
+          justifyContent={"end"}
+          p={6}
+          // backgroundColor={"gray.100"}
+          mb={-59}
+          // position={"fixed"}
+
+        >
+          {/* <CombinedContextButton
+            bg={theme.colors.highlights[50]}
+            size={"md"}
+            p={"2"}
+            gap={2}
+            // w={"5rem"}
+            position={"fixed"}
+            zIndex={1}
+            mr={'9.5rem'}
+            mt={'5rem'}
+          >
+            <AddIcon />
+            
+          </CombinedContextButton> */}
+        </Flex>
         <Table variant="striped" colorScheme="gray">
           <TableCaption>Registro de Estacionamento</TableCaption>
           <Thead>
