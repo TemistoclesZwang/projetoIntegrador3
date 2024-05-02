@@ -18,6 +18,9 @@ import { MesesMaisMovimentados } from "../../components/Estatisticas/Charts/Mese
 import {PlacasMaisUsadas} from "../../components/Estatisticas/Charts/PlacasMaisUsadas";
 import { useState } from "react";
 import { ValorPorMes } from "../../components/Estatisticas/Charts/ValoresMensais";
+import { MediaTempoVaga } from "../../components/Estatisticas/Charts/MediaDeTempo";
+import { HorariosDeMovimento } from "../../components/Estatisticas/Charts/HorarioMaiorMovimento";
+import { DiasDaSemanaMaisUsados } from "../../components/Estatisticas/Charts/DiasDaSemana";
 
 export function Estatisticas() {
   const theme = useTheme();
@@ -46,28 +49,19 @@ export function Estatisticas() {
         mb={'5rem'}
       >
         <Panel title="Gráficos">
-          <Menu>
-            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-              Escolha o gráfico
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleMenuClick("mesesMovimentados")}>Meses mais movimentados</MenuItem>
-              <MenuItem onClick={() => handleMenuClick("tempoPermanencia")}>Tempo médio de permanência</MenuItem>
-              <MenuItem onClick={() => handleMenuClick("placasFrequentes")}>Placas mais frequentes</MenuItem>
-              <MenuItem onClick={() => handleMenuClick("horarioMaiorMovimento")}>Horários de maior movimento</MenuItem>
-              <MenuItem onClick={() => handleMenuClick("horarioMenorMovimento")}>Horários de menor movimento</MenuItem>
-            </MenuList>
-          </Menu>
-          {selectedChart === "mesesMovimentados" && <MesesMaisMovimentados endpoint="http://localhost:3000/vagas" />}
-          {selectedChart === "placasFrequentes" && <PlacasMaisUsadas endpoint="http://localhost:3000/vagas" />}
+          <MesesMaisMovimentados endpoint="http://localhost:3000/vagas" />
           <ValorPorMes endpoint="http://localhost:3000/vagas" />
         </Panel>
 
-        <Panel title="Carros" children={undefined}>
+        <Panel title="Carros">
+        <PlacasMaisUsadas endpoint="http://localhost:3000/vagas" />
+        <MediaTempoVaga endpoint="http://localhost:3000/vagas" />
+
           
         </Panel>
-        <Panel title="Heatmap" children={undefined}>
-          
+        <Panel title="Heatmap">
+        <HorariosDeMovimento endpoint="http://localhost:3000/vagas" />
+        <DiasDaSemanaMaisUsados endpoint="http://localhost:3000/vagas" />
         </Panel>
       </Flex>
     </Flex>

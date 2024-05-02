@@ -34,6 +34,7 @@ export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: 
   }, [iconName, handleAction, isAutoUpdateEnabled]); // Adiciona isAutoUpdateEnabled às dependências
 
   return (
+    
     <IconButton
       isLoading={isProcessing}
       isRound={true}

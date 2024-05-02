@@ -16,14 +16,16 @@ import {
   Stack,
   useTheme,
   background,
+  Flex,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { AddIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 import { useGet } from "../../../hooks/api/useGet";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
+import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
 
 interface Vaga {
   //retirar essa interface daqui é usada em mais de um lugar
@@ -59,20 +61,32 @@ export function TableValues() {
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
   );
-  const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
+  // const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
 
-  const AutoUpdateToggle = () => (
-<FormControl display="flex" alignItems="center">
-  <FormLabel htmlFor="auto-update-toggle" mb="0" color="white"> {/* Altere a cor conforme necessário */}
-    Atualização Automática:
-  </FormLabel>
-  <Switch
-    id="auto-update-toggle"
-    isChecked={isAutoUpdateEnabled}
-    onChange={toggleAutoUpdate}
-  />
-</FormControl>
-  );
+  // const AutoUpdateToggle = () => (
+  //   <FormControl
+  //     display="flex"
+  //     alignItems="center"
+  //     bgColor={"gray.100"}
+  //     w={"15rem"}
+  //     borderRadius={"md"}
+  //     p={"0.5rem"}
+  //     justifyContent={"center"}
+
+  //     // alignSelf={'flex-start'}
+  //   >
+  //     <FormLabel htmlFor="auto-update-toggle" mb="0" color="black">
+  //       {" "}
+  //       {/* Altere a cor conforme necessário */}
+  //       Atualização automática:
+  //     </FormLabel>
+  //     <Switch
+  //       id="auto-update-toggle"
+  //       isChecked={isAutoUpdateEnabled}
+  //       onChange={toggleAutoUpdate}
+  //     />
+  //   </FormControl>
+  // );
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
 
@@ -207,7 +221,7 @@ export function TableValues() {
             ml={2}
             icon={
               sortOrder[title as SortableKeys] === "asc" ? (
-                <TriangleUpIcon/>
+                <TriangleUpIcon />
               ) : (
                 <TriangleDownIcon />
               )
@@ -231,10 +245,42 @@ export function TableValues() {
 
   return (
     <>
-      <Stack direction="row" justifyContent="end" mb={4}>
+      {/* <Stack
+        direction="row"
+        justifyContent="end"
+        mb={4}
+        // position={"fixed"}
+        // w={"100%"}
+        
+      >
         <AutoUpdateToggle />
-      </Stack>
-      <TableContainer backgroundColor={"gray.300"}  borderRadius={'md'}>
+      </Stack> */}
+
+      <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
+        <Flex
+          w={"100%"}
+          justifyContent={"end"}
+          p={6}
+          // backgroundColor={"gray.100"}
+          mb={-59}
+          // position={"fixed"}
+
+        >
+          {/* <CombinedContextButton
+            bg={theme.colors.highlights[50]}
+            size={"md"}
+            p={"2"}
+            gap={2}
+            // w={"5rem"}
+            position={"fixed"}
+            zIndex={1}
+            mr={'9.5rem'}
+            mt={'5rem'}
+          >
+            <AddIcon />
+            
+          </CombinedContextButton> */}
+        </Flex>
         <Table variant="striped" colorScheme="gray">
           <TableCaption>Registro de Estacionamento</TableCaption>
           <Thead>
@@ -260,7 +306,6 @@ export function TableValues() {
                     vagaId={record.vagaId}
                     onUpdate={atualizarInfosVagaLiberada}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
-                    
                   />
                   <TableIcons iconName={"add"} />
                   <TableIcons

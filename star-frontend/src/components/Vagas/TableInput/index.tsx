@@ -18,6 +18,7 @@ import {
 import { DisableInput } from "../Matrix/DisableInputs";
 import { useTableInput } from "../../../context/TableInput/TableInputContext";
 import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+// import { DrawerExample } from "../DrawerVagas";
 
 export function TableInput() {
   const {
@@ -40,23 +41,25 @@ export function TableInput() {
   // }
 
   return (
+    
     <Flex
-      gap={5}
+      gap={'0.5rem'}
       direction={"column"}
-      maxW={"1300"}
-      borderRadius={"lg"}
-      p={5}
-      mb={35}
-      mt={5}
-      backgroundColor={"gray.100"}
+      // maxW={"1300"}
+      // borderRadius={"lg"}
+      // p={5}
+      // mb={35}
+      // mt={5}
+      // backgroundColor={"gray.100"}
     >
+
       <Text fontSize="sm">Nome</Text>
       <Input
         size={"sm"}
 
         placeholder="Digite o nome"
-        bg={"teal.50"}
-        color={"white"}
+        // bg={"teal.50"}
+        // color={"white"}
         maxW={"80"}
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -66,8 +69,8 @@ export function TableInput() {
       <Input
         size={"sm"}
         placeholder="Digite a placa"
-        bg={"teal.50"}
-        color={"white"}
+        // bg={"teal.50"}
+        // color={"white"}
         maxW={"80"}
         value={plate}
         onChange={(e) => setPlate(e.target.value)}
@@ -82,6 +85,7 @@ export function TableInput() {
           max={23}
           size="sm"
           maxW={20}
+
         >
           <NumberInputField />
           <NumberInputStepper>
@@ -105,22 +109,24 @@ export function TableInput() {
         </NumberInput>
       </Flex>
       <DisableInput></DisableInput>
-      <Flex flexDirection={'row'} alignItems={'center'} gap={2} justifyContent={'center'}>
+      {/* <Flex flexDirection={'row'} alignItems={'center'} gap={2} justifyContent={'center'}>
       Status:
       <Badge borderRadius={'lg'} variant='solid' colorScheme='gray'>Ocupado</Badge>
       Entrada:
       <Badge borderRadius={'lg'} variant='solid' colorScheme='gray'>{date}</Badge>
-      </Flex>
-      <Flex flexDirection={'row'}  alignItems={'center'} justifyContent={'space-between'} gap={3}>
+      </Flex> */}
+      {/* <Flex flexDirection={'row'}  alignItems={'center'} justifyContent={'space-between'} gap={3}>
       <Box>
       Valor:
       <Badge fontSize={'sm'} borderRadius={'lg'} variant='solid' colorScheme='green' ml={2}>R$23,00</Badge>
-      </Box>
-      <CombinedContextButton colorScheme="teal" size={'sm'} p={'2'} gap={2}>
+      </Box> */}
+      {/* <CombinedContextButton colorScheme="teal" size={'sm'} p={'2'} gap={2}>
         Add
         <AddIcon />
-      </CombinedContextButton>
+
+      </CombinedContextButton> */}
       </Flex>
-    </Flex>
+      
+    // </Flex>
   );
 }

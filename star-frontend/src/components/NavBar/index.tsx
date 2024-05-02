@@ -1,10 +1,16 @@
+import { TiChartBarOutline } from "react-icons/ti";
+import { TiInfo } from "react-icons/ti";
+import { TiLocation } from "react-icons/ti";
 import { FaBars } from "react-icons/fa";
 import { Link as ReactRouterLink } from "react-router-dom";
 import {
   Avatar,
   Button,
   Link as ChakraLink,
+  Icon,
   LinkProps,
+  Stack,
+  Tooltip,
   WrapItem,
 } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
@@ -22,13 +28,12 @@ import {
 } from "@chakra-ui/react";
 import { InfoIcon } from "@chakra-ui/icons";
 import { AvatarUser } from "./AvatarUser";
+import { SearchPlate } from "../Vagas/SearchPlate";
 
 // Componente da Navbar
 export function NavBar() {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-
 
   return (
     <Flex
@@ -46,9 +51,9 @@ export function NavBar() {
       width="100%" // Garante que a navbar ocupe a largura total
       zIndex={1} // Garante que a navbar fique acima dos outros elementos
       // mb={10}
-      
     >
       <Flex>
+        
         <Link
           href="/home"
           display="flex"
@@ -65,6 +70,7 @@ export function NavBar() {
           </Text>
         </Link>
       </Flex>
+      
       {/* <Spacer /> */}
       <Box
         display={{ base: "block", md: "none" }}
@@ -79,40 +85,77 @@ export function NavBar() {
           _hover={{ bg: "transparent" }}
         />
       </Box>
-
+      <Flex w={'80%'} justifyContent={'center'} >
+      {/* <SearchPlate></SearchPlate> */}
+      </Flex>
       <Box
         display={{ base: isOpen ? "block" : "none", md: "flex" }}
         alignItems="flex-end"
         flexBasis={{ base: "100%", md: "auto" }}
       >
         <VStack
-          spacing={8}
+          spacing={5}
           alignItems="flex-end"
           textAlign={{ base: "center", md: "right" }}
-          flexDirection={{ base: "column", md: "row" }}
+          flexDirection={"row"}
           color={"white"}
           mt={{ base: 4, md: 0 }}
+          
         >
           <ChakraLink as={ReactRouterLink} to="/vagas">
-            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-              Vagas
-            </Text>
+          <Tooltip hasArrow label='vagas' bg='gray.300' color='black' placement="bottom">
+            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+            {/* Vagas */}
+            {/* </Text> */}
+            <Stack align={"center"}>
+              <Icon
+                as={TiLocation}
+                boxSize={"1.5rem"}
+                color={theme.colors.highlights[100]}
+                mb={-3}
+              />
+              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+            </Stack>
+              </Tooltip>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/estatisticas">
-            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-              Estatísticas
-            </Text>
+          <Tooltip hasArrow label='estatísticas' bg='gray.300' color='black' placement="bottom">
+
+            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+            {/* Estatísticas */}
+            {/* </Text> */}
+            <Stack align={"center"}>
+              <Icon
+                as={TiChartBarOutline}
+                boxSize={"1.5rem"}
+                color={theme.colors.highlights[100]}
+                mb={-3}
+              />
+              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+            </Stack>
+            </Tooltip>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/incidentes">
-            <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}>
-              Incidentes
-            </Text>
+          <Tooltip hasArrow label='incidentes' bg='gray.300' color='black' placement="bottom">
+
+            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+            {/* Incidentes */}
+            {/* </Text> */}
+            <Stack align={"center"}>
+              <Icon
+                as={TiInfo}
+                boxSize={"1.5rem"}
+                color={theme.colors.highlights[100]}
+                mb={-3}
+              />
+              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+            </Stack>
+            </Tooltip>
           </ChakraLink>
         </VStack>
       </Box>
-      {/* conteudo abaixo da navbar */}
-      {/* <Box className="content" bg="white" position="relative"></Box> */}
-          <AvatarUser />
+      
+      <AvatarUser />
     </Flex>
   );
 }

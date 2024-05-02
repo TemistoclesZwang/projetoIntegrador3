@@ -34,18 +34,24 @@ export function SearchPlate() {
       <Flex
         flexDirection={"row"}
         alignItems={"center"}
-        justifyContent={"space-between"}
+        justifyContent={"center"}
         gap={3}
+        // bgColor={"gray.900"}
+        // p={2}
+        w={"90%"}
+        // h={"100%"}
         
       >
-        <InputGroup size="md" maxW={"sm"}>
+        <InputGroup size="md" maxW={"lg"}>
+          
           <Input
             placeholder="Buscar placa, exemplo: A234-44"
             value={searchTerm}
             onChange={handleInputChange}
             bgColor={"gray.200"}
+            
           />
-          <InputRightElement width="4.5rem">
+          <InputRightElement width="3.5rem">
             <Search2Icon color={"gray.500"} />
           </InputRightElement>
         </InputGroup>

@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
-import { Button, Flex, List, ListItem } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  List,
+  ListItem,
+  Stack,
+  Switch,
+} from "@chakra-ui/react";
 import { useMatrix } from "../../../context/Matrix/MatrixContext";
 import { useOccupied } from "../../../context/Matrix/OccupiedContext";
 import { LastOccupiedButton } from "./LastOccupiedButton";
+import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
 
 export function Matrix() {
   const { sizeX, setSizeX, sizeY, setSizeY } = useMatrix();
@@ -60,20 +70,24 @@ export function Matrix() {
 
   return (
     <>
+      {" "}
       <Flex flexDirection={"column"} alignItems={"center"}>
         <Flex
           alignItems={"center"}
           flexDirection={"column"}
           maxW={550}
-          maxH={460}
-          mt={5}
-          ml={"6"}
-          backgroundColor={"gray.100"}
+          maxH={360}
+          // mt={5}
+          // ml={"6"}
+          m={'1rem'}
+          // backgroundColor={"gray.100"}
+          borderColor={"gray.100"}
+          border={"1px"}
           p={4}
           borderRadius={"lg"}
           overflowY="auto"
         >
-          <Flex wrap="wrap" justify="flex-end" align="center" maxW={"450"}>
+          <Flex wrap="wrap" justify="center" align="center" maxW={"450"}>
             {buttons}
           </Flex>
         </Flex>
