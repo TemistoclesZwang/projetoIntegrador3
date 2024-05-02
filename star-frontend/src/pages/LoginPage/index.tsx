@@ -17,11 +17,6 @@ import {
 } from "@chakra-ui/react";
 import usePost from "../../hooks/LoginPage/index";
 
-//! passos
-//proteger rotas do react router ver código p2
-// ao logar receber token e role
-// enviar token e role para um context
-// consumior context com token e role nos demais endpoints
 
 export function LoginPage() {
   const theme = useTheme();
