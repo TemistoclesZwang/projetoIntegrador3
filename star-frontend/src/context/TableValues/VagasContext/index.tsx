@@ -14,6 +14,7 @@ export interface Vaga {
   valor: string;
   vaga: string;
 }
+
 interface VagasContextType {
   records: Vaga[];
   isLoading: boolean;

@@ -23,47 +23,33 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoLogOut } from "react-icons/io5";
+import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 
 export function AvatarUser() {
-  const [isAutoUpdateEnabled, setIsAutoUpdateEnabled] = useState(false);
-  const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
+  const { isAutoUpdateEnabled, toggleAutoUpdate } = useAutoUpdate();  // Usando o estado e a função do contexto
 
   const handleClick = () => {
-    console.log("Avatar clicked");
-    // Implemente a lógica do clique aqui
   };
-  const initialFocusRef = React.useRef();
-  const AutoUpdateToggle = () => (
-    <FormControl
-      display="flex"
-      alignItems="center"
-      // bgColor={"gray.200"}
-      w={"15rem"}
-      // borderRadius={"md"}
-      // p={"0.5rem"}
-      justifyContent={"center"}
 
-      // alignSelf={'flex-start'}
-    >
-      <FormLabel htmlFor="auto-update-toggle" mb="0" color="black">
-        {" "}
-        {/* Altere a cor conforme necessário */}
-        Atualização automática:
-      </FormLabel>
-      <Switch
-        id="auto-update-toggle"
-        isChecked={isAutoUpdateEnabled}
-        onChange={toggleAutoUpdate}
-      />
-    </FormControl>
+  const AutoUpdateToggle = () => (
+    <Stack direction="row" justifyContent="end" mb={4}>
+        <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="auto-update-toggle" mb="0">
+                Atualização automática:
+            </FormLabel>
+            <Switch
+                id="auto-update-toggle"
+                isChecked={isAutoUpdateEnabled}
+                onChange={(event) => toggleAutoUpdate(event.target.checked)} // Pass the checked value as an argument
+            />
+        </FormControl>
+    </Stack>
   );
+  
+
   return (
     <WrapItem>
-      <Popover
-        // initialFocusRef={initialFocusRef}
-        placement="bottom"
-        closeOnBlur={false}
-      >
+      <Popover placement="bottom" closeOnBlur={false}>
         <PopoverTrigger>
           <div onClick={handleClick} style={{ cursor: "pointer" }}>
             <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
@@ -78,13 +64,7 @@ export function AvatarUser() {
           <PopoverBody>
             <Flex>
               <ButtonGroup flexDirection={"column"} gap={5}>
-                <Stack
-                  direction="row"
-                  justifyContent="end"
-                  // mb={4}
-                  // position={"fixed"}
-                  // w={"100%"}
-                >
+                <Stack direction="row" justifyContent="end">
                   <AutoUpdateToggle />
                 </Stack>
                 <Flex alignItems={"center"}>
@@ -118,7 +98,7 @@ export function AvatarUser() {
             alignItems="center"
             justifyContent="space-between"
             pb={4}
-          ></PopoverFooter>
+          />
         </PopoverContent>
       </Popover>
     </WrapItem>

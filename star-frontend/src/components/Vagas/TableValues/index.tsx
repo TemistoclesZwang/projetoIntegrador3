@@ -26,6 +26,8 @@ import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagament
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
+import { useAuth } from "../../../context/Auth";
 
 interface Vaga {
   //retirar essa interface daqui é usada em mais de um lugar
@@ -47,12 +49,12 @@ const extractTitlesFromRecord = (record: Vaga): string[] => {
 
 export function TableValues() {
   const theme = useTheme();
-
+  const { accessToken } = useAuth();
   const { records, isLoading, error } = useVagas();
 
   // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
-  const [isAutoUpdateEnabled, setIsAutoUpdateEnabled] = useState(false);
+  const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
   const [sortOrderDuration, setSortOrderDuration] = useState<
@@ -61,33 +63,7 @@ export function TableValues() {
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
     ""
   );
-  // const toggleAutoUpdate = () => setIsAutoUpdateEnabled(!isAutoUpdateEnabled);
 
-  // const AutoUpdateToggle = () => (
-  //   <FormControl
-  //     display="flex"
-  //     alignItems="center"
-  //     bgColor={"gray.100"}
-  //     w={"15rem"}
-  //     borderRadius={"md"}
-  //     p={"0.5rem"}
-  //     justifyContent={"center"}
-
-  //     // alignSelf={'flex-start'}
-  //   >
-  //     <FormLabel htmlFor="auto-update-toggle" mb="0" color="black">
-  //       {" "}
-  //       {/* Altere a cor conforme necessário */}
-  //       Atualização automática:
-  //     </FormLabel>
-  //     <Switch
-  //       id="auto-update-toggle"
-  //       isChecked={isAutoUpdateEnabled}
-  //       onChange={toggleAutoUpdate}
-  //     />
-  //   </FormControl>
-  // );
-  // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
 
   // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
@@ -100,19 +76,38 @@ export function TableValues() {
     }
   }, [records]);
 
-  if (isLoading) {
-    //colocar skeleton e erros chakra
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const fetchUpdatedValues = async () => {
+      const updates = await Promise.all(records.map(async (record) => {
+        const response = await fetch(`http://localhost:3000/vagas/previa-valor/${record.vagaId}`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        return { ...record, duracao: data.tempoTotalUsandoVaga, valor: data.valorPagar };
+      }));
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+      setSortedRecords(prevRecords => {
+        return prevRecords.map(record => {
+          const update = updates.find(u => u.vagaId === record.vagaId);
+          return update || record;
+        });
+      });
+    };
 
-  if (!records || records.length === 0) {
-    return <div>No data available</div>;
-  }
+    if (isAutoUpdateEnabled) {
+      console.log("Auto update enabled");
+      
+      const interval = setInterval(fetchUpdatedValues, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [isAutoUpdateEnabled, accessToken, records]);
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!sortedRecords.length) return <div>No data available</div>;
   const thTitles = extractTitlesFromRecord(records[0]);
 
   const sortByDuration = () => {
@@ -236,6 +231,8 @@ export function TableValues() {
   // };
 
   const atualizarInfosVagaLiberada = (updatedVaga: any) => {
+    console.log("toggle:", isAutoUpdateEnabled);
+
     setSortedRecords((records) =>
       records.map((vaga) =>
         vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga
@@ -264,7 +261,6 @@ export function TableValues() {
           // backgroundColor={"gray.100"}
           mb={-59}
           // position={"fixed"}
-
         >
           {/* <CombinedContextButton
             bg={theme.colors.highlights[50]}
@@ -307,6 +303,7 @@ export function TableValues() {
                     onUpdate={atualizarInfosVagaLiberada}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
+
                   <TableIcons iconName={"add"} />
                   <TableIcons
                     iconName={"check"}
