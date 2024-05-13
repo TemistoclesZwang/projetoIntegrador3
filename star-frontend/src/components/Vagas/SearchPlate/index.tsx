@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { Vaga } from "../../../context/TableValues/VagasContext";
-import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 
 export function SearchPlate() {
   const [searchTerm, setSearchTerm] = useState("");

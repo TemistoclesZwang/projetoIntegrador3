@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { DisableInput } from "../Matrix/DisableInputs";
 import { useTableInput } from "../../../context/TableInput/TableInputContext";
-import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 // import { DrawerExample } from "../DrawerVagas";
 
 export function TableInput() {
@@ -120,11 +120,11 @@ export function TableInput() {
       Valor:
       <Badge fontSize={'sm'} borderRadius={'lg'} variant='solid' colorScheme='green' ml={2}>R$23,00</Badge>
       </Box> */}
-      {/* <CombinedContextButton colorScheme="teal" size={'sm'} p={'2'} gap={2}>
+      {/* <BtnSendNewSpace colorScheme="teal" size={'sm'} p={'2'} gap={2}>
         Add
         <AddIcon />
 
-      </CombinedContextButton> */}
+      </BtnSendNewSpace> */}
       </Flex>
       
     // </Flex>

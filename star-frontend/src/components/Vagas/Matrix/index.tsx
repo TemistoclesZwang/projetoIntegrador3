@@ -12,7 +12,7 @@ import {
 import { useMatrix } from "../../../context/Matrix/MatrixContext";
 import { useOccupied } from "../../../context/Matrix/OccupiedContext";
 import { LastOccupiedButton } from "./LastOccupiedButton";
-import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 
 export function Matrix() {
   const { sizeX, setSizeX, sizeY, setSizeY } = useMatrix();

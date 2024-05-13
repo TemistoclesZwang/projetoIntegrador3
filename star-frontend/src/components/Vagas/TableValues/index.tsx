@@ -25,7 +25,7 @@ import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useVagas } from "../../../context/TableValues/VagasContext";
-import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
+import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 
@@ -85,6 +85,7 @@ export function TableValues() {
             'Content-Type': 'application/json'
           }
         });
+
         const data = await response.json();
         return { ...record, duracao: data.tempoTotalUsandoVaga, valor: data.valorPagar };
       }));
@@ -262,7 +263,7 @@ export function TableValues() {
           mb={-59}
           // position={"fixed"}
         >
-          {/* <CombinedContextButton
+          {/* <BtnSendNewSpace
             bg={theme.colors.highlights[50]}
             size={"md"}
             p={"2"}
@@ -275,7 +276,7 @@ export function TableValues() {
           >
             <AddIcon />
             
-          </CombinedContextButton> */}
+          </BtnSendNewSpace> */}
         </Flex>
         <Table variant="striped" colorScheme="gray">
           <TableCaption>Registro de Estacionamento</TableCaption>

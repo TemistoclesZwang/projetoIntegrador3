@@ -2,60 +2,68 @@ import React from "react";
 import { Button } from "@chakra-ui/react";
 import { useTableInput } from "../../TableInput/TableInputContext";
 import { useOccupied } from "../OccupiedContext";
+import { useEndpoint } from "../../../hooks/api/useEndpoint";
+import { useAuth } from "../../Auth";
 
-export function CombinedContextButton(
+export function BtnSendNewSpace(
   props: React.PropsWithChildren<React.ComponentProps<typeof Button>>
 ) {
   const { name, plate, durationHours, durationMinutes } = useTableInput();
   const { occupied } = useOccupied();
+  const { data, error, isLoading, sendRequest } = useEndpoint<
+    { status: string },
+    {
+      nome: string;
+      placa: string;
+      duracao: number;
+      vaga: string;
+      pagamento: string;
+    }
+  >(
+    {
+      url: "http://localhost:3000/vagas/criar",
+      method: "POST",
+      body: {
+        placa: plate,
+        nome: name,
+        duracao: durationHours * 60 + durationMinutes,
+        vaga: occupied.length > 0 ? occupied[occupied.length - 1] : "",
+        pagamento: "pendente",
+      },
+    },
+    false
+  ); // Controle manual do disparo
 
-  const handleButtonClick = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    // Converter horas e minutos para total de minutos
-    const durationInMinutes = durationHours * 60 + durationMinutes;
-    const lastOccupied =
-      occupied.length > 0 ? occupied[occupied.length - 1] : ""; // Pega a última vaga ocupada, se houver
-
-    // Log para debug
-    console.log(name, plate, durationInMinutes, lastOccupied);
-
-    // Preparar o corpo da requisição
-    const body = {
-      nome: name,
-      placa: plate,
-      duracao: durationInMinutes,
-      vaga: lastOccupied,
-    };
-
-    // Enviar a requisição POST
-    try {
-      const response = await fetch("http://localhost:3000/vagas/criar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro: ${response.statusText}`);
-      }
-
-      const responseData = await response.json();
-      console.log("Resposta do servidor:", responseData);
-      // Tratar a resposta aqui
-    } catch (error) {
+  React.useEffect(() => {
+    if (data) {
+      console.log("Resposta do servidor:", data);
+    }
+    if (error) {
       console.error("Erro ao enviar os dados:", error);
     }
+  }, [data, error]);
 
-    // Chama o onClick fornecido por props, se existir
+  const handleButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    // Validar dados antes de enviar
+    if (
+      plate &&
+      name &&
+      durationHours != null &&
+      durationMinutes != null &&
+      (occupied.length > 0 || typeof occupied[occupied.length - 1] === "string")
+    ) {
+      sendRequest();
+    } else {
+      console.error("Dados incompletos ou inválidos para enviar a requisição.");
+    }
     props.onClick?.(event);
   };
 
   return (
-    <Button {...props} onClick={handleButtonClick}>
-      {props.children} {/* Renderizando children aqui */}
+    <Button {...props} onClick={handleButtonClick} isLoading={isLoading}>
+      {props.children}
     </Button>
   );
 }

@@ -36,7 +36,7 @@ import { AllProviders } from "../../context/AllProviders";
 import { DrawerVagas } from "../../components/Vagas/DrawerVagas";
 import { AddIcon } from "@chakra-ui/icons";
 import React from "react";
-import { CombinedContextButton } from "../../context/Matrix/CombinedContext";
+import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
 
 export function Vagas() {
   const theme = useTheme();
@@ -100,7 +100,7 @@ export function Vagas() {
               gap={"1rem"}
             >
               {/* <Button colorScheme="blue">Submit</Button> */}
-              <CombinedContextButton
+              <BtnSendNewSpace
                 colorScheme="teal"
                 size={"md"}
                 p={"2"}
@@ -109,7 +109,7 @@ export function Vagas() {
               >
                 <AddIcon />
                 Criar
-              </CombinedContextButton>
+              </BtnSendNewSpace>
               <Button
                 variant="outline"
                 mr={3}
