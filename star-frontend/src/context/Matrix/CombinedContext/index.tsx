@@ -1,15 +1,21 @@
 import React from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 import { useTableInput } from "../../TableInput/TableInputContext";
 import { useOccupied } from "../OccupiedContext";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
-import { useAuth } from "../../Auth";
+import { useVagas } from "../../../context/TableValues/VagasContext";
+
+interface BtnSendNewSpaceProps extends ButtonProps {
+  onClose: () => void; // Adicionando a prop onClose
+}
 
 export function BtnSendNewSpace(
-  props: React.PropsWithChildren<React.ComponentProps<typeof Button>>
+  props: React.PropsWithChildren<BtnSendNewSpaceProps>
 ) {
   const { name, plate, durationHours, durationMinutes } = useTableInput();
   const { occupied } = useOccupied();
+  const { refreshVagas } = useVagas();
+
   const { data, error, isLoading, sendRequest } = useEndpoint<
     { status: string },
     {
@@ -32,21 +38,24 @@ export function BtnSendNewSpace(
       },
     },
     false
-  ); // Controle manual do disparo
+  );
 
   React.useEffect(() => {
     if (data) {
       console.log("Resposta do servidor:", data);
+      props.onClose(); // Fechar o Drawer quando a resposta é recebida
+      setTimeout(() => {
+        refreshVagas();
+      }, 1000); // Espera 1 segundo antes de atualizar as vagas
     }
     if (error) {
       console.error("Erro ao enviar os dados:", error);
     }
-  }, [data, error]);
+  }, [data, error, refreshVagas, props]); // Adicionando props para evitar dependências incompletas
 
   const handleButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    // Validar dados antes de enviar
     if (
       plate &&
       name &&
@@ -58,7 +67,7 @@ export function BtnSendNewSpace(
     } else {
       console.error("Dados incompletos ou inválidos para enviar a requisição.");
     }
-    props.onClick?.(event);
+    props.onClick?.(event); // Garantindo que props.onClick exista antes de chamá-lo
   };
 
   return (

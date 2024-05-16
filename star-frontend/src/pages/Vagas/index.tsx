@@ -105,6 +105,7 @@ export function Vagas() {
                 size={"md"}
                 p={"2"}
                 gap={2}
+                onClose={onClose} 
                 // w={"5rem"}
               >
                 <AddIcon />
