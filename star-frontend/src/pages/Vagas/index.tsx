@@ -57,7 +57,7 @@ export function Vagas() {
         <Box>
           {/* <SearchPlate /> */}
         </Box>
-      <SearchPlate></SearchPlate>
+      {/* <SearchPlate></SearchPlate> */}
         <Box>
         <Tooltip hasArrow label='Criar vaga' bg='gray.300' color='black' placement="bottom">
 

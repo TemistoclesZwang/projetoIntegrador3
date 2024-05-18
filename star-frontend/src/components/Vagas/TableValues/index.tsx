@@ -10,27 +10,18 @@ import {
   TableContainer,
   TableCaption,
   IconButton,
-  FormControl,
-  FormLabel,
-  Switch,
-  Stack,
-  useTheme,
-  background,
   Flex,
 } from "@chakra-ui/react";
-import { AddIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
-import { useGet } from "../../../hooks/api/useGet";
+import { useVagas } from "../../../context/TableValues/VagasContext";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
 import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagamento";
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
-import { useVagas } from "../../../context/TableValues/VagasContext";
-import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 
 interface Vaga {
-  //retirar essa interface daqui é usada em mais de um lugar
   vagaId: number;
   status: string;
   placa: string;
@@ -44,31 +35,20 @@ interface Vaga {
 }
 
 const extractTitlesFromRecord = (record: Vaga): string[] => {
-  return Object.keys(record).filter((key) => key !== "vagaId"); // Exclui 'vagaId' da lista de chaves
+  return Object.keys(record).filter((key) => key !== "vagaId");
 };
 
 export function TableValues() {
-  const theme = useTheme();
   const { accessToken } = useAuth();
-  const { records, isLoading, error } = useVagas();
-
-  // lembrar: Inicialize todos os estados antes de qualquer lógica condicional
+  const { records, isLoading, error, refreshRecords } = useVagas(); // Adicione refreshRecords
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
-  const [sortOrderDuration, setSortOrderDuration] = useState<
-    "asc" | "desc" | ""
-  >("");
-  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
-    ""
-  );
-
+  const [sortOrderDuration, setSortOrderDuration] = useState<"asc" | "desc" | "">("");
+  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
-
-  // const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
-  //. todos os estados tem que ser inicializados antes de qualquer lógica de uso
 
   useEffect(() => {
     if (records) {
@@ -78,21 +58,30 @@ export function TableValues() {
 
   useEffect(() => {
     const fetchUpdatedValues = async () => {
-      const updates = await Promise.all(records.map(async (record) => {
-        const response = await fetch(`http://localhost:3000/vagas/previa-valor/${record.vagaId}`, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-          }
-        });
+      const updates = await Promise.all(
+        records.map(async (record) => {
+          const response = await fetch(
+            `http://localhost:3000/vagas/previa-valor/${record.vagaId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
-        const data = await response.json();
-        return { ...record, duracao: data.tempoTotalUsandoVaga, valor: data.valorPagar };
-      }));
+          const data = await response.json();
+          return {
+            ...record,
+            duracao: data.tempoTotalUsandoVaga,
+            valor: data.valorPagar,
+          };
+        })
+      );
 
-      setSortedRecords(prevRecords => {
-        return prevRecords.map(record => {
-          const update = updates.find(u => u.vagaId === record.vagaId);
+      setSortedRecords((prevRecords) => {
+        return prevRecords.map((record) => {
+          const update = updates.find((u) => u.vagaId === record.vagaId);
           return update || record;
         });
       });
@@ -100,7 +89,7 @@ export function TableValues() {
 
     if (isAutoUpdateEnabled) {
       console.log("Auto update enabled");
-      
+
       const interval = setInterval(fetchUpdatedValues, 5000);
       return () => clearInterval(interval);
     }
@@ -177,9 +166,9 @@ export function TableValues() {
     entrada: sortOrderEntrada,
     valor: sortOrderValor,
   };
+
   function formatDate(dateString: string | number | Date | null) {
     if (dateString === null || dateString === "") {
-      // Retorna uma string vazia ou algum outro placeholder se a data for null
       return "";
     }
 
@@ -194,9 +183,8 @@ export function TableValues() {
     };
 
     const date = new Date(dateString);
-    // Verifica se a data é inválida antes de tentar formatá-la
     if (isNaN(date.getTime())) {
-      return ""; // Retorna string vazia ou placeholder para datas inválidas
+      return "";
     }
 
     return date.toLocaleDateString("pt-BR", options).replace(",", "");
@@ -227,13 +215,8 @@ export function TableValues() {
       </Th>
     ));
   };
-  // const atualizarInfosVagaLiberada = (updatedVaga: any) => {
-  //   setSortedRecords(records => records.map(vaga => vaga.vagaId === updatedVaga.vagaId ? updatedVaga : vaga));
-  // };
 
   const atualizarInfosVagaLiberada = (updatedVaga: any) => {
-    console.log("toggle:", isAutoUpdateEnabled);
-
     setSortedRecords((records) =>
       records.map((vaga) =>
         vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga
@@ -242,87 +225,52 @@ export function TableValues() {
   };
 
   return (
-    <>
-      {/* <Stack
-        direction="row"
-        justifyContent="end"
-        mb={4}
-        // position={"fixed"}
-        // w={"100%"}
-        
-      >
-        <AutoUpdateToggle />
-      </Stack> */}
-
-      <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
-        <Flex
-          w={"100%"}
-          justifyContent={"end"}
-          p={6}
-          // backgroundColor={"gray.100"}
-          mb={-59}
-          // position={"fixed"}
-        >
-          {/* <BtnSendNewSpace
-            bg={theme.colors.highlights[50]}
-            size={"md"}
-            p={"2"}
-            gap={2}
-            // w={"5rem"}
-            position={"fixed"}
-            zIndex={1}
-            mr={'9.5rem'}
-            mt={'5rem'}
-          >
-            <AddIcon />
-            
-          </BtnSendNewSpace> */}
-        </Flex>
-        <Table variant="striped" colorScheme="gray">
-          <TableCaption>Registro de Estacionamento</TableCaption>
-          <Thead>
-            <Tr>{generateTableHeaders(thTitles)}</Tr>
-          </Thead>
-          <Tbody>
-            {sortedRecords.map((record, index) => (
-              <Tr key={index}>
-                {Object.entries(record).map(([key, value], idx) => {
-                  // Filtra a propriedade vagaId para não renderizar na tabela
-                  if (key !== "vagaId") {
-                    // Verifica se a chave é uma das colunas de data
-                    if (key === "entrada" || key === "saida") {
-                      return <Td key={idx}>{formatDate(value)}</Td>;
-                    }
-                    return <Td key={idx}>{value}</Td>;
+    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
+      <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
+      <Table variant="striped" colorScheme="gray">
+        <TableCaption>Registro de Estacionamento</TableCaption>
+        <Thead>
+          <Tr>{generateTableHeaders(thTitles)}</Tr>
+        </Thead>
+        <Tbody>
+          {sortedRecords.map((record, index) => (
+            <Tr key={index}>
+              {Object.entries(record).map(([key, value], idx) => {
+                if (key !== "vagaId") {
+                  if (key === "entrada" || key === "saida") {
+                    return <Td key={idx}>{formatDate(value)}</Td>;
                   }
-                  return null; // Retorna null para a propriedade vagaId, omitindo-a da tabela
-                })}
-                <Td>
-                  <TableIcons
-                    iconName={"email"}
-                    vagaId={record.vagaId}
-                    onUpdate={atualizarInfosVagaLiberada}
-                    isAutoUpdateEnabled={isAutoUpdateEnabled}
-                  />
-
-                  <TableIcons iconName={"add"} />
-                  <TableIcons
-                    iconName={"check"}
-                    vagaId={record.vagaId}
-                    onUpdate={atualizarInfosVagaLiberada}
-                  />
-                  <TableIcons iconName={"info"} />
-                  {/* <button onClick={() => fetchAndUpdateVaga(record.vagaId)}>Atualizar</button> Botão para atualizar */}
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-
-          <Tfoot>
-            <Tr>{generateTableHeaders(thTitles)}</Tr>
-          </Tfoot>
-        </Table>
-      </TableContainer>
-    </>
+                  return <Td key={idx}>{value}</Td>;
+                }
+                return null;
+              })}
+              <Td>
+                <TableIcons
+                  iconName={"email"}
+                  vagaId={record.vagaId}
+                  onUpdate={atualizarInfosVagaLiberada}
+                  isAutoUpdateEnabled={isAutoUpdateEnabled}
+                />
+                <TableIcons
+                  iconName={"add"}
+                  vagaId={record.vagaId}
+                  onUpdate={() => refreshRecords()} // Recarregar todos os dados após "add"
+                  isAutoUpdateEnabled={isAutoUpdateEnabled}
+                />
+                <TableIcons
+                  iconName={"check"}
+                  vagaId={record.vagaId}
+                  onUpdate={atualizarInfosVagaLiberada}
+                />
+                <TableIcons iconName={"info"} />
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot>
+          <Tr>{generateTableHeaders(thTitles)}</Tr>
+        </Tfoot>
+      </Table>
+    </TableContainer>
   );
 }

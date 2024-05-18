@@ -40,7 +40,7 @@ export function NavBar() {
       as="nav"
       align="center"
       justify="space-between"
-      wrap="wrap"
+      // wrap="wrap"
       padding="0.5rem"
       bg="gray.900"
       color="white"
@@ -51,9 +51,10 @@ export function NavBar() {
       width="100%" // Garante que a navbar ocupe a largura total
       zIndex={1} // Garante que a navbar fique acima dos outros elementos
       // mb={10}
+      pr={'1.3rem'}
+      pl={'1.3rem'}
     >
       <Flex>
-        
         <Link
           href="/home"
           display="flex"
@@ -70,7 +71,7 @@ export function NavBar() {
           </Text>
         </Link>
       </Flex>
-      
+
       {/* <Spacer /> */}
       <Box
         display={{ base: "block", md: "none" }}
@@ -85,9 +86,10 @@ export function NavBar() {
           _hover={{ bg: "transparent" }}
         />
       </Box>
-      <Flex w={'80%'} justifyContent={'center'} >
-      {/* <SearchPlate></SearchPlate> */}
+      <Flex w={"80%"} justifyContent={"center"}>
+        <SearchPlate></SearchPlate>
       </Flex>
+      {/* <SearchPlate></SearchPlate> */}
       <Box
         display={{ base: isOpen ? "block" : "none", md: "flex" }}
         alignItems="flex-end"
@@ -100,61 +102,77 @@ export function NavBar() {
           flexDirection={"row"}
           color={"white"}
           mt={{ base: 4, md: 0 }}
-          
+          mr={'1rem'}
         >
           <ChakraLink as={ReactRouterLink} to="/vagas">
-          <Tooltip hasArrow label='vagas' bg='gray.300' color='black' placement="bottom">
-            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
-            {/* Vagas */}
-            {/* </Text> */}
-            <Stack align={"center"}>
-              <Icon
-                as={TiLocation}
-                boxSize={"1.5rem"}
-                color={theme.colors.highlights[100]}
-                mb={-3}
-              />
-              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
-            </Stack>
-              </Tooltip>
+            <Tooltip
+              hasArrow
+              label="vagas"
+              bg="gray.300"
+              color="black"
+              placement="bottom"
+            >
+              {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+              {/* Vagas */}
+              {/* </Text> */}
+              <Stack align={"center"}>
+                <Icon
+                  as={TiLocation}
+                  boxSize={"1.5rem"}
+                  color={theme.colors.highlights[100]}
+                  mb={-3}
+                />
+                {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+              </Stack>
+            </Tooltip>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/estatisticas">
-          <Tooltip hasArrow label='estatísticas' bg='gray.300' color='black' placement="bottom">
-
-            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
-            {/* Estatísticas */}
-            {/* </Text> */}
-            <Stack align={"center"}>
-              <Icon
-                as={TiChartBarOutline}
-                boxSize={"1.5rem"}
-                color={theme.colors.highlights[100]}
-                mb={-3}
-              />
-              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
-            </Stack>
+            <Tooltip
+              hasArrow
+              label="estatísticas"
+              bg="gray.300"
+              color="black"
+              placement="bottom"
+            >
+              {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+              {/* Estatísticas */}
+              {/* </Text> */}
+              <Stack align={"center"}>
+                <Icon
+                  as={TiChartBarOutline}
+                  boxSize={"1.5rem"}
+                  color={theme.colors.highlights[100]}
+                  mb={-3}
+                />
+                {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+              </Stack>
             </Tooltip>
           </ChakraLink>
           <ChakraLink as={ReactRouterLink} to="/incidentes">
-          <Tooltip hasArrow label='incidentes' bg='gray.300' color='black' placement="bottom">
-
-            {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
-            {/* Incidentes */}
-            {/* </Text> */}
-            <Stack align={"center"}>
-              <Icon
-                as={TiInfo}
-                boxSize={"1.5rem"}
-                color={theme.colors.highlights[100]}
-                mb={-3}
-              />
-              {/* <Text fontSize={"sm"}>Incidentes</Text> */}
-            </Stack>
+            <Tooltip
+              hasArrow
+              label="incidentes"
+              bg="gray.300"
+              color="black"
+              placement="bottom"
+            >
+              {/* <Text textStyle={"linkSize"} fontSize={theme.textStyles.linkSize}> */}
+              {/* Incidentes */}
+              {/* </Text> */}
+              <Stack align={"center"}>
+                <Icon
+                  as={TiInfo}
+                  boxSize={"1.5rem"}
+                  color={theme.colors.highlights[100]}
+                  mb={-3}
+                />
+                {/* <Text fontSize={"sm"}>Incidentes</Text> */}
+              </Stack>
             </Tooltip>
           </ChakraLink>
         </VStack>
       </Box>
-      
+
       <AvatarUser />
     </Flex>
   );

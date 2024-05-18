@@ -1,6 +1,6 @@
-import { useCallback, useState, useContext } from "react";
+import { useCallback, useState } from "react";
 import { useAuth } from "../../context/Auth";
-import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext"; // Importando o contexto
+import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
 
 type IconType = "email" | "add" | "check" | "info";
 
@@ -11,7 +11,7 @@ export function useIconClick(
 ) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { accessToken } = useAuth();
-  const { isAutoUpdateEnabled } = useAutoUpdate(); // Usando o estado do contexto
+  const { isAutoUpdateEnabled } = useAutoUpdate();
 
   async function updatedThisFields(
     response: Response,
@@ -33,9 +33,10 @@ export function useIconClick(
   }
 
   const handleAction = useCallback(async () => {
-  
-    
-    // if (!isAutoUpdateEnabled) return; // Verifica se a atualização automática está habilitada antes de prosseguir
+    if (!vagaId) {
+      console.error("vagaId está indefinido");
+      return;
+    }
 
     setIsProcessing(true);
     let response;
@@ -50,27 +51,15 @@ export function useIconClick(
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
               }
-              
             }
           );
           const camposMapeamentoEmail = {
             tempoTotalUsandoVaga: "duracao",
-            valorPagar: "valor", //! aqui é passada as informações do backend para o frontend
+            valorPagar: "valor",
           };
-          await updatedThisFields(response, vagaId || 0, camposMapeamentoEmail);
+          await updatedThisFields(response, vagaId, camposMapeamentoEmail);
           break;
         case "add":
-          console.log("Chamada API para add", vagaId);
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}/add`, {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${accessToken}`
-            }
-          });
-          break;
-        case "check":
-          console.log("Chamada API para check", vagaId);
           response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
             method: "POST",
             headers: {
@@ -78,9 +67,29 @@ export function useIconClick(
               'Authorization': `Bearer ${accessToken}`
             }
           });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
+          break;
+        case "check":
+          response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
           break;
         case "info":
-          console.log("Chamada API para info", vagaId);
           response = await fetch(`http://localhost:3000/vagas/${vagaId}/info`, {
             method: "POST",
             headers: {
@@ -88,23 +97,22 @@ export function useIconClick(
               'Authorization': `Bearer ${accessToken}`
             }
           });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
           break;
         default:
           console.log("Ação desconhecida");
-      }
-
-      if (response && response.ok) {
-        const updatedVaga = await response.json();
-        onUpdate?.(updatedVaga);
-      } else {
-        throw new Error("Falha ao processar ação");
       }
     } catch (error) {
       console.error('Erro ao processar ação:', error);
     } finally {
       setIsProcessing(false);
     }
-  }, [iconName, vagaId, onUpdate, accessToken, isAutoUpdateEnabled]); // Adicionando isAutoUpdateEnabled às dependências do useCallback
+  }, [iconName, vagaId, onUpdate, accessToken, isAutoUpdateEnabled]);
 
   return { handleAction, isProcessing };
 }

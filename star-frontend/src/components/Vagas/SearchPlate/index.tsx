@@ -36,7 +36,7 @@ export function SearchPlate() {
         alignItems={"center"}
         justifyContent={"center"}
         gap={3}
-        // bgColor={"gray.900"}
+        // bgColor={"gray.500"}
         // p={2}
         w={"90%"}
         // h={"100%"}

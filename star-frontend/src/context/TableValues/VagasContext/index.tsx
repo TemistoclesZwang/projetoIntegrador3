@@ -20,7 +20,7 @@ interface VagasContextType {
   error: Error | null;
   setSearchResults: (results: Vaga[] | null) => void;
   originalRecords: Vaga[] | null;
-  refreshVagas: () => void;
+  refreshRecords: () => void;  // Alterar o nome para refreshRecords para consistência
 }
 
 export const VagasContext = createContext<VagasContextType>({
@@ -29,7 +29,7 @@ export const VagasContext = createContext<VagasContextType>({
   error: null,
   setSearchResults: () => {},
   originalRecords: [],
-  refreshVagas: () => {},
+  refreshRecords: () => {},  // Alterar o nome para refreshRecords para consistência
 });
 
 export const useVagas = () => useContext(VagasContext);
@@ -52,12 +52,12 @@ export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const refreshVagas = () => {
+  const refreshRecords = () => {
     refetch();
   };
 
   return (
-    <VagasContext.Provider value={{ records: allRecords, isLoading, error, setSearchResults, originalRecords, refreshVagas }}>
+    <VagasContext.Provider value={{ records: allRecords, isLoading, error, setSearchResults, originalRecords, refreshRecords }}>
       {children}
     </VagasContext.Provider>
   );
