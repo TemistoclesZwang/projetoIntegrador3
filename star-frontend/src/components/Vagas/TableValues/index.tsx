@@ -11,6 +11,7 @@ import {
   TableCaption,
   IconButton,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
@@ -52,10 +53,10 @@ export function TableValues() {
 
   useEffect(() => {
     if (records) {
-      setSortedRecords(records);
+      setSortedRecords(records.length > 0 ? records : []);
     }
   }, [records]);
-
+  
   useEffect(() => {
     const fetchUpdatedValues = async () => {
       const updates = await Promise.all(
@@ -95,10 +96,20 @@ export function TableValues() {
     }
   }, [isAutoUpdateEnabled, accessToken, records]);
 
+
+  const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
+    if (!record) return [];
+    return Object.keys(record).filter((key) => key !== "vagaId");
+  };
+  
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (!sortedRecords.length) return <div>No data available</div>;
+  if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>
+
+
   const thTitles = extractTitlesFromRecord(records[0]);
+
+  
 
   const sortByDuration = () => {
     if (sortOrderDuration === "asc" || sortOrderDuration === "") {

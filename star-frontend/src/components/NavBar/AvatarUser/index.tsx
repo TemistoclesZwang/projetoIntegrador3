@@ -24,8 +24,10 @@ import {
 import React, { useState } from "react";
 import { IoLogOut } from "react-icons/io5";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
+import { useAuth } from "../../../context/Auth";
 
 export function AvatarUser() {
+  const {logout} = useAuth();
   const { isAutoUpdateEnabled, toggleAutoUpdate } = useAutoUpdate();  // Usando o estado e a função do contexto
 
   const handleClick = () => {
@@ -86,6 +88,7 @@ export function AvatarUser() {
                     fontSize={"lg"}
                     variant="solid"
                     size="lg"
+                    onClick={logout}
                   />
                   <div>Sair</div>
                 </Flex>

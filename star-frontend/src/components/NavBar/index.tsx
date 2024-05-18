@@ -104,12 +104,12 @@ export function NavBar() {
 
       <AvatarUser />
 
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay>
-          <DrawerContent>
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose} >
+        <DrawerOverlay >
+          <DrawerContent borderRadius={"xl"} bgColor={'gray.900'}>
             <DrawerCloseButton />
-            <DrawerHeader>Menu</DrawerHeader>
-            <DrawerBody>
+            <DrawerHeader >Menu</DrawerHeader>
+            <DrawerBody >
               <VStack spacing={5} alignItems="flex-start" w="100%">
                 <SearchPlate />
                 <NavLink to="/vagas" label="Vagas" icon={TiLocation} onClick={onClose} />

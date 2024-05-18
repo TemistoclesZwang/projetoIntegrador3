@@ -1,8 +1,6 @@
 import {
-  AbsoluteCenter,
   Box,
   Button,
-  Divider,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -11,15 +9,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Flex,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
-  Select,
   Stack,
-  Text,
-  Textarea,
   Tooltip,
   useDisclosure,
   useTheme,
@@ -27,13 +17,8 @@ import {
 import { TableValues } from "../../components/Vagas/TableValues";
 import { TableInput } from "../../components/Vagas/TableInput";
 import { Matrix } from "../../components/Vagas/Matrix";
-import { MatrixProvider } from "../../context/Matrix/MatrixContext";
-import { OccupiedProvider } from "../../context/Matrix/OccupiedContext";
-import { TableInputProvider } from "../../context/TableInput/TableInputContext";
 import { SearchPlate } from "../../components/Vagas/SearchPlate";
-import { VagasProvider } from "../../context/TableValues/VagasContext";
 import { AllProviders } from "../../context/AllProviders";
-import { DrawerVagas } from "../../components/Vagas/DrawerVagas";
 import { AddIcon } from "@chakra-ui/icons";
 import React from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
