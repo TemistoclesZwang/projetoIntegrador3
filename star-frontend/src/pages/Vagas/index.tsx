@@ -39,25 +39,28 @@ export function Vagas() {
         pt={"1rem"}
         pb={"1rem"}
       >
+        <Box>{/* <SearchPlate /> */}</Box>
+        {/* <SearchPlate></SearchPlate> */}
         <Box>
-          {/* <SearchPlate /> */}
-        </Box>
-      {/* <SearchPlate></SearchPlate> */}
-        <Box>
-        <Tooltip hasArrow label='Criar vaga' bg='gray.300' color='black' placement="bottom">
-
-          <Button
-            leftIcon={<AddIcon />}
-            // colorScheme="teal"
-            bg={theme.colors.highlights[50]}
-            color={'black'}
-            onClick={onOpen}
-            _active={{ bg: "gray.800", transform: "scale(0.95)" }}
-            w={"xsm"}
-            _hover={'black'}
+          <Tooltip
+            hasArrow
+            label="Criar vaga"
+            bg="gray.300"
+            color="black"
+            placement="bottom"
           >
-            Criar vaga
-          </Button>
+            <Button
+              leftIcon={<AddIcon />}
+              // colorScheme="teal"
+              bg={theme.colors.highlights[50]}
+              color={"black"}
+              onClick={onOpen}
+              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+              w={"xsm"}
+              _hover={"black"}
+            >
+              Criar vaga
+            </Button>
           </Tooltip>
         </Box>
         <Drawer
@@ -67,31 +70,30 @@ export function Vagas() {
           onClose={onClose}
         >
           <DrawerOverlay />
-          <DrawerContent borderRadius={"xl"}>
-            <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">
+          <DrawerContent borderRadius={"xl"} bgColor={"gray.800"}>
+            <DrawerCloseButton color={"white"} />
+            <DrawerHeader borderBottomWidth="1px" color={"white"}>
               Insira as informações:
             </DrawerHeader>
 
             <DrawerBody>
-              <Stack spacing="24px"></Stack>
-              <TableInput />
+              <Stack spacing="24px" color={"gray.300"}>
+                <TableInput />
+              </Stack>
             </DrawerBody>
-            <Matrix></Matrix>
+            <Matrix />
             <DrawerFooter
               borderTopWidth="1px"
               justifyContent={"center"}
-              bgColor={"gray.100"}
+              bgColor={"gray.800"}
               gap={"1rem"}
             >
-              {/* <Button colorScheme="blue">Submit</Button> */}
               <BtnSendNewSpace
                 colorScheme="teal"
                 size={"md"}
                 p={"2"}
                 gap={2}
-                onClose={onClose} 
-                // w={"5rem"}
+                onClose={onClose}
               >
                 <AddIcon />
                 Criar
@@ -100,9 +102,10 @@ export function Vagas() {
                 variant="outline"
                 mr={3}
                 onClick={onClose}
-                bgColor={"white"}
+                bgColor={"gray.700"}
+                color={"white"}
               >
-                Cancel
+                Cancelar
               </Button>
             </DrawerFooter>
           </DrawerContent>
