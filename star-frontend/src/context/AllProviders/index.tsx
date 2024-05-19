@@ -13,7 +13,7 @@ interface AllProvidersProps {
   export function AllProviders({ children }: AllProvidersProps): ReactElement {
     return (
       // <AutoUpdateProvider>
-      // <VagasProvider>
+      <VagasProvider>
         <MatrixProvider>
           <OccupiedProvider>
             <TableInputProvider>
@@ -21,7 +21,7 @@ interface AllProvidersProps {
             </TableInputProvider>
           </OccupiedProvider>
         </MatrixProvider>
-      // </VagasProvider>
+       </VagasProvider>
       // </AutoUpdateProvider>
     );
   }
