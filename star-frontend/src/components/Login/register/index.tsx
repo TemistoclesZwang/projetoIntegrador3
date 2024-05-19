@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
+import textureFloor from "/home/temistocles/IFPI/5 periodo/projeto 3/github/projetoIntegrador3/star-frontend/src/assets/textureFloor.jpg";
 import {
   Box,
   Button,
@@ -7,46 +8,130 @@ import {
   FormLabel,
   Input,
   Text,
+  Image,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  filter,
 } from "@chakra-ui/react";
+import { useEndpoint } from "../../../hooks/api/useEndpoint";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export function Register() {
-  // Estados para cada campo de entrada e mensagens de erro
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [IdRole, setIdRole] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [role, setRole] = useState("Guest"); 
 
-  // Validador de email
-  const validateEmail = (email:string) => {
+  // Hook useEndpoint para gerenciar a solicitação
+  const { data, error, isLoading, sendRequest } = useEndpoint<
+    { status: string },
+    {
+      name: string;
+      email: string;
+      password: string;
+      confirmPassword: string;
+      role:string;
+    }
+  >(
+    {
+      url: "http://localhost:3000/cadastro/novo-usuario",
+      method: "POST",
+      body: {
+        name,
+        email,
+        password,
+        confirmPassword,
+        role,
+      },
+    },
+    false // autoFetch é false para permitir envio manual
+  );
+
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [error]);
+
+  const validateEmail = (email: string) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
 
-  // Validador de senha
-  const validatePassword = (password:string) => {
+  const validatePassword = (password: string) => {
     const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
     return regex.test(password);
   };
 
-  // Função para enviar os dados
+  const TextureBg = () => {
+    return (
+      <Image
+        src={textureFloor}
+        position="absolute"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex="-1"
+        objectFit="cover">
+      </Image>
+    )
+  }
+  const RoleOptions = () => {
+    return (
+      <Flex w={'100%'} direction="column">
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            borderRadius={'md'}
+            textAlign="left"
+            color="gray.500" // Definindo a cor cinza semelhante a um placeholder
+            fontWeight="normal"
+          >
+            {role}
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => setRole("Guest")}>Guest</MenuItem>
+            <MenuItem onClick={() => setRole("Admin")}>Admin</MenuItem>
+            <MenuItem onClick={() => setRole("Manager")}>Manager</MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
+    );
+  };
+  
   const handleSubmit = async () => {
-    // Limpa erros anteriores
-    setEmailError('');
-    setPasswordError('');
+    setEmailError("");
+    setPasswordError("");
 
     let isValid = true;
 
-    // Verifica email
     if (!validateEmail(email)) {
-      setEmailError('Por favor, insira um e-mail válido.');
+      setEmailError("Por favor, insira um e-mail válido.");
       isValid = false;
     }
 
-    // Verifica senha
     if (!validatePassword(password)) {
-      setPasswordError('A senha deve ter pelo menos 8 caracteres e incluir uma combinação de maiúsculas, minúsculas e números.');
+      setPasswordError(
+        "A senha deve ter pelo menos 8 caracteres e incluir uma combinação de maiúsculas, minúsculas e números."
+      );
       isValid = false;
     }
 
@@ -54,24 +139,7 @@ export function Register() {
       return;
     }
 
-    // Se tudo estiver ok, envia os dados
-    const payload = {
-      name,
-      email,
-      password,
-      confirmPassword,
-    };
-
-    const response = await fetch('https://your-endpoint.com/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await response.json();
-    console.log(data); // Exibe a resposta do servidor no console
+    sendRequest();
   };
 
   return (
@@ -80,20 +148,100 @@ export function Register() {
       align="center"
       width="100vw"
       height="100vh"
+      // bgColor="black"
+      background={(textureFloor)}
     >
-      <Box>
+      <TextureBg />
+      <Box width="500px" bgColor="gray.800" p="5rem" h="auto" borderRadius="xl">
         <FormControl isRequired>
-          <FormLabel>Nome</FormLabel>
-          <Input placeholder="Nome completo" value={name} onChange={e => setName(e.target.value)} />
-          <FormLabel>Email</FormLabel>
-          <Input placeholder="exemplo@gmail.com" value={email} onChange={e => setEmail(e.target.value)} />
-          {emailError && <Text color="red.500">{emailError}</Text>}
-          <FormLabel>Senha</FormLabel>
-          <Input placeholder="Senha@123" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-          {passwordError && <Text color="red.500">{passwordError}</Text>}
-          <FormLabel>Confirmar senha</FormLabel>
-          <Input placeholder="Senha@123" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
-          <Button mt={10} colorScheme="teal" onClick={handleSubmit}>
+          <FormLabel color="white">Nome</FormLabel>
+          <Input
+            placeholder="Nome completo"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            width="100%"
+            bgColor="white"
+            color="white"
+          />
+          <FormLabel color="white" mt={4}>
+            Email
+          </FormLabel>
+          <Input
+            placeholder="exemplo@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            width="100%"
+            bgColor="white"
+            color="white"
+          />
+          {emailError && (
+            <Text color="red.500" mt={2}>
+              {emailError}
+            </Text>
+          )}
+          <FormLabel color="white" mt={4}>
+            Senha
+          </FormLabel>
+          <Input
+            placeholder="Senha@123"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            width="100%"
+            bgColor="white"
+            color="white"
+          />
+          {passwordError && (
+            <Text color="red.500" mt={2}>
+              {passwordError}
+            </Text>
+          )}
+          <FormLabel color="white" mt={4}>
+            Confirmar senha
+          </FormLabel>
+          <Input
+            placeholder="Senha@123"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            width="100%"
+            bgColor="white"
+            color="white"
+          />
+          <FormLabel color="white" mt={4}>
+            Role
+          </FormLabel>
+
+          <RoleOptions></RoleOptions>
+          
+          {(role === "Admin" || role === "Manager") && (
+  <>
+    <FormLabel color="white" mt={4}>
+      Id da role
+    </FormLabel>
+    <Input
+      placeholder="ID12345A"
+      type="text"
+      value={IdRole}
+      onChange={(e) => setIdRole(e.target.value)}
+      width="100%"
+      bgColor="white"
+      color="white"
+    />
+  </>
+)}
+
+          {passwordError && (
+            <Text color="red.500" mt={2}>
+              {passwordError}
+            </Text>
+          )}
+          <Button
+            mt={10}
+            colorScheme="teal"
+            onClick={handleSubmit}
+            isLoading={isLoading}
+          >
             Enviar
           </Button>
         </FormControl>
