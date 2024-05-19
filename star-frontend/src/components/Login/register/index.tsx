@@ -23,20 +23,20 @@ import { useEndpoint } from "../../../hooks/api/useEndpoint";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export function Register() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [IdRole, setIdRole] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [role, setRole] = useState("Guest"); 
+  const [role, setRole] = useState("guest"); 
 
   // Hook useEndpoint para gerenciar a solicitação
   const { data, error, isLoading, sendRequest } = useEndpoint<
     { status: string },
     {
-      name: string;
+      username: string;
       email: string;
       password: string;
       confirmPassword: string;
@@ -47,7 +47,7 @@ export function Register() {
       url: "http://localhost:3000/cadastro/novo-usuario",
       method: "POST",
       body: {
-        name,
+        username,
         email,
         password,
         confirmPassword,
@@ -108,9 +108,9 @@ export function Register() {
             {role}
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={() => setRole("Guest")}>Guest</MenuItem>
-            <MenuItem onClick={() => setRole("Admin")}>Admin</MenuItem>
-            <MenuItem onClick={() => setRole("Manager")}>Manager</MenuItem>
+            <MenuItem onClick={() => setRole("guest")}>Guest</MenuItem>
+            <MenuItem onClick={() => setRole("admin")}>Admin</MenuItem>
+            <MenuItem onClick={() => setRole("manager")}>Manager</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
@@ -140,6 +140,7 @@ export function Register() {
     }
 
     sendRequest();
+    
   };
 
   return (
@@ -157,11 +158,11 @@ export function Register() {
           <FormLabel color="white">Nome</FormLabel>
           <Input
             placeholder="Nome completo"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             width="100%"
             bgColor="white"
-            color="white"
+            color="black"
           />
           <FormLabel color="white" mt={4}>
             Email
@@ -172,7 +173,7 @@ export function Register() {
             onChange={(e) => setEmail(e.target.value)}
             width="100%"
             bgColor="white"
-            color="white"
+            color="black"
           />
           {emailError && (
             <Text color="red.500" mt={2}>
@@ -189,7 +190,7 @@ export function Register() {
             onChange={(e) => setPassword(e.target.value)}
             width="100%"
             bgColor="white"
-            color="white"
+            color="black"
           />
           {passwordError && (
             <Text color="red.500" mt={2}>
@@ -206,7 +207,7 @@ export function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             width="100%"
             bgColor="white"
-            color="white"
+            color="black"
           />
           <FormLabel color="white" mt={4}>
             Role
