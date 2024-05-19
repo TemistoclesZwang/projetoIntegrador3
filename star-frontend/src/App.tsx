@@ -11,10 +11,15 @@ import { LayoutManager } from "./hooks/App";
 import { Vagas } from "./pages/Vagas";
 import { Estatisticas } from "./pages/Estatisticas";
 import { AuthProvider } from "./context/Auth";
+import { AutoUpdateProvider } from "./context/AutoUpdateContext/AutoUpdateContext";
+import { VagasProvider } from "./context/TableValues/VagasContext";
 
 function App() {
   return (
     <>
+      <VagasProvider>
+
+      <AutoUpdateProvider>
     
       <AuthProvider>
         <BrowserRouter>
@@ -23,6 +28,9 @@ function App() {
           </LayoutManager>
         </BrowserRouter>
       </AuthProvider>
+      </AutoUpdateProvider>
+      </VagasProvider>
+
     </>
   );
 }

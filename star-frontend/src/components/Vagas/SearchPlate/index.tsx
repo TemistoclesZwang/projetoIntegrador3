@@ -1,62 +1,74 @@
-import { AddIcon, PhoneIcon, Search2Icon } from "@chakra-ui/icons";
+import { Search2Icon } from "@chakra-ui/icons";
 import {
-  Badge,
-  Box,
-  Button,
   Flex,
   Input,
   InputGroup,
   InputRightElement,
+  Button,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useVagas } from "../../../context/TableValues/VagasContext";
-import { Vaga } from "../../../context/TableValues/VagasContext";
-import { CombinedContextButton } from "../../../context/Matrix/CombinedContext";
 
 export function SearchPlate() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { records, setSearchResults, originalRecords } = useVagas(); // Assumindo que agora temos originalRecords
-  const handleInputChange = (e: { target: { value: any } }) => {
+  const { setSearchResults, originalRecords } = useVagas();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
     if (value.trim() === "") {
-      setSearchResults(null);
+      setSearchResults(originalRecords ?? []);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchTerm.trim() === "") {
+      setSearchResults(originalRecords ?? []);
     } else {
       const results = originalRecords?.filter((vaga) =>
-        vaga.placa.toLowerCase().includes(value.toLowerCase())
+        vaga.placa.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setSearchResults(results || null);
+      setSearchResults(results ?? []);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
   return (
-    <>
-      <Flex
-        flexDirection={"row"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        gap={3}
-        // bgColor={"gray.900"}
-        // p={2}
-        w={"90%"}
-        // h={"100%"}
-        
-      >
-        <InputGroup size="md" maxW={"lg"}>
-          
-          <Input
-            placeholder="Buscar placa, exemplo: A234-44"
-            value={searchTerm}
-            onChange={handleInputChange}
-            bgColor={"gray.200"}
-            
-          />
-          <InputRightElement width="3.5rem">
-            <Search2Icon color={"gray.500"} />
-          </InputRightElement>
-        </InputGroup>
+    <Flex
+      flexDirection={"row"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      gap={3}
+      w={"90%"}
+    >
+      <InputGroup size="md" maxW={"lg"}>
+        <Input
+          placeholder="Buscar placa, exemplo: A234-44"
+          value={searchTerm}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          bgColor={"gray.200"}
+          color={"gray.900"}
+        />
+        <InputRightElement width="3.5rem">
+          <Button
+            h="1.75rem"
+            size="sm"
+            onClick={handleSearch}
+            bgColor={"gray.900"}
+            _hover={{ bgColor: "gray.300" }}
 
-      </Flex>
-    </>
+            
+          >
+            <Search2Icon color={"gray.500"} />
+          </Button>
+        </InputRightElement>
+      </InputGroup>
+    </Flex>
   );
 }

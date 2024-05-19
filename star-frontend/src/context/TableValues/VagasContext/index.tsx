@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useGet } from "../../../hooks/api/useGet";
 
-// Definição do tipo Vaga
 export interface Vaga {
   vagaId: number;
   status: string;
@@ -14,27 +13,29 @@ export interface Vaga {
   valor: string;
   vaga: string;
 }
+
 interface VagasContextType {
   records: Vaga[];
   isLoading: boolean;
   error: Error | null;
-  setSearchResults: (results: Vaga[] | null) => void; // Permitir null como argumento
+  setSearchResults: (results: Vaga[] | null) => void;
   originalRecords: Vaga[] | null;
+  refreshRecords: () => void;  // Alterar o nome para refreshRecords para consistência
 }
 
-
-// Criando o contexto
 export const VagasContext = createContext<VagasContextType>({
-    records: [],
-    isLoading: false,
-    error: null,
-    setSearchResults: () => {}, // Implementação dummy
-    originalRecords:[]
-  });
+  records: [],
+  isLoading: false,
+  error: null,
+  setSearchResults: () => {},
+  originalRecords: [],
+  refreshRecords: () => {},  // Alterar o nome para refreshRecords para consistência
+});
 
 export const useVagas = () => useContext(VagasContext);
+
 export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { data: originalRecords, error, isLoading } = useGet<Vaga[]>({
+  const { data: originalRecords, error, isLoading, refetch } = useGet<Vaga[]>({
     url: "http://localhost:3000/vagas",
   });
   const [allRecords, setAllRecords] = useState<Vaga[]>([]);
@@ -45,17 +46,19 @@ export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setSearchResults = (results: Vaga[] | null) => {
     if (results === null) {
-      // Reset para mostrar todos os registros se a busca for limpa
       setAllRecords(originalRecords ?? []);
     } else {
-      // Atualiza para mostrar resultados da busca
       setAllRecords(results);
     }
   };
 
+  const refreshRecords = () => {
+    refetch();
+  };
+
   return (
-    <VagasContext.Provider value={{ records: allRecords, isLoading, error, setSearchResults, originalRecords }}>
-    {children}
-  </VagasContext.Provider>
+    <VagasContext.Provider value={{ records: allRecords, isLoading, error, setSearchResults, originalRecords, refreshRecords }}>
+      {children}
+    </VagasContext.Provider>
   );
 };

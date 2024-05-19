@@ -1,82 +1,118 @@
-// useIconClick.ts
-import { useCallback, useState } from 'react';
-import { useEndpoint } from '../api/useEndpoint';
+import { useCallback, useState } from "react";
+import { useAuth } from "../../context/Auth";
+import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
 
-type IconType = 'email' | 'add' | 'check' | 'info';
+type IconType = "email" | "add" | "check" | "info";
 
-export function useIconClick(iconName: IconType, vagaId?: number, onUpdate?: (updatedVaga: any) => void) {
+export function useIconClick(
+  iconName: IconType,
+  vagaId?: number,
+  onUpdate?: (updatedVaga: any) => void
+) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const { accessToken } = useAuth();
+  const { isAutoUpdateEnabled } = useAutoUpdate();
 
-  async function updatedThisFields(response: Response, vagaId: number, camposMapeamento: Record<string, string>) {
+  async function updatedThisFields(
+    response: Response,
+    vagaId: number,
+    camposMapeamento: Record<string, string>
+  ) {
     if (response && response.ok) {
       const data = await response.json();
       const dadosAtualizados: Record<string, any> = { vagaId };
-  
-      // Itera sobre o mapeamento de campos para construir o objeto com os dados atualizados
-      Object.keys(camposMapeamento).forEach(chaveOriginal => {
-        const novaChave = camposMapeamento[chaveOriginal];
-        dadosAtualizados[novaChave] = data[chaveOriginal];
+
+      Object.keys(camposMapeamento).forEach((chaveOriginal) => {
+        dadosAtualizados[camposMapeamento[chaveOriginal]] = data[chaveOriginal];
       });
-  
-      // Chama o callback onUpdate com os dados atualizados
+
       onUpdate?.(dadosAtualizados);
     } else {
-      throw new Error('Falha ao processar ação');
+      throw new Error("Falha ao processar ação");
     }
   }
 
   const handleAction = useCallback(async () => {
+    if (!vagaId) {
+      console.error("vagaId está indefinido");
+      return;
+    }
+
     setIsProcessing(true);
+    let response;
     try {
-      let response;
       switch (iconName) {
-        case 'email':
-          // Chamar endpoint específico para email
-          // console.log('Chamada API para email', vagaId);
-          // Simulação de chamada API
-          response = await fetch(`http://localhost:3000/vagas/previa-valor/${vagaId}`, { method: "GET" });
-          // if (response && response.ok) {
-            const camposMapeamento = {
-              tempoTotalUsandoVaga: 'duracao',
-              valorPagar: 'valor',
-            };
-    
-            await updatedThisFields(response, vagaId || 0, camposMapeamento);
-          
+        case "email":
+          response = await fetch(
+            `http://localhost:3000/vagas/previa-valor/${vagaId}`,
+            {
+              method: "GET",
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+              }
+            }
+          );
+          const camposMapeamentoEmail = {
+            tempoTotalUsandoVaga: "duracao",
+            valorPagar: "valor",
+          };
+          await updatedThisFields(response, vagaId, camposMapeamentoEmail);
           break;
-        case 'add':
-          // Chamar endpoint específico para add
-          console.log('Chamada API para add', vagaId);
-          // Simulação de chamada API
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}/add`, { method: "POST" });
+        case "add":
+          response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
           break;
-        case 'check':
-          console.log('Chamada API para check', vagaId);
-          await fetch(`http://localhost:3000/vagas/${vagaId}`, { method: "POST" }); //atualiza vaga
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}`); // pega a vaga atualizada
+        case "check":
+          response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
           break;
-        case 'info':
-          // Chamar endpoint específico para info
-          console.log('Chamada API para info', vagaId);
-          // Simulação de chamada API
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}/info`, { method: "POST" });
+        case "info":
+          response = await fetch(`http://localhost:3000/vagas/${vagaId}/info`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`
+            }
+          });
+          if (response && response.ok) {
+            const updatedVaga = await response.json();
+            onUpdate?.(updatedVaga);
+          } else {
+            throw new Error("Falha ao processar ação");
+          }
           break;
         default:
-          console.log('Ação desconhecida');
-      }
-      if (response && response.ok) {
-        const updatedVaga = await response.json();
-        onUpdate?.(updatedVaga);//envia resposta para aparecer na interface
-      } else {
-        throw new Error('Falha ao processar ação');
+          console.log("Ação desconhecida");
       }
     } catch (error) {
-      // console.error('Erro ao processar ação:', error); //.!corrigir
+      console.error('Erro ao processar ação:', error);
     } finally {
       setIsProcessing(false);
     }
-  }, [iconName, vagaId, onUpdate]);
+  }, [iconName, vagaId, onUpdate, accessToken, isAutoUpdateEnabled]);
 
-  // Retorna o manipulador de ação e o estado de processamento
   return { handleAction, isProcessing };
 }

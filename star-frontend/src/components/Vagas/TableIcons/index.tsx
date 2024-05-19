@@ -23,9 +23,7 @@ export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: 
   useEffect(() => {
     let intervalId: number | undefined;
     if (iconName === "email" && isAutoUpdateEnabled) { // Verifica se a atualização automática está habilitada
-      intervalId = setInterval(() => {
-        handleAction();
-      }, 60000); // Define o intervalo para 1 minuto
+      handleAction();
     }
 
     return () => {

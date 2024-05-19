@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import { useAuth } from "../../../context/Auth/index";
 
 interface RequestOptions {
@@ -9,6 +9,7 @@ interface UseGetResponse<T> {
   data: T | null;
   error: Error | null;
   isLoading: boolean;
+  refetch: () => void; // Adiciona a função refetch à interface
 }
 
 export function useGet<T>({ url }: RequestOptions): UseGetResponse<T> {
@@ -16,36 +17,35 @@ export function useGet<T>({ url }: RequestOptions): UseGetResponse<T> {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setLoading] = useState<boolean>(false);
 
-  // Utilizando useAuth para acessar o token
   const { accessToken } = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`, // Inclui o token Bearer no cabeçalho
-            'Content-Type': 'application/json'
-          }
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
         }
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok.");
       }
-    };
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      setError(error as Error);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, accessToken]);
 
-    if (accessToken) { // Garante que o token esteja disponível antes de fazer a requisição
+  useEffect(() => {
+    if (accessToken) {
       fetchData();
     }
-  }, [url, accessToken]); // Dependência adicionada para refazer a requisição se o token mudar
+  }, [url, accessToken, fetchData]);
 
-  return { data, error, isLoading };
+  return { data, error, isLoading, refetch: fetchData };
 }

@@ -1,5 +1,6 @@
 // OccupiedContext.tsx
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { useGet } from '../../../hooks/api/useGet';
 
 interface IOccupiedContext {
   occupied: string[];
@@ -19,26 +20,22 @@ interface OccupiedProviderProps {
   children: ReactNode;
 }
 
-async function fetchOccupied(): Promise<string[]> {
-  const response = await fetch('http://localhost:3000/vagas/todas-posicoes');
-  const data = await response.json();
-  // Converter o objeto para um array de valores
-  const occupiedArray = Object.values(data) as string[];
-  return occupiedArray;
+interface VagaPositions {
+  [key: string]: string;
 }
 
 export const OccupiedProvider: React.FC<OccupiedProviderProps> = ({ children }) => {
   const [occupied, setOccupied] = useState<string[]>([]);
+  const { data: response, error, isLoading } = useGet<VagaPositions>({
+    url: 'http://localhost:3000/vagas/todas-posicoes'
+  });
+
   useEffect(() => {
-    // Função assíncrona dentro do useEffect para buscar os dados
-    const initializeOccupied = async () => {
-      const occupiedData = await fetchOccupied();
-      setOccupied(occupiedData);
-    };
-    
-    // Chamando a função assíncrona
-    initializeOccupied();
-  }, []);
+    if (response && !Array.isArray(response)) {
+      const occupiedArray = Object.values(response) as string[];
+      setOccupied(occupiedArray);
+    }
+  }, [response]);
 
   const handleLastOccupiedClick = () => {
     if (occupied.length > 0) {
