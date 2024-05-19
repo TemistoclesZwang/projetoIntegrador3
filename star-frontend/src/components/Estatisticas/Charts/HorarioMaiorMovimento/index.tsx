@@ -90,7 +90,7 @@ export function HorariosDeMovimento({ endpoint }: { endpoint: string }) {
   };
 
   return (
-    <div style={{ width: "95%", height: "400px" }}>
+    <div style={{ width: "95%", height: "300px" }}>
       <Bar data={data} options={options} />
     </div>
   );
