@@ -21,6 +21,7 @@ import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagament
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
+import { Pagination } from "../../../hooks/TableValues/usePagination";
 
 interface Vaga {
   vagaId: number;
@@ -35,14 +36,14 @@ interface Vaga {
   vaga: string;
 }
 
-const extractTitlesFromRecord = (record: Vaga): string[] => {
-  return Object.keys(record).filter((key) => key !== "vagaId");
-};
+
 
 export function TableValues() {
   const { accessToken } = useAuth();
-  const { records, isLoading, error, refreshRecords } = useVagas(); // Adicione refreshRecords
+  const { records, isLoading, error, refreshRecords } = useVagas();
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10; // Define records per page
   const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -56,7 +57,7 @@ export function TableValues() {
       setSortedRecords(records.length > 0 ? records : []);
     }
   }, [records]);
-  
+
   useEffect(() => {
     const fetchUpdatedValues = async () => {
       const updates = await Promise.all(
@@ -96,20 +97,16 @@ export function TableValues() {
     }
   }, [isAutoUpdateEnabled, accessToken, records]);
 
-
   const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
     if (!record) return [];
     return Object.keys(record).filter((key) => key !== "vagaId");
   };
-  
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>
 
-
   const thTitles = extractTitlesFromRecord(records[0]);
-
-  
 
   const sortByDuration = () => {
     if (sortOrderDuration === "asc" || sortOrderDuration === "") {
@@ -235,6 +232,11 @@ export function TableValues() {
     );
   };
 
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
+
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
       <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
@@ -244,7 +246,7 @@ export function TableValues() {
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Thead>
         <Tbody>
-          {sortedRecords.map((record, index) => (
+          {currentRecords.map((record, index) => (
             <Tr key={index}>
               {Object.entries(record).map(([key, value], idx) => {
                 if (key !== "vagaId") {
@@ -265,7 +267,7 @@ export function TableValues() {
                 <TableIcons
                   iconName={"add"}
                   vagaId={record.vagaId}
-                  onUpdate={() => refreshRecords()} // Recarregar todos os dados após "add"
+                  onUpdate={() => refreshRecords()}
                   isAutoUpdateEnabled={isAutoUpdateEnabled}
                 />
                 <TableIcons
@@ -282,6 +284,7 @@ export function TableValues() {
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Tfoot>
       </Table>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </TableContainer>
   );
 }
