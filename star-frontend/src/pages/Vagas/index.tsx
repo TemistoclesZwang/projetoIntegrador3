@@ -38,6 +38,7 @@ export function Vagas() {
         pr={"1.5rem"}
         pt={"1rem"}
         pb={"1rem"}
+        // h={'1vh'}
       >
         <Box>{/* <SearchPlate /> */}</Box>
         {/* <SearchPlate></SearchPlate> */}
@@ -115,7 +116,8 @@ export function Vagas() {
       <Box
         pr={3}
         pl={3}
-        maxH="80vh"
+        // maxH="80vh"
+        h={"100vh"}
         overflowY="auto"
         // bgColor={theme.colors.highlights[50]}
         // borderRadius={"md"}
@@ -123,7 +125,7 @@ export function Vagas() {
         // p={5}
       >
         <Box minH="60vh">
-          {" "}
+          {/* {" "} */}
           {/* Garantir um mínimo de altura para TableValues */}
           <TableValues />
         </Box>

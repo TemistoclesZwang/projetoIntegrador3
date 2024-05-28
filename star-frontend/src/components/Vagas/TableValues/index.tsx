@@ -254,7 +254,7 @@ export function TableValues() {
   };
 
   return (
-    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
+    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"} >
       <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
       {/* <SearchInput records={records} onSearchResults={handleSearchResults} /> */}
       <Table variant="striped" colorScheme="gray">

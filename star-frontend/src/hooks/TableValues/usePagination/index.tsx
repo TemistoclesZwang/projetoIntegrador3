@@ -21,13 +21,13 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   };
 
   return (
-    <Flex justifyContent="center" mt={4}>
+    <Flex justifyContent="center" mt={4} m={'1rem'}>
       <ButtonGroup isAttached variant="outline">
-        <Button onClick={handlePrevious} isDisabled={currentPage === 1}>
+        <Button onClick={handlePrevious} isDisabled={currentPage === 1} bgColor={"white"}>
           Previous
         </Button>
-        <Button>{`Page ${currentPage} of ${totalPages}`}</Button>
-        <Button onClick={handleNext} isDisabled={currentPage === totalPages}>
+        <Button bgColor={"white"}>{`Page ${currentPage} of ${totalPages}`} </Button>
+        <Button onClick={handleNext} isDisabled={currentPage === totalPages} bgColor={"white"}>
           Next
         </Button>
       </ButtonGroup>
