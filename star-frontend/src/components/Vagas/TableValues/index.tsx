@@ -22,6 +22,7 @@ import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
+// import { SearchInput } from "../SearchInput";
 
 interface Vaga {
   vagaId: number;
@@ -36,8 +37,6 @@ interface Vaga {
   vaga: string;
 }
 
-
-
 export function TableValues() {
   const { accessToken } = useAuth();
   const { records, isLoading, error, refreshRecords } = useVagas();
@@ -51,6 +50,19 @@ export function TableValues() {
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
+
+
+  useEffect(() => {
+    const handleSearchResults = (event: CustomEvent) => {
+      setSortedRecords(event.detail);
+    };
+  
+    window.addEventListener('searchResults', handleSearchResults as EventListener);
+  
+    return () => {
+      window.removeEventListener('searchResults', handleSearchResults as EventListener);
+    };
+  }, []);
 
   useEffect(() => {
     if (records) {
@@ -237,9 +249,14 @@ export function TableValues() {
   const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
   const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
 
+  const handleSearchResults = (results: Vaga[]) => {
+    setSortedRecords(results);
+  };
+
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
       <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
+      {/* <SearchInput records={records} onSearchResults={handleSearchResults} /> */}
       <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
