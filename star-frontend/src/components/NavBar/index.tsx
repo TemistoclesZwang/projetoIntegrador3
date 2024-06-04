@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { TiChartBarOutline, TiInfo, TiLocation } from "react-icons/ti";
 import { FaBars } from "react-icons/fa";
 import { Link as ReactRouterLink } from "react-router-dom";
@@ -30,7 +30,8 @@ import { useTheme } from "@chakra-ui/react";
 import { IoLogOut, IoSparklesSharp } from "react-icons/io5";
 import { AvatarUser } from "./AvatarUser";
 import { SearchPlate } from "../Vagas/SearchPlate";
-import { AllProviders } from '../../context/AllProviders';
+import { AllProviders } from "../../context/AllProviders";
+import { SearchInput } from "../Vagas/SearchInput";
 
 export function NavBar() {
   const theme = useTheme();
@@ -51,8 +52,8 @@ export function NavBar() {
         right={0}
         width="100%"
         zIndex={1}
-        pr={'1.3rem'}
-        pl={'1.3rem'}
+        pr={"1.3rem"}
+        pl={"1.3rem"}
       >
         <Flex>
           <Link
@@ -71,7 +72,18 @@ export function NavBar() {
             </Text>
           </Link>
         </Flex>
-
+        <Flex
+          
+          justifyContent={"center"}
+          // display={{ base: "none", md: "flex" }}
+          w={"100vw"} //!bug
+          // bgColor={"green"}
+          position={"absolute"}
+          // flex={'1'}
+          // left={"1%"}
+        >
+          <SearchInput />
+        </Flex>
         <Box
           display={{ base: "block", md: "none" }}
           className="hamburger"
@@ -86,11 +98,7 @@ export function NavBar() {
           />
         </Box>
 
-        <Flex w={"80%"} justifyContent={"center"} display={{ base: "none", md: "flex" }}>
-          <SearchPlate />
-        </Flex>
-
-        <Box display={{ base: "none", md: "flex" }} alignItems="flex-end">
+        <Box display={{ base: "none", md: "flex" }}  justifyContent={'end'} w={'100%'}>
           <VStack
             spacing={5}
             alignItems="flex-end"
@@ -98,11 +106,22 @@ export function NavBar() {
             flexDirection={"row"}
             color={"white"}
             mt={{ base: 4, md: 0 }}
-            mr={'1rem'}
+            mr={"1rem"}
           >
-            <NavLink to="/vagas" label="Vagas" icon={TiLocation} />
-            <NavLink to="/estatisticas" label="Estatísticas" icon={TiChartBarOutline} />
-            <NavLink to="/incidentes" label="Incidentes" icon={TiInfo} />
+            <NavLink 
+            to="/vagas" 
+            label="Vagas" 
+            icon={TiLocation} />
+
+            <NavLink
+              to="/estatisticas"
+              label="Estatísticas"
+              icon={TiChartBarOutline}
+            />
+            <NavLink 
+              to="/incidentes" 
+              label="Incidentes" 
+              icon={TiInfo} />
           </VStack>
         </Box>
 
@@ -110,15 +129,33 @@ export function NavBar() {
 
         <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
           <DrawerOverlay>
-            <DrawerContent borderRadius={"xl"} bgColor={'gray.800'}>
-              <DrawerCloseButton color={'white'}/>
-              <DrawerHeader color={'white'}>Menu</DrawerHeader>
+            <DrawerContent borderRadius={"xl"} bgColor={"gray.800"}>
+              <DrawerCloseButton color={"white"} />
+              <DrawerHeader color={"white"}>Menu</DrawerHeader>
               <DrawerBody>
                 <VStack spacing={5} alignItems="flex-start" w="100%">
-                  <SearchPlate />
-                  <NavLink to="/vagas" label="Vagas" icon={TiLocation} onClick={onClose} color={'white'}/>
-                  <NavLink to="/estatisticas" label="Estatísticas" icon={TiChartBarOutline} onClick={onClose} color={'white'}/>
-                  <NavLink to="/incidentes" label="Incidentes" icon={TiInfo} onClick={onClose} color={'white'}/>
+                  <SearchInput />
+                  <NavLink
+                    to="/vagas"
+                    label="Vagas"
+                    icon={TiLocation}
+                    onClick={onClose}
+                    color={"white"}
+                  />
+                  <NavLink
+                    to="/estatisticas"
+                    label="Estatísticas"
+                    icon={TiChartBarOutline}
+                    onClick={onClose}
+                    color={"white"}
+                  />
+                  <NavLink
+                    to="/incidentes"
+                    label="Incidentes"
+                    icon={TiInfo}
+                    onClick={onClose}
+                    color={"white"}
+                  />
                 </VStack>
               </DrawerBody>
             </DrawerContent>

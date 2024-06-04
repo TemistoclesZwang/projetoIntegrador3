@@ -21,6 +21,8 @@ import { useSortByPagamento } from "../../../hooks/TableValues/useSortByPagament
 import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
+import { Pagination } from "../../../hooks/TableValues/usePagination";
+// import { SearchInput } from "../SearchInput";
 
 interface Vaga {
   vagaId: number;
@@ -35,14 +37,12 @@ interface Vaga {
   vaga: string;
 }
 
-const extractTitlesFromRecord = (record: Vaga): string[] => {
-  return Object.keys(record).filter((key) => key !== "vagaId");
-};
-
 export function TableValues() {
   const { accessToken } = useAuth();
-  const { records, isLoading, error, refreshRecords } = useVagas(); // Adicione refreshRecords
+  const { records, isLoading, error, refreshRecords } = useVagas();
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10; // Define records per page
   const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -51,12 +51,25 @@ export function TableValues() {
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
 
+
+  useEffect(() => {
+    const handleSearchResults = (event: CustomEvent) => {
+      setSortedRecords(event.detail);
+    };
+  
+    window.addEventListener('searchResults', handleSearchResults as EventListener);
+  
+    return () => {
+      window.removeEventListener('searchResults', handleSearchResults as EventListener);
+    };
+  }, []);
+
   useEffect(() => {
     if (records) {
       setSortedRecords(records.length > 0 ? records : []);
     }
   }, [records]);
-  
+
   useEffect(() => {
     const fetchUpdatedValues = async () => {
       const updates = await Promise.all(
@@ -96,20 +109,16 @@ export function TableValues() {
     }
   }, [isAutoUpdateEnabled, accessToken, records]);
 
-
   const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
     if (!record) return [];
     return Object.keys(record).filter((key) => key !== "vagaId");
   };
-  
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
   if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>
 
-
   const thTitles = extractTitlesFromRecord(records[0]);
-
-  
 
   const sortByDuration = () => {
     if (sortOrderDuration === "asc" || sortOrderDuration === "") {
@@ -235,16 +244,26 @@ export function TableValues() {
     );
   };
 
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
+
+  const handleSearchResults = (results: Vaga[]) => {
+    setSortedRecords(results);
+  };
+
   return (
-    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
+    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"} >
       <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
+      {/* <SearchInput records={records} onSearchResults={handleSearchResults} /> */}
       <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Thead>
         <Tbody>
-          {sortedRecords.map((record, index) => (
+          {currentRecords.map((record, index) => (
             <Tr key={index}>
               {Object.entries(record).map(([key, value], idx) => {
                 if (key !== "vagaId") {
@@ -265,7 +284,7 @@ export function TableValues() {
                 <TableIcons
                   iconName={"add"}
                   vagaId={record.vagaId}
-                  onUpdate={() => refreshRecords()} // Recarregar todos os dados após "add"
+                  onUpdate={() => refreshRecords()}
                   isAutoUpdateEnabled={isAutoUpdateEnabled}
                 />
                 <TableIcons
@@ -282,6 +301,7 @@ export function TableValues() {
           <Tr>{generateTableHeaders(thTitles)}</Tr>
         </Tfoot>
       </Table>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
     </TableContainer>
   );
 }
