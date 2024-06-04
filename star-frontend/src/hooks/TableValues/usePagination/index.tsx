@@ -24,11 +24,11 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
     <Flex justifyContent="center" mt={4} m={'1rem'}>
       <ButtonGroup isAttached variant="outline">
         <Button onClick={handlePrevious} isDisabled={currentPage === 1} bgColor={"white"}>
-          Previous
+          Anterior
         </Button>
-        <Button bgColor={"white"}>{`Page ${currentPage} of ${totalPages}`} </Button>
+        <Button bgColor={"white"}>{`Página ${currentPage} de ${totalPages}`} </Button>
         <Button onClick={handleNext} isDisabled={currentPage === totalPages} bgColor={"white"}>
-          Next
+          Próxima
         </Button>
       </ButtonGroup>
     </Flex>
