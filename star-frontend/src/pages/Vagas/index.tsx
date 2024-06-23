@@ -33,7 +33,8 @@ export function Vagas() {
       <Flex
         bgColor={"blackAlpha.900"}
         flexDirection={"row"}
-        justifyContent={"space-between"}
+        gap={'1rem'}
+        justifyContent={"right"}
         pl={"0.5rem"}
         pr={"1.5rem"}
         pt={"1rem"}
@@ -111,6 +112,28 @@ export function Vagas() {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
+        <Box>
+          <Tooltip
+            hasArrow
+            label="Marcar incidente"
+            bg="gray.300"
+            color="black"
+            placement="bottom"
+          >
+            <Button
+              leftIcon={<AddIcon />}
+              // colorScheme="teal"
+              bg={theme.colors.highlights[50]}
+              color={"black"}
+              onClick={onOpen}
+              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+              w={"xsm"}
+              _hover={"black"}
+            >
+              Marcar incidente
+            </Button>
+          </Tooltip>
+        </Box>
       </Flex>
 
       <Box
