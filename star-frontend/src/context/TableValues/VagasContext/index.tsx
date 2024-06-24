@@ -1,18 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useGet } from "../../../hooks/api/useGet";
-
-export interface Vaga {
-  vagaId: number;
-  status: string;
-  placa: string;
-  nome: string;
-  pagamento: string;
-  duracao: number;
-  entrada: string;
-  saida: string;
-  valor: string;
-  vaga: string;
-}
+import { Vaga } from "../../../services/Interfaces/Vaga/index";
 
 interface VagasContextType {
   records: Vaga[];
