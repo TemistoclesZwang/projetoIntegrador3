@@ -12,9 +12,13 @@ import {
   IconButton,
   Flex,
   Text,
-  Checkbox
+  Checkbox,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  TriangleDownIcon,
+  TriangleUpIcon,
+  WarningIcon,
+} from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
@@ -46,7 +50,13 @@ interface TableValuesProps {
   onRefreshTable: () => void;
 }
 
-export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedIncidents, refreshTable, onRefreshTable }: TableValuesProps) {
+export function TableValues({
+  isMarkingIncident,
+  selectedIncidents,
+  setSelectedIncidents,
+  refreshTable,
+  onRefreshTable,
+}: TableValuesProps) {
   const { accessToken } = useAuth();
   const { records, isLoading, error, refreshRecords } = useVagas();
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
@@ -55,8 +65,12 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
   const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
-  const [sortOrderDuration, setSortOrderDuration] = useState<"asc" | "desc" | "">("");
-  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
+  const [sortOrderDuration, setSortOrderDuration] = useState<
+    "asc" | "desc" | ""
+  >("");
+  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
+    ""
+  );
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
 
@@ -65,10 +79,16 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
       setSortedRecords(event.detail);
     };
 
-    window.addEventListener('searchResults', handleSearchResults as EventListener);
+    window.addEventListener(
+      "searchResults",
+      handleSearchResults as EventListener
+    );
 
     return () => {
-      window.removeEventListener('searchResults', handleSearchResults as EventListener);
+      window.removeEventListener(
+        "searchResults",
+        handleSearchResults as EventListener
+      );
     };
   }, []);
 
@@ -93,7 +113,9 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
           );
 
           const data = await response.json();
-          const incidentResponse = await fetch(`http://localhost:3000/vagas/${record.vagaId}`);
+          const incidentResponse = await fetch(
+            `http://localhost:3000/vagas/${record.vagaId}`
+          );
           const incidentData = await incidentResponse.json();
 
           return {
@@ -130,12 +152,19 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
 
   const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
     if (!record) return [];
-    return Object.keys(record).filter((key) => key !== "vagaId" && key !== "incidente");
+    return Object.keys(record).filter(
+      (key) => key !== "vagaId" && key !== "incidente"
+    );
   };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>;
+  if (!sortedRecords.length)
+    return (
+      <Text color={"white"} fontSize={"lg"}>
+        Nenhum resultado encontrado
+      </Text>
+    );
 
   const thTitles = extractTitlesFromRecord(records[0]);
 
@@ -207,9 +236,9 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
   };
 
   const handleCheckboxChange = (vagaId: number) => {
-    setSelectedIncidents(prevSelected => {
+    setSelectedIncidents((prevSelected) => {
       if (prevSelected.includes(vagaId)) {
-        return prevSelected.filter(id => id !== vagaId);
+        return prevSelected.filter((id) => id !== vagaId);
       } else {
         return [...prevSelected, vagaId];
       }
@@ -275,7 +304,10 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = sortedRecords.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = sortedRecords.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
 
   const handleSearchResults = (results: Vaga[]) => {
@@ -288,7 +320,10 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
       <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
-          <Tr>{isMarkingIncident && <Th>Selecionar</Th>}{generateTableHeaders(thTitles)}</Tr>
+          <Tr>
+            {isMarkingIncident && <Th>Selecionar</Th>}
+            {generateTableHeaders(thTitles)}
+          </Tr>
         </Thead>
         <Tbody>
           {currentRecords.map((record, index) => (
@@ -311,34 +346,49 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
                 return null;
               })}
               <Td>
-                {record.incidente && <WarningIcon color="red.500" />}
-                <TableIcons
-                  iconName={"email"}
-                  vagaId={record.vagaId}
-                  onUpdate={atualizarInfosVagaLiberada}
-                  isAutoUpdateEnabled={isAutoUpdateEnabled}
-                />
-                <TableIcons
-                  iconName={"add"}
-                  vagaId={record.vagaId}
-                  onUpdate={() => refreshRecords()}
-                  isAutoUpdateEnabled={isAutoUpdateEnabled}
-                />
-                <TableIcons
-                  iconName={"check"}
-                  vagaId={record.vagaId}
-                  onUpdate={atualizarInfosVagaLiberada}
-                />
-                <TableIcons iconName={"info"} />
-              </Td>
+                
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    
+                  >
+                    {record.incidente && <WarningIcon color="red.500" ml={-4}/>}
+                    <TableIcons
+                      iconName={"email"}
+                      vagaId={record.vagaId}
+                      onUpdate={atualizarInfosVagaLiberada}
+                      isAutoUpdateEnabled={isAutoUpdateEnabled}
+                    />
+                    <TableIcons
+                      iconName={"add"}
+                      vagaId={record.vagaId}
+                      onUpdate={() => refreshRecords()}
+                      isAutoUpdateEnabled={isAutoUpdateEnabled}
+                    />
+                    <TableIcons
+                      iconName={"check"}
+                      vagaId={record.vagaId}
+                      onUpdate={atualizarInfosVagaLiberada}
+                    />
+                    <TableIcons iconName={"info"} />
+                  </Flex>
+                </Td>
+            
             </Tr>
           ))}
         </Tbody>
         <Tfoot>
-          <Tr>{isMarkingIncident && <Th>Selecionar</Th>}{generateTableHeaders(thTitles)}</Tr>
+          <Tr>
+            {isMarkingIncident && <Th>Selecionar</Th>}
+            {generateTableHeaders(thTitles)}
+          </Tr>
         </Tfoot>
       </Table>
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </TableContainer>
   );
 }
