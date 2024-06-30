@@ -13,7 +13,7 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { TriangleDownIcon, TriangleUpIcon, WarningIcon } from "@chakra-ui/icons"; // Adicione WarningIcon aqui
 import { TableIcons } from "../TableIcons";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
@@ -22,7 +22,6 @@ import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
-// import { SearchInput } from "../SearchInput";
 
 interface Vaga {
   vagaId: number;
@@ -35,6 +34,7 @@ interface Vaga {
   saida: string;
   valor: string;
   vaga: string;
+  incidente?: boolean; // Adicione esta chave
 }
 
 export function TableValues() {
@@ -50,7 +50,6 @@ export function TableValues() {
   const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
-
 
   useEffect(() => {
     const handleSearchResults = (event: CustomEvent) => {
@@ -85,10 +84,14 @@ export function TableValues() {
           );
 
           const data = await response.json();
+          const incidentResponse = await fetch(`http://localhost:3000/vagas/${record.vagaId}`);
+          const incidentData = await incidentResponse.json();
+
           return {
             ...record,
             duracao: data.tempoTotalUsandoVaga,
             valor: data.valorPagar,
+            incidente: incidentData.incidente, // Adicione esta linha
           };
         })
       );
@@ -111,12 +114,12 @@ export function TableValues() {
 
   const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
     if (!record) return [];
-    return Object.keys(record).filter((key) => key !== "vagaId");
+    return Object.keys(record).filter((key) => key !== "vagaId" && key !== "incidente");
   };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
-  if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>
+  if (!sortedRecords.length) return <Text color={'white'} fontSize={'lg'}>Nenhum resultado encontrado</Text>;
 
   const thTitles = extractTitlesFromRecord(records[0]);
 
@@ -266,7 +269,7 @@ export function TableValues() {
           {currentRecords.map((record, index) => (
             <Tr key={index}>
               {Object.entries(record).map(([key, value], idx) => {
-                if (key !== "vagaId") {
+                if (key !== "vagaId" && key !== "incidente") {
                   if (key === "entrada" || key === "saida") {
                     return <Td key={idx}>{formatDate(value)}</Td>;
                   }
@@ -275,6 +278,7 @@ export function TableValues() {
                 return null;
               })}
               <Td>
+                {record.incidente && <WarningIcon color="red.500" />} {/* Adicione esta linha */}
                 <TableIcons
                   iconName={"email"}
                   vagaId={record.vagaId}

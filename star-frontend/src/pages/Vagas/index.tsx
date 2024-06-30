@@ -39,10 +39,8 @@ export function Vagas() {
         pr={"1.5rem"}
         pt={"1rem"}
         pb={"1rem"}
-        // h={'1vh'}
       >
         <Box>{/* <SearchPlate /> */}</Box>
-        {/* <SearchPlate></SearchPlate> */}
         <Box>
           <Tooltip
             hasArrow
@@ -53,7 +51,6 @@ export function Vagas() {
           >
             <Button
               leftIcon={<AddIcon />}
-              // colorScheme="teal"
               bg={theme.colors.highlights[50]}
               color={"black"}
               onClick={onOpen}
@@ -122,7 +119,6 @@ export function Vagas() {
           >
             <Button
               leftIcon={<AddIcon />}
-              // colorScheme="teal"
               bg={theme.colors.highlights[50]}
               color={"black"}
               onClick={onOpen}
@@ -139,17 +135,11 @@ export function Vagas() {
       <Box
         pr={3}
         pl={3}
-        // maxH="80vh"
         h={"100vh"}
         overflowY="auto"
-        // bgColor={theme.colors.highlights[50]}
-        // borderRadius={"md"}
         bgColor={"blackAlpha.900"}
-        // p={5}
       >
         <Box minH="60vh">
-          {/* {" "} */}
-          {/* Garantir um mínimo de altura para TableValues */}
           <TableValues />
         </Box>
       </Box>
