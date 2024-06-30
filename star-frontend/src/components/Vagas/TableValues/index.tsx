@@ -12,8 +12,9 @@ import {
   IconButton,
   Flex,
   Text,
+  Checkbox
 } from "@chakra-ui/react";
-import { TriangleDownIcon, TriangleUpIcon, WarningIcon } from "@chakra-ui/icons"; // Adicione WarningIcon aqui
+import { TriangleDownIcon, TriangleUpIcon, WarningIcon } from "@chakra-ui/icons";
 import { TableIcons } from "../TableIcons";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { useSortByName } from "../../../hooks/TableValues/useSortByName";
@@ -34,15 +35,21 @@ interface Vaga {
   saida: string;
   valor: string;
   vaga: string;
-  incidente?: boolean; // Adicione esta chave
+  incidente?: boolean;
 }
 
-export function TableValues() {
+interface TableValuesProps {
+  isMarkingIncident: boolean;
+  selectedIncidents: number[];
+  setSelectedIncidents: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedIncidents }: TableValuesProps) {
   const { accessToken } = useAuth();
   const { records, isLoading, error, refreshRecords } = useVagas();
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const recordsPerPage = 10; // Define records per page
+  const recordsPerPage = 10;
   const { isAutoUpdateEnabled } = useAutoUpdate();
 
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -55,9 +62,9 @@ export function TableValues() {
     const handleSearchResults = (event: CustomEvent) => {
       setSortedRecords(event.detail);
     };
-  
+
     window.addEventListener('searchResults', handleSearchResults as EventListener);
-  
+
     return () => {
       window.removeEventListener('searchResults', handleSearchResults as EventListener);
     };
@@ -91,7 +98,7 @@ export function TableValues() {
             ...record,
             duracao: data.tempoTotalUsandoVaga,
             valor: data.valorPagar,
-            incidente: incidentData.incidente, // Adicione esta linha
+            incidente: incidentData.incidente,
           };
         })
       );
@@ -190,6 +197,16 @@ export function TableValues() {
     valor: sortOrderValor,
   };
 
+  const handleCheckboxChange = (vagaId: number) => {
+    setSelectedIncidents(prevSelected => {
+      if (prevSelected.includes(vagaId)) {
+        return prevSelected.filter(id => id !== vagaId);
+      } else {
+        return [...prevSelected, vagaId];
+      }
+    });
+  };
+
   function formatDate(dateString: string | number | Date | null) {
     if (dateString === null || dateString === "") {
       return "";
@@ -257,17 +274,24 @@ export function TableValues() {
   };
 
   return (
-    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"} >
+    <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
       <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
-      {/* <SearchInput records={records} onSearchResults={handleSearchResults} /> */}
       <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
-          <Tr>{generateTableHeaders(thTitles)}</Tr>
+          <Tr>{isMarkingIncident && <Th>Selecionar</Th>}{generateTableHeaders(thTitles)}</Tr>
         </Thead>
         <Tbody>
           {currentRecords.map((record, index) => (
             <Tr key={index}>
+              {isMarkingIncident && (
+                <Td>
+                  <Checkbox
+                    isChecked={selectedIncidents.includes(record.vagaId)}
+                    onChange={() => handleCheckboxChange(record.vagaId)}
+                  />
+                </Td>
+              )}
               {Object.entries(record).map(([key, value], idx) => {
                 if (key !== "vagaId" && key !== "incidente") {
                   if (key === "entrada" || key === "saida") {
@@ -278,7 +302,7 @@ export function TableValues() {
                 return null;
               })}
               <Td>
-                {record.incidente && <WarningIcon color="red.500" />} {/* Adicione esta linha */}
+                {record.incidente && <WarningIcon color="red.500" />}
                 <TableIcons
                   iconName={"email"}
                   vagaId={record.vagaId}
@@ -302,7 +326,7 @@ export function TableValues() {
           ))}
         </Tbody>
         <Tfoot>
-          <Tr>{generateTableHeaders(thTitles)}</Tr>
+          <Tr>{isMarkingIncident && <Th>Selecionar</Th>}{generateTableHeaders(thTitles)}</Tr>
         </Tfoot>
       </Table>
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />

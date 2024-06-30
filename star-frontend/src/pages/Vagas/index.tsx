@@ -20,13 +20,39 @@ import { Matrix } from "../../components/Vagas/Matrix";
 import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { AllProviders } from "../../context/AllProviders";
 import { AddIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
+import { useEndpoint } from"../../hooks/api/useEndpoint";
 
 export function Vagas() {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef<HTMLInputElement>(null);
+  const [isMarkingIncident, setIsMarkingIncident] = useState(false);
+  const [selectedIncidents, setSelectedIncidents] = useState<number[]>([]);
+
+  const { data, error, isLoading, sendRequest } = useEndpoint<{ message: string }, { vagas: { vagaId: number, incidente: boolean }[] }>({
+    url: 'http://localhost:3000/vagas/incidentes/update-multi-fields',
+    method: 'PATCH',
+    body: { vagas: selectedIncidents.map(vagaId => ({ vagaId, incidente: true })) }
+  }, false);
+
+  const toggleMarkIncident = async () => {
+    if (isMarkingIncident) {
+      sendRequest();
+      setSelectedIncidents([]);
+    }
+    setIsMarkingIncident(prevState => !prevState);
+  };
+
+  useEffect(() => {
+    if (data) {
+      console.log('Incidentes atualizados com sucesso:', data);
+    }
+    if (error) {
+      console.error('Erro ao atualizar incidentes:', error);
+    }
+  }, [data, error]);
 
   return (
     <AllProviders>
@@ -112,21 +138,20 @@ export function Vagas() {
         <Box>
           <Tooltip
             hasArrow
-            label="Marcar incidente"
+            label={isMarkingIncident ? "Concluir" : "Marcar incidente"}
             bg="gray.300"
             color="black"
             placement="bottom"
           >
             <Button
-              leftIcon={<AddIcon />}
-              bg={theme.colors.highlights[50]}
+              bg={isMarkingIncident ? "green.400" : theme.colors.highlights[50]}
               color={"black"}
-              onClick={onOpen}
+              onClick={toggleMarkIncident}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               w={"xsm"}
               _hover={"black"}
             >
-              Marcar incidente
+              {isMarkingIncident ? "Concluir" : "Marcar incidente"}
             </Button>
           </Tooltip>
         </Box>
@@ -140,7 +165,7 @@ export function Vagas() {
         bgColor={"blackAlpha.900"}
       >
         <Box minH="60vh">
-          <TableValues />
+          <TableValues isMarkingIncident={isMarkingIncident} selectedIncidents={selectedIncidents} setSelectedIncidents={setSelectedIncidents} />
         </Box>
       </Box>
     </AllProviders>
