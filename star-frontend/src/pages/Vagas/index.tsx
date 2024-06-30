@@ -20,9 +20,10 @@ import { Matrix } from "../../components/Vagas/Matrix";
 import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { AllProviders } from "../../context/AllProviders";
 import { AddIcon } from "@chakra-ui/icons";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
 import { useEndpoint } from"../../hooks/api/useEndpoint";
+
 
 export function Vagas() {
   const theme = useTheme();
@@ -30,7 +31,9 @@ export function Vagas() {
   const firstField = React.useRef<HTMLInputElement>(null);
   const [isMarkingIncident, setIsMarkingIncident] = useState(false);
   const [selectedIncidents, setSelectedIncidents] = useState<number[]>([]);
+  const [refreshTable, setRefreshTable] = useState(false);
 
+  // Configure o hook useEndpoint
   const { data, error, isLoading, sendRequest } = useEndpoint<{ message: string }, { vagas: { vagaId: number, incidente: boolean }[] }>({
     url: 'http://localhost:3000/vagas/incidentes/update-multi-fields',
     method: 'PATCH',
@@ -39,20 +42,27 @@ export function Vagas() {
 
   const toggleMarkIncident = async () => {
     if (isMarkingIncident) {
+      // Disparar o request usando o hook
       sendRequest();
       setSelectedIncidents([]);
     }
     setIsMarkingIncident(prevState => !prevState);
   };
 
+  // Efeito para lidar com a resposta do request
   useEffect(() => {
     if (data) {
       console.log('Incidentes atualizados com sucesso:', data);
+      setRefreshTable(true); // Atualiza a tabela após o patch
     }
     if (error) {
       console.error('Erro ao atualizar incidentes:', error);
     }
   }, [data, error]);
+
+  const handleRefreshTable = useCallback(() => {
+    setRefreshTable(false); // Resetar a flag após a atualização
+  }, []);
 
   return (
     <AllProviders>
@@ -165,7 +175,7 @@ export function Vagas() {
         bgColor={"blackAlpha.900"}
       >
         <Box minH="60vh">
-          <TableValues isMarkingIncident={isMarkingIncident} selectedIncidents={selectedIncidents} setSelectedIncidents={setSelectedIncidents} />
+          <TableValues isMarkingIncident={isMarkingIncident} selectedIncidents={selectedIncidents} setSelectedIncidents={setSelectedIncidents} refreshTable={refreshTable} onRefreshTable={handleRefreshTable} />
         </Box>
       </Box>
     </AllProviders>

@@ -42,9 +42,11 @@ interface TableValuesProps {
   isMarkingIncident: boolean;
   selectedIncidents: number[];
   setSelectedIncidents: React.Dispatch<React.SetStateAction<number[]>>;
+  refreshTable: boolean;
+  onRefreshTable: () => void;
 }
 
-export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedIncidents }: TableValuesProps) {
+export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedIncidents, refreshTable, onRefreshTable }: TableValuesProps) {
   const { accessToken } = useAuth();
   const { records, isLoading, error, refreshRecords } = useVagas();
   const [sortedRecords, setSortedRecords] = useState<Vaga[]>([]);
@@ -118,6 +120,13 @@ export function TableValues({ isMarkingIncident, selectedIncidents, setSelectedI
       return () => clearInterval(interval);
     }
   }, [isAutoUpdateEnabled, accessToken, records]);
+
+  useEffect(() => {
+    if (refreshTable) {
+      refreshRecords();
+      onRefreshTable();
+    }
+  }, [refreshTable, refreshRecords, onRefreshTable]);
 
   const extractTitlesFromRecord = (record: Vaga | undefined): string[] => {
     if (!record) return [];
