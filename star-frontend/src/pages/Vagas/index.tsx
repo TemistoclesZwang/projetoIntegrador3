@@ -20,28 +20,63 @@ import { Matrix } from "../../components/Vagas/Matrix";
 import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { AllProviders } from "../../context/AllProviders";
 import { AddIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
+import { useEndpoint } from"../../hooks/api/useEndpoint";
+
 
 export function Vagas() {
   const theme = useTheme();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = React.useRef<HTMLInputElement>(null);
+  const [isMarkingIncident, setIsMarkingIncident] = useState(false);
+  const [selectedIncidents, setSelectedIncidents] = useState<number[]>([]);
+  const [refreshTable, setRefreshTable] = useState(false);
+
+  // Configure o hook useEndpoint
+  const { data, error, isLoading, sendRequest } = useEndpoint<{ message: string }, { vagas: { vagaId: number, incidente: boolean }[] }>({
+    url: 'http://localhost:3000/vagas/incidentes/update-multi-fields',
+    method: 'PATCH',
+    body: { vagas: selectedIncidents.map(vagaId => ({ vagaId, incidente: true })) }
+  }, false);
+
+  const toggleMarkIncident = async () => {
+    if (isMarkingIncident) {
+      // Disparar o request usando o hook
+      sendRequest();
+      setSelectedIncidents([]);
+    }
+    setIsMarkingIncident(prevState => !prevState);
+  };
+
+  // Efeito para lidar com a resposta do request
+  useEffect(() => {
+    if (data) {
+      console.log('Incidentes atualizados com sucesso:', data);
+      setRefreshTable(true); // Atualiza a tabela após o patch
+    }
+    if (error) {
+      console.error('Erro ao atualizar incidentes:', error);
+    }
+  }, [data, error]);
+
+  const handleRefreshTable = useCallback(() => {
+    setRefreshTable(false); // Resetar a flag após a atualização
+  }, []);
 
   return (
     <AllProviders>
       <Flex
         bgColor={"blackAlpha.900"}
         flexDirection={"row"}
-        justifyContent={"space-between"}
+        gap={'1rem'}
+        justifyContent={"right"}
         pl={"0.5rem"}
         pr={"1.5rem"}
         pt={"1rem"}
         pb={"1rem"}
-        // h={'1vh'}
       >
         <Box>{/* <SearchPlate /> */}</Box>
-        {/* <SearchPlate></SearchPlate> */}
         <Box>
           <Tooltip
             hasArrow
@@ -52,7 +87,6 @@ export function Vagas() {
           >
             <Button
               leftIcon={<AddIcon />}
-              // colorScheme="teal"
               bg={theme.colors.highlights[50]}
               color={"black"}
               onClick={onOpen}
@@ -111,23 +145,37 @@ export function Vagas() {
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
+        <Box>
+          <Tooltip
+            hasArrow
+            label={isMarkingIncident ? "Concluir" : "Marcar incidente"}
+            bg="gray.300"
+            color="black"
+            placement="bottom"
+          >
+            <Button
+              bg={isMarkingIncident ? "green.400" : theme.colors.highlights[50]}
+              color={"black"}
+              onClick={toggleMarkIncident}
+              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+              w={"xsm"}
+              _hover={"black"}
+            >
+              {isMarkingIncident ? "Concluir" : "Marcar incidente"}
+            </Button>
+          </Tooltip>
+        </Box>
       </Flex>
 
       <Box
         pr={3}
         pl={3}
-        // maxH="80vh"
         h={"100vh"}
         overflowY="auto"
-        // bgColor={theme.colors.highlights[50]}
-        // borderRadius={"md"}
         bgColor={"blackAlpha.900"}
-        // p={5}
       >
         <Box minH="60vh">
-          {/* {" "} */}
-          {/* Garantir um mínimo de altura para TableValues */}
-          <TableValues />
+          <TableValues isMarkingIncident={isMarkingIncident} selectedIncidents={selectedIncidents} setSelectedIncidents={setSelectedIncidents} refreshTable={refreshTable} onRefreshTable={handleRefreshTable} />
         </Box>
       </Box>
     </AllProviders>
