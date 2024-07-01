@@ -331,6 +331,12 @@ export function TableValues({
               {isMarkingIncident && (
                 <Td>
                   <Checkbox
+                  ml={"2rem"}
+                  // borderWidth={1}
+                  // borderRadius={'md'}
+                  borderColor={'black'}
+                  bgColor={'white'}
+                  
                     isChecked={selectedIncidents.includes(record.vagaId)}
                     onChange={() => handleCheckboxChange(record.vagaId)}
                   />
