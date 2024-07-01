@@ -23,6 +23,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
 import { useEndpoint } from"../../hooks/api/useEndpoint";
+import { TiInfo } from "react-icons/ti";
 
 
 export function Vagas() {
@@ -154,12 +155,15 @@ export function Vagas() {
             placement="bottom"
           >
             <Button
-              bg={isMarkingIncident ? "green.400" : theme.colors.highlights[50]}
+              size={"md"}
+              leftIcon={<TiInfo size={27}/>}
+              bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
               color={"black"}
               onClick={toggleMarkIncident}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               w={"xsm"}
               _hover={"black"}
+              
             >
               {isMarkingIncident ? "Concluir" : "Marcar incidente"}
             </Button>
