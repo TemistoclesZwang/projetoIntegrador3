@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useAuth } from "../../context/Auth";
 import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
 
-type IconType = "email" | "add" | "check" | "info";
+type IconType = "time" | "add" | "check" | "info";
 
 export function useIconClick(
   iconName: IconType,
@@ -42,7 +42,7 @@ export function useIconClick(
     let response;
     try {
       switch (iconName) {
-        case "email":
+        case "time":
           response = await fetch(
             `http://localhost:3000/vagas/previa-valor/${vagaId}`,
             {

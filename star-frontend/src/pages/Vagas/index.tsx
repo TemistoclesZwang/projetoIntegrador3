@@ -22,9 +22,8 @@ import { AllProviders } from "../../context/AllProviders";
 import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
-import { useEndpoint } from"../../hooks/api/useEndpoint";
+import { useEndpoint } from "../../hooks/api/useEndpoint";
 import { TiInfo } from "react-icons/ti";
-
 
 export function Vagas() {
   const theme = useTheme();
@@ -35,11 +34,19 @@ export function Vagas() {
   const [refreshTable, setRefreshTable] = useState(false);
 
   // Configure o hook useEndpoint
-  const { data, error, isLoading, sendRequest } = useEndpoint<{ message: string }, { vagas: { vagaId: number, incidente: boolean }[] }>({
-    url: 'http://localhost:3000/vagas/incidentes/update-multi-fields',
-    method: 'PATCH',
-    body: { vagas: selectedIncidents.map(vagaId => ({ vagaId, incidente: true })) }
-  }, false);
+  const { data, error, isLoading, sendRequest } = useEndpoint<
+    { message: string },
+    { vagas: { vagaId: number; incidente: boolean }[] }
+  >(
+    {
+      url: "http://localhost:3000/vagas/incidentes/update-multi-fields",
+      method: "PATCH",
+      body: {
+        vagas: selectedIncidents.map((vagaId) => ({ vagaId, incidente: true })),
+      },
+    },
+    false
+  );
 
   const toggleMarkIncident = async () => {
     if (isMarkingIncident) {
@@ -47,17 +54,17 @@ export function Vagas() {
       sendRequest();
       setSelectedIncidents([]);
     }
-    setIsMarkingIncident(prevState => !prevState);
+    setIsMarkingIncident((prevState) => !prevState);
   };
 
   // Efeito para lidar com a resposta do request
   useEffect(() => {
     if (data) {
-      console.log('Incidentes atualizados com sucesso:', data);
+      console.log("Incidentes atualizados com sucesso:", data);
       setRefreshTable(true); // Atualiza a tabela após o patch
     }
     if (error) {
-      console.error('Erro ao atualizar incidentes:', error);
+      console.error("Erro ao atualizar incidentes:", error);
     }
   }, [data, error]);
 
@@ -70,7 +77,7 @@ export function Vagas() {
       <Flex
         bgColor={"blackAlpha.900"}
         flexDirection={"row"}
-        gap={'1rem'}
+        gap={"1rem"}
         justifyContent={"right"}
         pl={"0.5rem"}
         pr={"1.5rem"}
@@ -156,14 +163,13 @@ export function Vagas() {
           >
             <Button
               size={"md"}
-              leftIcon={<TiInfo size={27}/>}
+              leftIcon={<TiInfo size={27} />}
               bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
               color={"black"}
               onClick={toggleMarkIncident}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               w={"xsm"}
               _hover={"black"}
-              
             >
               {isMarkingIncident ? "Concluir" : "Marcar incidente"}
             </Button>
@@ -179,7 +185,13 @@ export function Vagas() {
         bgColor={"blackAlpha.900"}
       >
         <Box minH="60vh">
-          <TableValues isMarkingIncident={isMarkingIncident} selectedIncidents={selectedIncidents} setSelectedIncidents={setSelectedIncidents} refreshTable={refreshTable} onRefreshTable={handleRefreshTable} />
+          <TableValues
+            isMarkingIncident={isMarkingIncident}
+            selectedIncidents={selectedIncidents}
+            setSelectedIncidents={setSelectedIncidents}
+            refreshTable={refreshTable}
+            onRefreshTable={handleRefreshTable}
+          />
         </Box>
       </Box>
     </AllProviders>

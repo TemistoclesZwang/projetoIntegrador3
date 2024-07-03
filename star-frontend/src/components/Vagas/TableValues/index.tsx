@@ -360,7 +360,7 @@ export function TableValues({
                   >
                     {record.incidente && <WarningIcon color="red.500" ml={-4}/>}
                     <TableIcons
-                      iconName={"email"}
+                      iconName={"time"}
                       vagaId={record.vagaId}
                       onUpdate={atualizarInfosVagaLiberada}
                       isAutoUpdateEnabled={isAutoUpdateEnabled}
