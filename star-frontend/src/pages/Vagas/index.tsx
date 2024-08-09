@@ -180,7 +180,7 @@ export function Vagas() {
       <Box
         pr={3}
         pl={3}
-        h={"100vh"}
+        // h={"100vh"}
         overflowY="auto"
         bgColor={"blackAlpha.900"}
       >
