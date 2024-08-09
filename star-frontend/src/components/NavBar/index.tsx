@@ -76,11 +76,11 @@ export function NavBar() {
           
           justifyContent={"center"}
           // display={{ base: "none", md: "flex" }}
-          w={"100vw"} //!bug
+          w={"15vw"} //!bug
           // bgColor={"green"}
           position={"absolute"}
           // flex={'1'}
-          // left={"1%"}
+          left={"43%"}
         >
           <SearchInput />
         </Flex>
@@ -118,10 +118,6 @@ export function NavBar() {
               label="Estatísticas"
               icon={TiChartBarOutline}
             />
-            <NavLink 
-              to="/incidentes" 
-              label="Incidentes" 
-              icon={TiInfo} />
           </VStack>
         </Box>
 
