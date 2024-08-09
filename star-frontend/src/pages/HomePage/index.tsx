@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { IoSparklesSharp } from "react-icons/io5";
 // import { NavBar } from "../../components/NavBar";
-import parking from "../../assets/HomePage/parking.jpg";
+import parking from "../../assets/HomePage/parking2.jpg";
 import { SimpleCard } from "../../components/SimpleCard";
 
 export function HomePage() {
