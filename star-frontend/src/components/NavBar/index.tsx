@@ -29,9 +29,40 @@ import {
 import { useTheme } from "@chakra-ui/react";
 import { IoLogOut, IoSparklesSharp } from "react-icons/io5";
 import { AvatarUser } from "./AvatarUser";
-import { SearchPlate } from "../Vagas/SearchPlate";
 import { AllProviders } from "../../context/AllProviders";
 import { SearchInput } from "../Vagas/SearchInput";
+
+// Define o NavLink antes de ser utilizado
+interface NavLinkProps extends LinkProps {
+  to: string;
+  label: string;
+  icon: React.ElementType;
+  onClick?: () => void;
+}
+
+const NavLink = ({ to, label, icon, onClick, ...props }: NavLinkProps) => {
+  const theme = useTheme();
+  return (
+    <ChakraLink as={ReactRouterLink} to={to} onClick={onClick} {...props}>
+      <Tooltip
+        hasArrow
+        label={label}
+        bg="gray.300"
+        color="black"
+        placement="bottom"
+      >
+        <Stack direction="row" align="center">
+          <Icon
+            as={icon}
+            boxSize={"1.5rem"}
+            color={theme.colors.highlights[100]}
+          />
+          <Text ml={2}>{label}</Text>
+        </Stack>
+      </Tooltip>
+    </ChakraLink>
+  );
+};
 
 export function NavBar() {
   const theme = useTheme();
@@ -72,18 +103,18 @@ export function NavBar() {
             </Text>
           </Link>
         </Flex>
+
+        {/* Barra de busca, visível apenas em telas médias e grandes */}
         <Flex
-          
           justifyContent={"center"}
-          // display={{ base: "none", md: "flex" }}
-          w={"15vw"} //!bug
-          // bgColor={"green"}
+          w={"15vw"}
           position={"absolute"}
-          // flex={'1'}
           left={"43%"}
+          display={{ base: "none", md: "flex" }} 
         >
           <SearchInput />
         </Flex>
+
         <Box
           display={{ base: "block", md: "none" }}
           className="hamburger"
@@ -130,7 +161,7 @@ export function NavBar() {
               <DrawerHeader color={"white"}>Menu</DrawerHeader>
               <DrawerBody>
                 <VStack spacing={5} alignItems="flex-start" w="100%">
-                  <SearchInput />
+                  <SearchInput /> {/* No menu sandwich */}
                   <NavLink
                     to="/vagas"
                     label="Vagas"
@@ -161,34 +192,3 @@ export function NavBar() {
     </AllProviders>
   );
 }
-
-interface NavLinkProps extends LinkProps {
-  to: string;
-  label: string;
-  icon: React.ElementType;
-  onClick?: () => void;
-}
-
-const NavLink = ({ to, label, icon, onClick, ...props }: NavLinkProps) => {
-  const theme = useTheme();
-  return (
-    <ChakraLink as={ReactRouterLink} to={to} onClick={onClick} {...props}>
-      <Tooltip
-        hasArrow
-        label={label}
-        bg="gray.300"
-        color="black"
-        placement="bottom"
-      >
-        <Stack direction="row" align="center">
-          <Icon
-            as={icon}
-            boxSize={"1.5rem"}
-            color={theme.colors.highlights[100]}
-          />
-          <Text ml={2}>{label}</Text>
-        </Stack>
-      </Tooltip>
-    </ChakraLink>
-  );
-};
