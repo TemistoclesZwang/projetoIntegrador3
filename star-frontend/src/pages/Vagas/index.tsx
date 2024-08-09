@@ -17,7 +17,6 @@ import {
 import { TableValues } from "../../components/Vagas/TableValues";
 import { TableInput } from "../../components/Vagas/TableInput";
 import { Matrix } from "../../components/Vagas/Matrix";
-import { SearchPlate } from "../../components/Vagas/SearchPlate";
 import { AllProviders } from "../../context/AllProviders";
 import { AddIcon } from "@chakra-ui/icons";
 import React, { useState, useEffect, useCallback } from "react";
@@ -94,15 +93,22 @@ export function Vagas() {
             placement="bottom"
           >
             <Button
-              leftIcon={<AddIcon />}
               bg={theme.colors.highlights[50]}
               color={"black"}
               onClick={onOpen}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               w={"xsm"}
               _hover={"black"}
+              justifyContent="center" // Centraliza o conteúdo dentro do botão
             >
-              Criar vaga
+              {/* Ícone à esquerda exibido apenas em telas maiores */}
+              <Box display={{ base: "none", md: "block" }}>
+                <AddIcon />
+              </Box>
+              <Box display={{ base: "block", md: "none" }}>
+                <AddIcon />
+              </Box>
+              <Box display={{ base: "none", md: "block" }}>Criar vaga</Box>
             </Button>
           </Tooltip>
         </Box>
@@ -138,8 +144,10 @@ export function Vagas() {
                 gap={2}
                 onClose={onClose}
               >
-                <AddIcon />
-                Criar
+                <Box display={{ base: "none", md: "block" }}>
+                  <AddIcon />
+                </Box>
+                <Box display={{ base: "none", md: "block" }}>Criar</Box>
               </BtnSendNewSpace>
               <Button
                 variant="outline"
@@ -163,15 +171,24 @@ export function Vagas() {
           >
             <Button
               size={"md"}
-              leftIcon={<TiInfo size={27} />}
               bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
               color={"black"}
               onClick={toggleMarkIncident}
               _active={{ bg: "gray.800", transform: "scale(0.95)" }}
               w={"xsm"}
               _hover={"black"}
+              justifyContent="center" // Centraliza o conteúdo dentro do botão
             >
-              {isMarkingIncident ? "Concluir" : "Marcar incidente"}
+              {/* Ícone à esquerda exibido apenas em telas maiores */}
+              <Box display={{ base: "none", md: "block" }}>
+                <TiInfo size={27} />
+              </Box>
+              <Box display={{ base: "block", md: "none" }}>
+                <TiInfo size={27} />
+              </Box>
+              <Box display={{ base: "none", md: "block" }}>
+                {isMarkingIncident ? "Concluir" : "Marcar incidente"}
+              </Box>
             </Button>
           </Tooltip>
         </Box>
@@ -180,7 +197,6 @@ export function Vagas() {
       <Box
         pr={3}
         pl={3}
-        // h={"100vh"}
         overflowY="auto"
         bgColor={"blackAlpha.900"}
       >
