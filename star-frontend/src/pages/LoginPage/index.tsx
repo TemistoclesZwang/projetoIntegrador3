@@ -16,7 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import usePost from "../../hooks/LoginPage/index";
-
+import parking from "../../assets/HomePage/parking2.jpg";
 
 export function LoginPage() {
   const theme = useTheme();
@@ -42,9 +42,8 @@ export function LoginPage() {
         isClosable: true,
       });
     } else if (result && result.access_token) {
-      
       login(result.access_token, result.role);
-      
+
       toast({
         title: "Login Successful",
         description: "You have successfully logged in.",
@@ -54,25 +53,47 @@ export function LoginPage() {
       });
       navigate("/vagas");
     }
-
   };
 
-//   useEffect(() => {
-//     console.log('O estado de isLoggedIn foi atualizado:', isLoggedIn);
-//     // Você pode colocar mais lógica aqui que deve ser executada quando isLoggedIn mudar
-// }, [isLoggedIn]); 
-
   return (
-    <Flex height="100vh" alignItems="center" justifyContent="center" bgColor={'blackAlpha.900'}>
-      <VStack spacing="35px" width="100%" height="50%">
-        <Box
-          p={10}
+    <Flex
+      height="100vh"
+      w="100vw"
+      alignItems="center"
+      justifyContent="center"
+      position="relative"
+      bgColor="blackAlpha.900"
+      overflow="hidden"
+    >
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        width="100%"
+        height="100%"
+        zIndex={0}
+        bgImage={`url(${parking})`}
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
+        opacity={0.2}
+      />
+
+      <Flex
+        w="100%"
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+        zIndex={1}
+        flexDirection="column"
+        p={5}
+      >
+        <VStack
+          spacing="35px"
+          width={{ base: "90%", md: "50%", lg: "30%" }}
+          p={{ base: 5, md: 10 }}
           borderRadius="lg"
-          // boxShadow="dark-lg"
-          textAlign="center"
-          maxWidth={{ base: "90%", sm: "40%", md: "35%", lg: "30%" }}
-          width="100%"
-          bgColor={'blackAlpha.900'}
+          bgColor="blackAlpha.900"
         >
           <Heading as="h1" color={theme.colors.highlights[80]} size="lg">
             Login
@@ -81,7 +102,6 @@ export function LoginPage() {
             <FormLabel color={"white"}>Email</FormLabel>
             <Input
               type="email"
-              // Adicione aqui a variável e a função para manipular o email
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               bgColor={"white"}
@@ -91,20 +111,18 @@ export function LoginPage() {
             <FormLabel color={"white"}>Password</FormLabel>
             <Input
               type="password"
-              // Adicione aqui a variável e a função para manipular a senha
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               bgColor={"white"}
             />
           </FormControl>
-          <VStack spacing="35px">
+          <VStack spacing="35px" width="100%">
             <Button
               bg={theme.colors.highlights[100]}
               _hover={{ bg: theme.colors.highlights[50] }}
               onClick={handleLogin}
               width="50%"
               mt="35px"
-              // mb="35px"
             >
               Sign in
             </Button>
@@ -112,8 +130,8 @@ export function LoginPage() {
               <LinkRouter to="/register">Create an account</LinkRouter>
             </Link>
           </VStack>
-        </Box>
-      </VStack>
+        </VStack>
+      </Flex>
     </Flex>
   );
 }
