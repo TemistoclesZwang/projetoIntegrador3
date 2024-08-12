@@ -14,8 +14,7 @@ import {
   Text,
   Checkbox,
   Button,
-  Box,
-  Tag,
+  useTheme,
 } from "@chakra-ui/react";
 import {
   TriangleDownIcon,
@@ -67,6 +66,7 @@ export function TableValues({
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const { isAutoUpdateEnabled } = useAutoUpdate();
+  const theme = useTheme();
 
   const sortByIncident = () => {
     setSortedRecords((prevRecords) => 
@@ -333,7 +333,7 @@ export function TableValues({
             {isMarkingIncident && <Th>Selecionar</Th>}
             {generateTableHeaders(thTitles)}
             <Th textAlign="right">
-              <Button onClick={sortByIncident} colorScheme="teal" size="sm">
+              <Button onClick={sortByIncident} bg={theme.colors.highlights[50]} size="sm">
                 Organizar por Incidente
               </Button>
             </Th>
@@ -378,13 +378,13 @@ export function TableValues({
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
                   <TableIcons
-                    iconName={"add"}
+                    iconName={"check"}
                     vagaId={record.vagaId}
                     onUpdate={() => refreshRecords()}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
                   <TableIcons
-                    iconName={"check"}
+                    iconName={"add"}
                     vagaId={record.vagaId}
                     onUpdate={atualizarInfosVagaLiberada}
                   />
