@@ -15,6 +15,7 @@ import {
   Checkbox,
   Button,
   Box,
+  Tag,
 } from "@chakra-ui/react";
 import {
   TriangleDownIcon,
@@ -29,6 +30,7 @@ import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
+import { StatusTag } from "../../../hooks/TableValues/useStatusTag";
 
 interface Vaga {
   vagaId: number;
@@ -321,83 +323,89 @@ export function TableValues({
     setSortedRecords(results);
   };
 
+ 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
-    <Table variant="striped" colorScheme="gray">
-      <TableCaption>Registro de Estacionamento</TableCaption>
-      <Thead>
-        <Tr>
-          {isMarkingIncident && <Th>Selecionar</Th>}
-          {generateTableHeaders(thTitles)}
-          {/* Célula de cabeçalho dedicada para o botão */}
-          <Th textAlign="right">
-            <Button onClick={sortByIncident} colorScheme="teal" size="sm">
-              Organizar por Incidente
-            </Button>
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {currentRecords.map((record, index) => (
-          <Tr key={index}>
-            {isMarkingIncident && (
-              <Td>
-                <Checkbox
-                  ml={"2rem"}
-                  borderColor={'black'}
-                  bgColor={'white'}
-                  isChecked={selectedIncidents.includes(record.vagaId)}
-                  onChange={() => handleCheckboxChange(record.vagaId)}
-                />
-              </Td>
-            )}
-            {Object.entries(record).map(([key, value], idx) => {
-              if (key !== "vagaId" && key !== "incidente") {
-                if (key === "entrada" || key === "saida") {
-                  return <Td key={idx}>{formatDate(value)}</Td>;
-                }
-                return <Td key={idx}>{value}</Td>;
-              }
-              return null;
-            })}
-            <Td>
-              <Flex alignItems="center" justifyContent="center">
-                {record.incidente && <WarningIcon color="red.500" ml={-4}/>}
-                <TableIcons
-                  iconName={"time"}
-                  vagaId={record.vagaId}
-                  onUpdate={atualizarInfosVagaLiberada}
-                  isAutoUpdateEnabled={isAutoUpdateEnabled}
-                />
-                <TableIcons
-                  iconName={"add"}
-                  vagaId={record.vagaId}
-                  onUpdate={() => refreshRecords()}
-                  isAutoUpdateEnabled={isAutoUpdateEnabled}
-                />
-                <TableIcons
-                  iconName={"check"}
-                  vagaId={record.vagaId}
-                  onUpdate={atualizarInfosVagaLiberada}
-                />
-                <TableIcons iconName={"info"} />
-              </Flex>
-            </Td>
+      <Table variant="striped" colorScheme="gray">
+        <TableCaption>Registro de Estacionamento</TableCaption>
+        <Thead>
+          <Tr>
+            {isMarkingIncident && <Th>Selecionar</Th>}
+            {generateTableHeaders(thTitles)}
+            <Th textAlign="right">
+              <Button onClick={sortByIncident} colorScheme="teal" size="sm">
+                Organizar por Incidente
+              </Button>
+            </Th>
           </Tr>
-        ))}
-      </Tbody>
-      <Tfoot>
-        <Tr>
-          {isMarkingIncident && <Th>Selecionar</Th>}
-          {generateTableHeaders(thTitles)}
-        </Tr>
-      </Tfoot>
-    </Table>
-    <Pagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={setCurrentPage}
-    />
-  </TableContainer>
-);
+        </Thead>
+        <Tbody>
+          {currentRecords.map((record, index) => (
+            <Tr key={index}>
+              {isMarkingIncident && (
+                <Td>
+                  <Checkbox
+                    ml={"2rem"}
+                    borderColor={'black'}
+                    bgColor={'white'}
+                    isChecked={selectedIncidents.includes(record.vagaId)}
+                    onChange={() => handleCheckboxChange(record.vagaId)}
+                  />
+                </Td>
+              )}
+              {Object.entries(record).map(([key, value], idx) => {
+                if (key === "status" || key === "pagamento") {
+                  return (
+                    <Td key={idx}>
+                      <StatusTag value={value as string} column={key as "status" | "pagamento"} />
+                    </Td>
+                  );
+                } else if (key !== "vagaId" && key !== "incidente") {
+                  if (key === "entrada" || key === "saida") {
+                    return <Td key={idx}>{formatDate(value)}</Td>;
+                  }
+                  return <Td key={idx}>{value}</Td>;
+                }
+                return null;
+              })}
+              <Td>
+                <Flex alignItems="center" justifyContent="center">
+                  {record.incidente && <WarningIcon color="red.500" ml={-4} />}
+                  <TableIcons
+                    iconName={"time"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
+                  <TableIcons
+                    iconName={"add"}
+                    vagaId={record.vagaId}
+                    onUpdate={() => refreshRecords()}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
+                  <TableIcons
+                    iconName={"check"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                  />
+                  <TableIcons iconName={"info"} />
+                </Flex>
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot>
+          <Tr>
+            {isMarkingIncident && <Th>Selecionar</Th>}
+            {generateTableHeaders(thTitles)}
+          </Tr>
+        </Tfoot>
+      </Table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+    </TableContainer>
+  );
 }
