@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import textureFloor from "/home/temistocles/IFPI/5 periodo/projeto 3/github/projetoIntegrador3/star-frontend/src/assets/textureFloor.jpg";
+import textureFloor from "/home/temistocles/IFPI/5periodo/projeto3/github/projetoIntegrador3/star-frontend/src/assets/textureFloor.jpg";
 import {
   Box,
   Button,
@@ -13,46 +13,49 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-  filter,
+
 } from "@chakra-ui/react";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-export function Register() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [IdRole, setIdRole] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [role, setRole] = useState("guest"); 
+interface RegisterFormState {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  IdRole: string;
+  emailError: string;
+  passwordError: string;
+  role: string;
+}
 
-  // Hook useEndpoint para gerenciar a solicitação
+export function Register() {
+  const [formState, setFormState] = useState<RegisterFormState>({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    IdRole: "",
+    emailError: "",
+    passwordError: "",
+    role: "guest", //valor padrão
+  });
+
+  const handleChange = (key: keyof RegisterFormState, value: string) => {
+    setFormState(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
   const { data, error, isLoading, sendRequest } = useEndpoint<
     { status: string },
-    {
-      username: string;
-      email: string;
-      password: string;
-      confirmPassword: string;
-      role:string;
-    }
+    RegisterFormState
   >(
     {
       url: "http://localhost:3000/cadastro/novo-usuario",
       method: "POST",
-      body: {
-        username,
-        email,
-        password,
-        confirmPassword,
-        role,
-      },
+      body: formState,
     },
     false // autoFetch é false para permitir envio manual
   );
@@ -79,21 +82,42 @@ export function Register() {
     return regex.test(password);
   };
 
-  const TextureBg = () => {
-    return (
-      <Image
-        src={textureFloor}
-        position="absolute"
-        top="0"
-        left="0"
-        width="100%"
-        height="100%"
-        zIndex="-1"
-        objectFit="cover">
-      </Image>
-    )
-  }
-  const RoleOptions = () => {
+  const handleSubmit = async () => {
+    let isValid = true;
+
+    if (!validateEmail(formState.email)) {
+      setFormState(prevState => ({
+        ...prevState,
+        emailError: "Por favor, insira um e-mail válido."
+      }));
+      isValid = false;
+    } else {
+      setFormState(prevState => ({
+        ...prevState,
+        emailError: ""
+      }));
+    }
+
+    if (!validatePassword(formState.password)) {
+      setFormState(prevState => ({
+        ...prevState,
+        passwordError: "A senha deve ter pelo menos 8 caracteres e incluir uma combinação de maiúsculas, minúsculas e números."
+      }));
+      isValid = false;
+    } else {
+      setFormState(prevState => ({
+        ...prevState,
+        passwordError: ""
+      }));
+    }
+
+    if (!isValid) {
+      return;
+    }
+
+    sendRequest();
+  };
+  const RoleOptions = ({ role, setRole }: { role: string, setRole: (role: string) => void }) => {
     return (
       <Flex w={'100%'} direction="column">
         <Menu>
@@ -117,31 +141,6 @@ export function Register() {
     );
   };
   
-  const handleSubmit = async () => {
-    setEmailError("");
-    setPasswordError("");
-
-    let isValid = true;
-
-    if (!validateEmail(email)) {
-      setEmailError("Por favor, insira um e-mail válido.");
-      isValid = false;
-    }
-
-    if (!validatePassword(password)) {
-      setPasswordError(
-        "A senha deve ter pelo menos 8 caracteres e incluir uma combinação de maiúsculas, minúsculas e números."
-      );
-      isValid = false;
-    }
-
-    if (!isValid) {
-      return;
-    }
-
-    sendRequest();
-    
-  };
 
   return (
     <Flex
@@ -149,17 +148,16 @@ export function Register() {
       align="center"
       width="100vw"
       height="100vh"
-      // bgColor="black"
       background={(textureFloor)}
     >
-      <TextureBg />
+      
       <Box width="500px" bgColor="gray.800" p="5rem" h="auto" borderRadius="xl">
         <FormControl isRequired>
           <FormLabel color="white">Nome</FormLabel>
           <Input
             placeholder="Nome completo"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={formState.username}
+            onChange={(e) => handleChange("username", e.target.value)}
             width="100%"
             bgColor="white"
             color="black"
@@ -169,15 +167,15 @@ export function Register() {
           </FormLabel>
           <Input
             placeholder="exemplo@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formState.email}
+            onChange={(e) => handleChange("email", e.target.value)}
             width="100%"
             bgColor="white"
             color="black"
           />
-          {emailError && (
+          {formState.emailError && (
             <Text color="red.500" mt={2}>
-              {emailError}
+              {formState.emailError}
             </Text>
           )}
           <FormLabel color="white" mt={4}>
@@ -186,15 +184,15 @@ export function Register() {
           <Input
             placeholder="Senha@123"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formState.password}
+            onChange={(e) => handleChange("password", e.target.value)}
             width="100%"
             bgColor="white"
             color="black"
           />
-          {passwordError && (
+          {formState.passwordError && (
             <Text color="red.500" mt={2}>
-              {passwordError}
+              {formState.passwordError}
             </Text>
           )}
           <FormLabel color="white" mt={4}>
@@ -203,8 +201,8 @@ export function Register() {
           <Input
             placeholder="Senha@123"
             type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={formState.confirmPassword}
+            onChange={(e) => handleChange("confirmPassword", e.target.value)}
             width="100%"
             bgColor="white"
             color="black"
@@ -213,30 +211,25 @@ export function Register() {
             Role
           </FormLabel>
 
-          <RoleOptions></RoleOptions>
-          
-          {(role === "Admin" || role === "Manager") && (
-  <>
-    <FormLabel color="white" mt={4}>
-      Id da role
-    </FormLabel>
-    <Input
-      placeholder="ID12345A"
-      type="text"
-      value={IdRole}
-      onChange={(e) => setIdRole(e.target.value)}
-      width="100%"
-      bgColor="white"
-      color="white"
-    />
-  </>
-)}
+          <RoleOptions role={formState.role} setRole={(role) => handleChange("role", role)} />
 
-          {passwordError && (
-            <Text color="red.500" mt={2}>
-              {passwordError}
-            </Text>
+          {(formState.role === "Admin" || formState.role === "Manager") && (
+            <>
+              <FormLabel color="white" mt={4}>
+                Id da role
+              </FormLabel>
+              <Input
+                placeholder="ID12345A"
+                type="text"
+                value={formState.IdRole}
+                onChange={(e) => handleChange("IdRole", e.target.value)}
+                width="100%"
+                bgColor="white"
+                color="white"
+              />
+            </>
           )}
+
           <Button
             mt={10}
             colorScheme="teal"
@@ -250,3 +243,4 @@ export function Register() {
     </Flex>
   );
 }
+

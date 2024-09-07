@@ -333,7 +333,7 @@ export function TableValues({
             {isMarkingIncident && <Th>Selecionar</Th>}
             {generateTableHeaders(thTitles)}
             <Th textAlign="right">
-              <Button onClick={sortByIncident} bg={theme.colors.highlights[50]} size="sm">
+              <Button onClick={sortByIncident} bg={"black"} color={'white'} size="sm">
                 Organizar por Incidente
               </Button>
             </Th>

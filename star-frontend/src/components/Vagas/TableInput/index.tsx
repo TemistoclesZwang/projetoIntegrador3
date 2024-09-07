@@ -84,7 +84,7 @@ export function TableInput() {
           min={0}
           max={23}
           size="sm"
-          maxW={20}
+          // maxW={20}
 
         >
           <NumberInputField />
@@ -99,7 +99,7 @@ export function TableInput() {
           min={0}
           max={59}
           size="sm"
-          maxW={20}
+          // maxW={20}
         >
           <NumberInputField />
           <NumberInputStepper>

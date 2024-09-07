@@ -126,7 +126,7 @@ export function Vagas() {
             </DrawerHeader>
 
             <DrawerBody>
-              <Stack spacing="24px" color={"gray.300"}>
+              <Stack spacing="24px" color={"gray.100"}>
                 <TableInput />
               </Stack>
             </DrawerBody>

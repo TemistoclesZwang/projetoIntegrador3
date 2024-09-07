@@ -39,7 +39,8 @@ export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: 
       isRound={true}
       variant="solid"
       // colorScheme="teal"
-      bg={theme.colors.highlights[100]}
+      bg={"black"}
+      color={"white"}
       aria-label="Ação"
       fontSize="sm"
       size="sm"
