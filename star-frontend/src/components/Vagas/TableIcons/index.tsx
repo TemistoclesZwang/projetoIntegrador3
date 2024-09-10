@@ -9,6 +9,7 @@ interface TableIconsProps {
   vagaId?: number;
   onUpdate?: (updatedVaga: any) => void;
   isAutoUpdateEnabled?: boolean; // Adicione esta linha
+  id?:string;
 }
 
 const iconMapping = {
@@ -17,7 +18,7 @@ const iconMapping = {
   check: <CheckIcon />,
   info: <InfoIcon />,
 };
-export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: TableIconsProps) {
+export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled,id }: TableIconsProps) {
   const theme = useTheme();
   const { handleAction, isProcessing } = useIconClick(iconName, vagaId, onUpdate);
 
