@@ -19,63 +19,58 @@ export function TutorialPopover() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const targetRef = useRef<HTMLDivElement | null>(null);
   const [isTargetReady, setIsTargetReady] = useState(false);
-  const [tutorialCompleted, setTutorialCompleted] = useState(false); // Controle para saber se o tutorial foi finalizado
+  const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  
+  const maxRetries = 10; // Aumenta o número de tentativas
+  let retries = 0;
 
   // Função para verificar se o alvo da etapa atual está disponível no DOM
   const checkAndSetTarget = () => {
     const currentElement = document.getElementById(steps[currentStep]?.elementId);
 
+    // Adicionando um log detalhado do estado do elemento
     if (currentElement && !tutorialCompleted) {
+      console.log(`Elemento alvo encontrado para o passo ${currentStep + 1}`);
       targetRef.current = currentElement as HTMLDivElement;
       currentElement.scrollIntoView({ behavior: "smooth", block: "center" });
-      setIsTargetReady(true); // Marca que o alvo está pronto
+      setIsTargetReady(true);
       setTimeout(onOpen, 300); // Atraso para garantir a transição suave
     } else {
+      console.log(`Elemento alvo não encontrado para o passo ${currentStep + 1}, tentativa ${retries}`);
       setIsTargetReady(false);
+      if (retries < maxRetries) {
+        retries++;
+        setTimeout(checkAndSetTarget, 500); // Repetir a verificação após um tempo
+      } else {
+        console.error(`Falha ao encontrar o elemento após ${maxRetries} tentativas para o passo ${currentStep + 1}.`);
+        // Ação alternativa se o elemento não for encontrado
+        alert(`O elemento para o passo ${currentStep + 1} não foi encontrado. Verifique se ele está sendo renderizado corretamente.`);
+      }
     }
   };
 
   useEffect(() => {
-    let observer: MutationObserver | undefined;
+    if (!steps.length || tutorialCompleted) return;
 
-    if (!steps.length || tutorialCompleted) return; // Se não houver etapas ou o tutorial foi concluído, não continua
-
-    // Observa mudanças no DOM para detectar quando o elemento alvo estiver disponível
-    observer = new MutationObserver(() => {
-      checkAndSetTarget();
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Verifica se o alvo já está no DOM
+    // Sempre tenta encontrar o alvo quando a etapa mudar
     checkAndSetTarget();
 
     return () => {
-      if (observer) observer.disconnect();
+      retries = 0; // Reseta as tentativas ao sair do efeito
     };
   }, [currentStep, steps, tutorialCompleted]);
 
-  // UseEffect para garantir que o popover abra após o próximo passo ser definido
-  useEffect(() => {
-    if (isTargetReady && !tutorialCompleted) {
-      setTimeout(onOpen, 300);
-    }
-  }, [isTargetReady, onOpen, tutorialCompleted]);
-
   const handleNextStep = () => {
     onClose(); // Fecha o popover atual
-
-    // Verifica se é o último passo
+  
     if (currentStep === steps.length - 1) {
-      // Último passo, fecha o tutorial
-      setIsTargetReady(false); // Desativa o estado de alvo pronto
-      setTutorialCompleted(true); // Marca o tutorial como concluído
+      setIsTargetReady(false);
+      setTutorialCompleted(true);
     } else {
-      // Vai para o próximo passo normalmente
-      setTimeout(() => {
-        goToNextStep(); // Vai para o próximo passo
-        setIsTargetReady(false); // Reinicia o estado do alvo
-      }, 300); // Pequeno atraso para garantir a transição suave
+      goToNextStep();
+      setIsTargetReady(false);
+      retries = 0; // Reseta o número de tentativas para o próximo passo
+      checkAndSetTarget(); // Verifica o alvo do próximo passo
     }
   };
 

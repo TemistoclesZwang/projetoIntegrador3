@@ -30,6 +30,7 @@ import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateCont
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
 import { StatusTag } from "../../../hooks/TableValues/useStatusTag";
+import { useTutorial } from "../../../context/TutorialPopover";
 
 interface Vaga {
   vagaId: number;
@@ -67,10 +68,42 @@ export function TableValues({
   const recordsPerPage = 10;
   const { isAutoUpdateEnabled } = useAutoUpdate();
   const theme = useTheme();
+  const { addSteps } = useTutorial();
+  const [stepsAdded, setStepsAdded] = useState(false);
+
+  useEffect(() => {
+    if (!stepsAdded) {
+      addSteps([
+        {
+          elementId: "timeIcon",
+          message: "Este ícone mostra o tempo da vaga.",
+          order: 3,
+        },
+        {
+          elementId: "checkIcon",
+          message: "Clique aqui para confirmar a vaga.",
+          order: 4,
+        },
+        {
+          elementId: "addIcon",
+          message: "Adicione novas vagas aqui.",
+          order: 5,
+        },
+        {
+          elementId: "infoIcon",
+          message: "Veja mais informações sobre a vaga.",
+          order: 6,
+        },
+      ]);
+      setStepsAdded(true);
+    }
+  }, [addSteps, stepsAdded]);
 
   const sortByIncident = () => {
-    setSortedRecords((prevRecords) => 
-      [...prevRecords].sort((a, b) => (b.incidente ? 1 : 0) - (a.incidente ? 1 : 0))
+    setSortedRecords((prevRecords) =>
+      [...prevRecords].sort(
+        (a, b) => (b.incidente ? 1 : 0) - (a.incidente ? 1 : 0)
+      )
     );
   };
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -303,7 +336,7 @@ export function TableValues({
     ));
   };
 
-  const atualizarInfosVagaLiberada = (updatedVaga: any) => {
+  const atualizarInfosVagaLiberada = (updatedVaga: Vaga) => {
     setSortedRecords((records) =>
       records.map((vaga) =>
         vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga
@@ -323,7 +356,6 @@ export function TableValues({
     setSortedRecords(results);
   };
 
- 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
       <Table variant="striped" colorScheme="gray">
@@ -333,7 +365,12 @@ export function TableValues({
             {isMarkingIncident && <Th>Selecionar</Th>}
             {generateTableHeaders(thTitles)}
             <Th textAlign="right">
-              <Button onClick={sortByIncident} bg={"black"} color={'white'} size="sm">
+              <Button
+                onClick={sortByIncident}
+                bg={"black"}
+                color={"white"}
+                size="sm"
+              >
                 Organizar por Incidente
               </Button>
             </Th>
@@ -346,8 +383,8 @@ export function TableValues({
                 <Td>
                   <Checkbox
                     ml={"2rem"}
-                    borderColor={'black'}
-                    bgColor={'white'}
+                    borderColor={"black"}
+                    bgColor={"white"}
                     isChecked={selectedIncidents.includes(record.vagaId)}
                     onChange={() => handleCheckboxChange(record.vagaId)}
                   />
@@ -357,7 +394,10 @@ export function TableValues({
                 if (key === "status" || key === "pagamento") {
                   return (
                     <Td key={idx}>
-                      <StatusTag value={value as string} column={key as "status" | "pagamento"} />
+                      <StatusTag
+                        value={value as string}
+                        column={key as "status" | "pagamento"}
+                      />
                     </Td>
                   );
                 } else if (key !== "vagaId" && key !== "incidente") {
@@ -371,24 +411,42 @@ export function TableValues({
               <Td>
                 <Flex alignItems="center" justifyContent="center">
                   {record.incidente && <WarningIcon color="red.500" ml={-4} />}
+
+                  {/* Ícone para mostrar o tempo da vaga */}
                   <TableIcons
+                    id="timeIcon" /* Adicionado o id aqui */
                     iconName={"time"}
                     vagaId={record.vagaId}
-                    onUpdate={atualizarInfosVagaLiberada}
+                    onUpdate={() => atualizarInfosVagaLiberada(record)}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
+
+                  {/* Ícone para confirmar a vaga */}
                   <TableIcons
+                    id="checkIcon" /* Adicionado o id aqui */
                     iconName={"check"}
                     vagaId={record.vagaId}
                     onUpdate={() => refreshRecords()}
                     isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
+
+                  {/* Ícone para adicionar vagas */}
                   <TableIcons
+                    id="addIcon" /* Adicionado o id aqui */
                     iconName={"add"}
                     vagaId={record.vagaId}
-                    onUpdate={atualizarInfosVagaLiberada}
+                    onUpdate={() => atualizarInfosVagaLiberada(record)}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
                   />
-                  <TableIcons iconName={"info"} />
+
+                  {/* Ícone para mais informações */}
+                  <TableIcons
+                    id="infoIcon" // Adicionado o id aqui
+                    iconName={"info"}
+                    vagaId={record.vagaId}
+                    onUpdate={() => console.log("Informações sobre a vaga")}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
                 </Flex>
               </Td>
             </Tr>
