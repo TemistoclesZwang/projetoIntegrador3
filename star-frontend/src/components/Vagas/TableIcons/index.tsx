@@ -50,6 +50,10 @@ export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled,id 
         icon={getIconComponent(iconName)}
         ref={targetRef}
         onClick={handleClick}
+        backgroundColor={"black"}
+        color={"white"}
+        margin={0.5}
+        _hover={{ backgroundColor: "gray.500" }}
       />
       {isTargetReady && (
         <Popover isOpen={isOpen} onClose={onClose} placement="bottom" closeOnBlur={false}>
