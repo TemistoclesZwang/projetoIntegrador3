@@ -25,10 +25,14 @@ ChartJS.register(
   Legend
 );
 
-export function PlacasMaisUsadas({ endpoint }: { endpoint: string }) {
+interface PlacasMaisUsadasProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void;
+}
+
+export function PlacasMaisUsadas({ endpoint, onDataUpdate }: PlacasMaisUsadasProps) {
   const [placas, setPlacas] = useState<Record<string, number>>({});
 
-  // Modificação aqui para usar o useGetCharts
   useGetCharts({
     getEndpoint: endpoint,
     setEndpoint: (dados: Vaga[]) => {
@@ -37,10 +41,10 @@ export function PlacasMaisUsadas({ endpoint }: { endpoint: string }) {
         return acc;
       }, {} as Record<string, number>);
       setPlacas(contadorPlacas);
-    }
+      onDataUpdate(contadorPlacas); // Atualiza o pai com os dados
+    },
   });
 
-  // Preparing the data for the chart
   const labels = Object.keys(placas);
   const dataValues = Object.values(placas);
 
@@ -59,6 +63,9 @@ export function PlacasMaisUsadas({ endpoint }: { endpoint: string }) {
 
   const options = {
     responsive: true,
+    animation: {
+      duration: 100, // Controla a duração da animação
+    },
     plugins: {
       legend: {
         display: true,
@@ -70,7 +77,6 @@ export function PlacasMaisUsadas({ endpoint }: { endpoint: string }) {
     },
     scales: {
       y: {
-        // beginAtZero: false,
         min: 2,
       },
     },

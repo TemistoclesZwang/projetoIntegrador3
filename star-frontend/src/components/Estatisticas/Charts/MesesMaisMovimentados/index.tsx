@@ -26,13 +26,16 @@ ChartJS.register(
   Filler
 );
 
-export function MesesMaisMovimentados({ endpoint }: { endpoint: string }) {
+interface MesesMaisMovimentadosProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void;
+}
+
+export function MesesMaisMovimentados({ endpoint, onDataUpdate }: MesesMaisMovimentadosProps) {
   const [vagas, setVagas] = useState([]);
 
-  // Use o hook para buscar os dados
   useGetCharts({ getEndpoint: endpoint, setEndpoint: setVagas });
 
-  // Calculating entries by month
   const countEntriesByMonth = (vagas: any[]) => {
     const monthCounts = new Array(12).fill(0);
     vagas.forEach((vaga) => {
@@ -42,7 +45,7 @@ export function MesesMaisMovimentados({ endpoint }: { endpoint: string }) {
     return monthCounts;
   };
 
-  // Data for the chart
+  const dataEntries = countEntriesByMonth(vagas);
   const data = {
     labels: [
       "Janeiro",
@@ -61,7 +64,7 @@ export function MesesMaisMovimentados({ endpoint }: { endpoint: string }) {
     datasets: [
       {
         label: "Entradas por Mês",
-        data: countEntriesByMonth(vagas),
+        data: dataEntries,
         borderColor: "rgb(75, 192, 192)",
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         fill: true,
@@ -70,15 +73,26 @@ export function MesesMaisMovimentados({ endpoint }: { endpoint: string }) {
     ],
   };
 
-  // Options for the chart
+  // Atualiza os dados no componente pai
+  React.useEffect(() => {
+    const formattedData = data.labels.reduce((acc, label, index) => {
+      acc[label] = dataEntries[index];
+      return acc;
+    }, {} as Record<string, number>);
+    onDataUpdate(formattedData);
+  }, [dataEntries]);
+
   const options = {
     responsive: true,
+    animation: {
+      duration: 100, // Controla a duração da animação
+    },
     plugins: {
       legend: {
         display: true,
       },
       tooltip: {
-        mode: "index" as const, // Ensuring 'index' is treated as a literal type
+        mode: "index" as const,
         intersect: false,
       },
     },
