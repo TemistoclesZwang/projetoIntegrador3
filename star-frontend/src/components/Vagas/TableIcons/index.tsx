@@ -62,18 +62,24 @@ export function TableIcons({
   return (
     <>
       <IconButton
-        isLoading={isProcessing} // Mostra o estado de carregamento
-        isRound={true}
-        variant="solid"
-        bg={"black"}
-        color={"white"}
-        aria-label="Ação"
-        fontSize="sm"
-        size="sm"
-        ml={1}
-        icon={iconMapping[iconName]} // Ícone correto com base em `iconName`
-        onClick={handleClick} // Ação com base no ícone (abre o diálogo ou executa a ação)
-      />
+        isLoading={isProcessing}
+        icon={iconMapping[iconName]} // Ícone correto baseado no nome
+        onClick={handleClick}
+        variant="outline" // Define o estilo como outline
+        backgroundColor="gray.200" // Cor de fundo padrão
+        size="sm" // Tamanho pequeno
+        borderColor="gray.500" // Cor da borda
+        color="gray.700" // Cor do ícone e do texto
+        _hover={{
+          bg: "transparent", // No hover, mantém o fundo transparente
+          borderColor: "gray.700", // A borda fica mais escura
+          color: "gray.700", // O ícone/texto ficam mais escuros
+        }}
+        _active={{
+          bg: "transparent", // No clique, mantém o fundo transparente
+          borderColor: "gray.800", // A borda fica mais escura no clique
+          color: "gray.800", // O ícone/texto ficam ainda mais escuros
+        }} aria-label={""}      />
       {iconName === "check" && (
         <PaymentDialog
           isOpen={isPaymentDialogOpen}

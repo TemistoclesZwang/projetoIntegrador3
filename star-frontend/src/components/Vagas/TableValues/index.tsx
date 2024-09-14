@@ -69,8 +69,10 @@ export function TableValues({
   const theme = useTheme();
 
   const sortByIncident = () => {
-    setSortedRecords((prevRecords) => 
-      [...prevRecords].sort((a, b) => (b.incidente ? 1 : 0) - (a.incidente ? 1 : 0))
+    setSortedRecords((prevRecords) =>
+      [...prevRecords].sort(
+        (a, b) => (b.incidente ? 1 : 0) - (a.incidente ? 1 : 0)
+      )
     );
   };
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
@@ -323,7 +325,6 @@ export function TableValues({
     setSortedRecords(results);
   };
 
- 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
       <Table variant="striped" colorScheme="gray">
@@ -333,7 +334,16 @@ export function TableValues({
             {isMarkingIncident && <Th>Selecionar</Th>}
             {generateTableHeaders(thTitles)}
             <Th textAlign="right">
-              <Button onClick={sortByIncident} bg={"black"} color={'white'} size="sm">
+              <Button
+                onClick={sortByIncident}
+                variant="outline" // Estilo outline por padrão
+                backgroundColor="gray.200" // Cor do texto igual aos títulos da tabela
+                size="sm" // Tamanho pequeno
+                borderColor="gray.500" // Cor da borda semelhante aos títulos
+                color="gray.700" // Cor do texto igual aos títulos da tabela
+                _hover={{ bg: "transparent", borderColor: "gray.700" }} // Hover: mantém o estilo outline e muda apenas a borda
+                _active={{ bg: "transparent", borderColor: "gray.800" }} // Active: mantém o estilo outline e muda a borda
+              >
                 Organizar por Incidente
               </Button>
             </Th>
@@ -346,8 +356,8 @@ export function TableValues({
                 <Td>
                   <Checkbox
                     ml={"2rem"}
-                    borderColor={'black'}
-                    bgColor={'white'}
+                    borderColor={"black"}
+                    bgColor={"white"}
                     isChecked={selectedIncidents.includes(record.vagaId)}
                     onChange={() => handleCheckboxChange(record.vagaId)}
                   />
@@ -357,7 +367,10 @@ export function TableValues({
                 if (key === "status" || key === "pagamento") {
                   return (
                     <Td key={idx}>
-                      <StatusTag value={value as string} column={key as "status" | "pagamento"} />
+                      <StatusTag
+                        value={value as string}
+                        column={key as "status" | "pagamento"}
+                      />
                     </Td>
                   );
                 } else if (key !== "vagaId" && key !== "incidente") {
