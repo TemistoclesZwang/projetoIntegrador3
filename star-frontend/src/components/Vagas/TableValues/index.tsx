@@ -341,7 +341,7 @@ export function TableValues({
                 size="sm" // Tamanho pequeno
                 borderColor="gray.500" // Cor da borda semelhante aos títulos
                 color="gray.700" // Cor do texto igual aos títulos da tabela
-                _hover={{ bg: "transparent", borderColor: "gray.700" }} // Hover: mantém o estilo outline e muda apenas a borda
+                _hover={{ bg: "gray.400", borderColor: "gray.700" }} // Hover: mantém o estilo outline e muda apenas a borda
                 _active={{ bg: "transparent", borderColor: "gray.800" }} // Active: mantém o estilo outline e muda a borda
               >
                 Organizar por Incidente
