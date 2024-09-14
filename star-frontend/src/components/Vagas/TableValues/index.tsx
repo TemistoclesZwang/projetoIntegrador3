@@ -13,6 +13,8 @@ import {
   Flex,
   Text,
   Checkbox,
+  Button,
+  useTheme,
 } from "@chakra-ui/react";
 import {
   TriangleDownIcon,
@@ -27,6 +29,7 @@ import { useSortByValor } from "../../../hooks/TableValues/useSortByValor";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
+import { StatusTag } from "../../../hooks/TableValues/useStatusTag";
 
 interface Vaga {
   vagaId: number;
@@ -63,7 +66,13 @@ export function TableValues({
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const { isAutoUpdateEnabled } = useAutoUpdate();
+  const theme = useTheme();
 
+  const sortByIncident = () => {
+    setSortedRecords((prevRecords) => 
+      [...prevRecords].sort((a, b) => (b.incidente ? 1 : 0) - (a.incidente ? 1 : 0))
+    );
+  };
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
   const [sortOrderDuration, setSortOrderDuration] = useState<
     "asc" | "desc" | ""
@@ -314,15 +323,20 @@ export function TableValues({
     setSortedRecords(results);
   };
 
+ 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>
-      <Flex w={"100%"} justifyContent={"end"} p={6} mb={-59}></Flex>
       <Table variant="striped" colorScheme="gray">
         <TableCaption>Registro de Estacionamento</TableCaption>
         <Thead>
           <Tr>
             {isMarkingIncident && <Th>Selecionar</Th>}
             {generateTableHeaders(thTitles)}
+            <Th textAlign="right">
+              <Button onClick={sortByIncident} bg={"black"} color={'white'} size="sm">
+                Organizar por Incidente
+              </Button>
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -331,19 +345,22 @@ export function TableValues({
               {isMarkingIncident && (
                 <Td>
                   <Checkbox
-                  ml={"2rem"}
-                  // borderWidth={1}
-                  // borderRadius={'md'}
-                  borderColor={'black'}
-                  bgColor={'white'}
-                  
+                    ml={"2rem"}
+                    borderColor={'black'}
+                    bgColor={'white'}
                     isChecked={selectedIncidents.includes(record.vagaId)}
                     onChange={() => handleCheckboxChange(record.vagaId)}
                   />
                 </Td>
               )}
               {Object.entries(record).map(([key, value], idx) => {
-                if (key !== "vagaId" && key !== "incidente") {
+                if (key === "status" || key === "pagamento") {
+                  return (
+                    <Td key={idx}>
+                      <StatusTag value={value as string} column={key as "status" | "pagamento"} />
+                    </Td>
+                  );
+                } else if (key !== "vagaId" && key !== "incidente") {
                   if (key === "entrada" || key === "saida") {
                     return <Td key={idx}>{formatDate(value)}</Td>;
                   }
@@ -352,34 +369,28 @@ export function TableValues({
                 return null;
               })}
               <Td>
-                
-                  <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    
-                  >
-                    {record.incidente && <WarningIcon color="red.500" ml={-4}/>}
-                    <TableIcons
-                      iconName={"time"}
-                      vagaId={record.vagaId}
-                      onUpdate={atualizarInfosVagaLiberada}
-                      isAutoUpdateEnabled={isAutoUpdateEnabled}
-                    />
-                    <TableIcons
-                      iconName={"add"}
-                      vagaId={record.vagaId}
-                      onUpdate={() => refreshRecords()}
-                      isAutoUpdateEnabled={isAutoUpdateEnabled}
-                    />
-                    <TableIcons
-                      iconName={"check"}
-                      vagaId={record.vagaId}
-                      onUpdate={atualizarInfosVagaLiberada}
-                    />
-                    <TableIcons iconName={"info"} />
-                  </Flex>
-                </Td>
-            
+                <Flex alignItems="center" justifyContent="center">
+                  {record.incidente && <WarningIcon color="red.500" ml={-4} />}
+                  <TableIcons
+                    iconName={"time"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
+                  <TableIcons
+                    iconName={"check"}
+                    vagaId={record.vagaId}
+                    onUpdate={() => refreshRecords()}
+                    isAutoUpdateEnabled={isAutoUpdateEnabled}
+                  />
+                  <TableIcons
+                    iconName={"add"}
+                    vagaId={record.vagaId}
+                    onUpdate={atualizarInfosVagaLiberada}
+                  />
+                  <TableIcons iconName={"info"} />
+                </Flex>
+              </Td>
             </Tr>
           ))}
         </Tbody>

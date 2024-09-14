@@ -26,14 +26,17 @@ ChartJS.register(
   Legend
 );
 
-export function ValorPorMes({ endpoint }: { endpoint: string }) {
-  // Adição de tipagem específica para o estado dos dados
+
+interface ValorPorMesProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void;
+}
+
+export function ValorPorMes({ endpoint, onDataUpdate }: ValorPorMesProps) {
   const [dados, setDados] = React.useState<Vaga[]>([]);
 
-  // Use o hook para buscar os dados
   useGetCharts({ getEndpoint: endpoint, setEndpoint: setDados });
 
-  // Calculating total value earned each month
   const valorPorMes = (dados: Vaga[]) => {
     const valoresMes = new Array(12).fill(0);
     dados.forEach((vaga) => {
@@ -43,7 +46,6 @@ export function ValorPorMes({ endpoint }: { endpoint: string }) {
     return valoresMes;
   };
 
-  // Prepare data for the chart
   const dadosMeses = valorPorMes(dados);
   const data = {
     labels: [
@@ -71,26 +73,28 @@ export function ValorPorMes({ endpoint }: { endpoint: string }) {
     ],
   };
 
-  // Options for the chart
+  // Atualiza os dados do gráfico
+  React.useEffect(() => {
+    const formattedData = data.labels.reduce((acc, label, index) => {
+      acc[label] = dadosMeses[index];
+      return acc;
+    }, {} as Record<string, number>);
+    onDataUpdate(formattedData);
+  }, [dadosMeses]);
+
   const options = {
     responsive: true,
+    animation: {
+      duration: 200, // Controla a duração da animação
+    },
     plugins: {
-      legend: {
-        display: true,
-      },
-      tooltip: {
-        mode: 'index' as const,
-        intersect: false,
-      },
+      legend: { display: true },
+      tooltip: { mode: "index" as const, intersect: false },
     },
     scales: {
-      y: {
-        // beginAtZero: false,
-        min: 2,
-      },
+      y: { min: 2 },
     },
   };
-  
 
   return (
     <div style={{ width: "95%", height: "300px" }}>

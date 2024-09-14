@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { IconButton } from "@chakra-ui/react";
+import { IconButton, useTheme } from "@chakra-ui/react";
 import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
@@ -9,6 +9,7 @@ interface TableIconsProps {
   vagaId?: number;
   onUpdate?: (updatedVaga: any) => void;
   isAutoUpdateEnabled?: boolean; // Adicione esta linha
+  id?:string;
 }
 
 const iconMapping = {
@@ -17,7 +18,8 @@ const iconMapping = {
   check: <CheckIcon />,
   info: <InfoIcon />,
 };
-export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: TableIconsProps) {
+export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled,id }: TableIconsProps) {
+  const theme = useTheme();
   const { handleAction, isProcessing } = useIconClick(iconName, vagaId, onUpdate);
 
   useEffect(() => {
@@ -37,7 +39,9 @@ export function TableIcons({ iconName, vagaId, onUpdate, isAutoUpdateEnabled }: 
       isLoading={isProcessing}
       isRound={true}
       variant="solid"
-      colorScheme="teal"
+      // colorScheme="teal"
+      bg={"black"}
+      color={"white"}
       aria-label="Ação"
       fontSize="sm"
       size="sm"

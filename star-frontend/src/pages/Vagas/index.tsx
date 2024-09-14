@@ -23,6 +23,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
 import { useEndpoint } from "../../hooks/api/useEndpoint";
 import { TiInfo } from "react-icons/ti";
+import { TutorialProvider, useTutorial } from "../../context/TutorialPopover";
+import { TutorialPopover } from "../../components/Vagas/Tutorial";
 
 export function Vagas() {
   const theme = useTheme();
@@ -31,6 +33,26 @@ export function Vagas() {
   const [isMarkingIncident, setIsMarkingIncident] = useState(false);
   const [selectedIncidents, setSelectedIncidents] = useState<number[]>([]);
   const [refreshTable, setRefreshTable] = useState(false);
+  const { addSteps } = useTutorial();
+  const [stepsAdded, setStepsAdded] = useState(false);
+
+  useEffect(() => {
+    if (!stepsAdded) { // Adiciona os passos apenas uma vez
+      addSteps([
+        {
+          elementId: "btnCriarVaga",
+          message: "Clique aqui para criar uma nova vaga.",
+          order: 1,
+        },
+        {
+          elementId: "btnCriarIncidente",
+          message: "Marque um incidente clicando aqui.",
+          order: 2,
+        },
+      ]);
+      setStepsAdded(true); // Marca que os passos foram adicionados
+    }
+  }, [addSteps, stepsAdded]);
 
   // Configure o hook useEndpoint
   const { data, error, isLoading, sendRequest } = useEndpoint<
@@ -84,6 +106,8 @@ export function Vagas() {
         pb={"1rem"}
       >
         <Box>{/* <SearchPlate /> */}</Box>
+        <TutorialPopover />
+
         <Box>
           <Tooltip
             hasArrow
@@ -93,6 +117,7 @@ export function Vagas() {
             placement="bottom"
           >
             <Button
+              id="btnCriarVaga"
               bg={theme.colors.highlights[50]}
               color={"black"}
               onClick={onOpen}
@@ -126,7 +151,7 @@ export function Vagas() {
             </DrawerHeader>
 
             <DrawerBody>
-              <Stack spacing="24px" color={"gray.300"}>
+              <Stack spacing="24px" color={"gray.100"}>
                 <TableInput />
               </Stack>
             </DrawerBody>
@@ -170,6 +195,7 @@ export function Vagas() {
             placement="bottom"
           >
             <Button
+              id="btnCriarIncidente"
               size={"md"}
               bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
               color={"black"}
@@ -194,12 +220,7 @@ export function Vagas() {
         </Box>
       </Flex>
 
-      <Box
-        pr={3}
-        pl={3}
-        overflowY="auto"
-        bgColor={"blackAlpha.900"}
-      >
+      <Box pr={3} pl={3} overflowY="auto" bgColor={"blackAlpha.900"}>
         <Box minH="60vh">
           <TableValues
             isMarkingIncident={isMarkingIncident}

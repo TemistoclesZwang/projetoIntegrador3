@@ -14,9 +14,11 @@ import {
   VStack,
   useTheme,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import usePost from "../../hooks/LoginPage/index";
 import parking from "../../assets/HomePage/parking2.jpg";
+import { IoSparklesSharp } from "react-icons/io5";
 
 export function LoginPage() {
   const theme = useTheme();
@@ -93,10 +95,19 @@ export function LoginPage() {
           width={{ base: "90%", md: "50%", lg: "30%" }}
           p={{ base: 5, md: 10 }}
           borderRadius="lg"
-          bgColor="blackAlpha.900"
+          bgColor="blackAlpha.700"
         >
-          <Heading as="h1" color={theme.colors.highlights[80]} size="lg">
-            Login
+          <Heading as="h1" color={theme.colors.highlights[100]} size="lg">
+          <Flex>
+          <IoSparklesSharp color={"#98FB98"} fontSize={40} />
+            <Text
+              textStyle={"linkSize"}
+              fontSize={theme.textStyles.linkSize}
+              ml={2}
+            >
+              Star
+            </Text>
+            </Flex>
           </Heading>
           <FormControl id="email">
             <FormLabel color={"white"}>Email</FormLabel>
@@ -116,6 +127,9 @@ export function LoginPage() {
               bgColor={"white"}
             />
           </FormControl>
+          <Link color={theme.colors.highlights[100]}>
+            <LinkRouter to="/register">Esqueci minha senha</LinkRouter>
+          </Link>
           <VStack spacing="35px" width="100%">
             <Button
               bg={theme.colors.highlights[100]}
@@ -126,7 +140,7 @@ export function LoginPage() {
             >
               Sign in
             </Button>
-            <Link color={theme.colors.highlights[80]}>
+            <Link color={theme.colors.highlights[100]}>
               <LinkRouter to="/register">Create an account</LinkRouter>
             </Link>
           </VStack>

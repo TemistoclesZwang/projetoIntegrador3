@@ -13,10 +13,12 @@ import { Estatisticas } from "./pages/Estatisticas";
 import { AuthProvider } from "./context/Auth";
 import { AutoUpdateProvider } from "./context/AutoUpdateContext/AutoUpdateContext";
 import { VagasProvider } from "./context/TableValues/VagasContext";
+import { TutorialProvider } from "./context/TutorialPopover";
 
 function App() {
   return (
     <>
+    <TutorialProvider>
       <VagasProvider>
 
       <AutoUpdateProvider>
@@ -30,6 +32,7 @@ function App() {
       </AuthProvider>
       </AutoUpdateProvider>
       </VagasProvider>
+      </TutorialProvider>
 
     </>
   );

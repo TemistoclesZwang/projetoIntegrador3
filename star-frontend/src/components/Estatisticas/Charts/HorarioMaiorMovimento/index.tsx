@@ -26,7 +26,12 @@ ChartJS.register(
   Legend
 );
 
-export function HorariosDeMovimento({ endpoint }: { endpoint: string }) {
+interface HorariosDeMovimentoProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void;
+}
+
+export function HorariosDeMovimento({ endpoint, onDataUpdate }: HorariosDeMovimentoProps) {
   const [movimentosPorHora, setMovimentosPorHora] = useState<Record<string, number>>({});
 
   useGetCharts({
@@ -42,7 +47,8 @@ export function HorariosDeMovimento({ endpoint }: { endpoint: string }) {
       });
 
       setMovimentosPorHora(contadorHoras);
-    }
+      onDataUpdate(contadorHoras); // Atualiza o pai com os dados
+    },
   });
 
   const labels = Object.keys(movimentosPorHora).map(Number).sort((a, b) => a - b).map(String);
@@ -63,6 +69,9 @@ export function HorariosDeMovimento({ endpoint }: { endpoint: string }) {
 
   const options = {
     responsive: true,
+    animation: {
+      duration: 100, // Reduzindo a duração da animação
+    },
     plugins: {
       legend: {
         display: false,
@@ -88,6 +97,7 @@ export function HorariosDeMovimento({ endpoint }: { endpoint: string }) {
       },
     },
   };
+  
 
   return (
     <div style={{ width: "95%", height: "300px" }}>

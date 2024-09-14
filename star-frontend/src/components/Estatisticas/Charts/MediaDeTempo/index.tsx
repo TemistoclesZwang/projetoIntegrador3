@@ -26,7 +26,12 @@ ChartJS.register(
   Legend
 );
 
-export function MediaTempoVaga({ endpoint }: { endpoint: string }) {
+interface MediaTempoVagaProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void;
+}
+
+export function MediaTempoVaga({ endpoint, onDataUpdate }: MediaTempoVagaProps) {
   const [mediaPorVaga, setMediaPorVaga] = useState<Record<string, number>>({});
 
   useGetCharts({
@@ -45,14 +50,15 @@ export function MediaTempoVaga({ endpoint }: { endpoint: string }) {
         return acc;
       }, {} as Record<string, number>);
       setMediaPorVaga(medias);
-    }
+      onDataUpdate(medias); // Atualiza o pai com os dados
+    },
   });
 
   const labels = Object.keys(mediaPorVaga);
   const dataValues = Object.values(mediaPorVaga);
 
   const data = {
-    labels: labels,
+    labels,
     datasets: [
       {
         label: 'Média de Tempo por Vaga (minutos)',
@@ -65,11 +71,14 @@ export function MediaTempoVaga({ endpoint }: { endpoint: string }) {
   };
 
   const options = {
-    indexAxis: 'y' as const,  // Orient the chart to have the Y axis as the category axis
+    indexAxis: 'y' as const,
     responsive: true,
+    animation: {
+      duration: 200, // Controla a duração da animação
+    },
     plugins: {
       legend: {
-        display: false,  // Optionally hide the legend if it's not necessary
+        display: false,
       },
       tooltip: {
         mode: 'index' as const,
@@ -78,7 +87,7 @@ export function MediaTempoVaga({ endpoint }: { endpoint: string }) {
     },
     scales: {
       x: {
-        min: 0,  // Ensures the scale starts from zero
+        min: 0,
         title: {
           display: true,
           text: 'Duração Média (minutos)',

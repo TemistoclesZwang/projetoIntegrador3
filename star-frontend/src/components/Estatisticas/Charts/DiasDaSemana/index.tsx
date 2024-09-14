@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { useGetCharts } from "../../../../hooks/api/useGetCharts";
+import {useChartAnimationOptions} from "../../../../components/Estatisticas/Charts/Animations";
+
 
 interface VagaData {
   entrada: string;
@@ -25,7 +27,15 @@ ChartJS.register(
   Legend
 );
 
-export function DiasDaSemanaMaisUsados({ endpoint }: { endpoint: string }) {
+interface DiasDaSemanaMaisUsadosProps {
+  endpoint: string;
+  onDataUpdate: (data: Record<string, number>) => void; // Nova prop
+}
+
+export function DiasDaSemanaMaisUsados({
+  endpoint,
+  onDataUpdate, // Recebe a nova prop
+}: DiasDaSemanaMaisUsadosProps) {
   const [contagemDias, setContagemDias] = useState<Record<string, number>>({});
 
   useGetCharts({
@@ -37,6 +47,7 @@ export function DiasDaSemanaMaisUsados({ endpoint }: { endpoint: string }) {
         contadorDias[dia] = (contadorDias[dia] || 0) + 1;
       });
       setContagemDias(contadorDias);
+      onDataUpdate(contadorDias); // Atualiza o pai com os dados
     }
   });
 
@@ -58,6 +69,9 @@ export function DiasDaSemanaMaisUsados({ endpoint }: { endpoint: string }) {
 
   const options = {
     responsive: true,
+    animation: {
+      duration: 200, // Controla a duração da animação
+    },
     plugins: {
       legend: {
         display: false,

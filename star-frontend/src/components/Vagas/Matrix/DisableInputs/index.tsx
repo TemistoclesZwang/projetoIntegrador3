@@ -1,4 +1,11 @@
-import { FormControl, FormLabel, Switch, Input, Flex, Text } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormLabel,
+  Switch,
+  Input,
+  Flex,
+  Text,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useMatrix } from "../../../../context/Matrix/MatrixContext";
 
@@ -27,40 +34,44 @@ export function DisableInput() {
       }
     };
   return (
-    <Flex flexDirection={'row'} alignItems={'center'}>
+    <Flex flexDirection={"row"} alignItems={"center"}>
       <FormControl mb="4">
         <FormLabel htmlFor="input-disabled">
-        <Text fontSize="sm">Desabilitar inputs</Text>
-
+          <Text fontSize="sm">Desabilitar inputs</Text>
         </FormLabel>
         <Switch
           id="input-disabled"
           onChange={() => setInputDisabled(!inputDisabled)}
         />
       </FormControl>
-      <Flex mb={'1.5rem'}>
-      <Text fontSize="sm" >X</Text>
-      <Input
-        type="number"
-        value={sizeX}
-        onChange={handleSizeChange("x")}
-        placeholder="Enter X-axis size"
-        w={'3rem'}
-        mr="2"
-        isDisabled={inputDisabled}
-        min={1}
-      />
-      <Text fontSize="sm">Y</Text>
-      <Input
-        type="number"
-        value={sizeY}
-        onChange={handleSizeChange("y")}
-        placeholder="Enter Y-axis size"
-        w="3rem"
-        isDisabled={inputDisabled}
-        min={1}
-      />
-</Flex>
+      <Flex mb={"1.5rem"} mr={"1rem"}>
+        <Flex mr="1rem" align={'center'} >
+        <Text fontSize="sm" mr="1rem">X</Text>
+        <Input
+          type="number"
+          value={sizeX}
+          onChange={handleSizeChange("x")}
+          placeholder="Enter X-axis size"
+          w={"3rem"}
+          mr="2"
+          isDisabled={inputDisabled}
+          min={1}
+        />
+        </Flex>
+        <Flex mr="2" align={'center'}>
+
+        <Text fontSize="sm" mr="1rem">Y</Text>
+        <Input
+          type="number"
+          value={sizeY}
+          onChange={handleSizeChange("y")}
+          placeholder="Enter Y-axis size"
+          w="3rem"
+          isDisabled={inputDisabled}
+          min={1}
+        />
+        </Flex>
+      </Flex>
     </Flex>
   );
 }
