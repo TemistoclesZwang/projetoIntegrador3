@@ -62,6 +62,7 @@ export function TableIcons({
   return (
     <>
       <IconButton
+      ml={1}
         isLoading={isProcessing}
         icon={iconMapping[iconName]} // Ícone correto baseado no nome
         onClick={handleClick}
@@ -78,7 +79,7 @@ export function TableIcons({
         _active={{
           bg: "transparent", // No clique, mantém o fundo transparente
           borderColor: "gray.800", // A borda fica mais escura no clique
-          color: "gray.800", // O ícone/texto ficam ainda mais escuros
+          color: "gray.00", // O ícone/texto ficam ainda mais escuros
         }} aria-label={""}      />
       {iconName === "check" && (
         <PaymentDialog
