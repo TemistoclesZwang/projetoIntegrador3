@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useAuth } from "../../context/Auth";
 import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
+import { Alert, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, Button } from "@chakra-ui/react";
 
 type IconType = "time" | "add" | "check" | "info";
 
@@ -12,6 +13,8 @@ export function useIconClick(
   const [isProcessing, setIsProcessing] = useState(false);
   const { accessToken } = useAuth();
   const { isAutoUpdateEnabled } = useAutoUpdate();
+  const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"dinheiro" | "pix" | null>(null);
 
   async function updatedThisFields(
     response: Response,
@@ -32,10 +35,40 @@ export function useIconClick(
     }
   }
 
+  const handlePaymentDecision = async () => {
+    if (selectedPaymentMethod === "pix") {
+      // Gerar QR Code
+      console.log("Gerando QR Code...");
+      // Lógica para gerar e exibir QR Code
+    } else {
+      // Fazer a requisição normal se for dinheiro
+      let response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      if (response && response.ok) {
+        const updatedVaga = await response.json();
+        onUpdate?.(updatedVaga);
+      } else {
+        throw new Error("Falha ao processar ação");
+      }
+    }
+    setPaymentDialogOpen(false);  // Fechar o diálogo de pagamento após a escolha
+    setSelectedPaymentMethod(null); // Resetar a seleção de pagamento
+  };
+
   const handleAction = useCallback(async () => {
     if (!vagaId) {
       console.error("vagaId está indefinido");
       return;
+    }
+
+    if (iconName === "check") {
+      setPaymentDialogOpen(true); // Abrir o diálogo de pagamento
+      return; // Pausar a ação principal até que o pagamento seja escolhido
     }
 
     setIsProcessing(true);
@@ -60,21 +93,6 @@ export function useIconClick(
           await updatedThisFields(response, vagaId, camposMapeamentoEmail);
           break;
         case "add":
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${accessToken}`
-            }
-          });
-          if (response && response.ok) {
-            const updatedVaga = await response.json();
-            onUpdate?.(updatedVaga);
-          } else {
-            throw new Error("Falha ao processar ação");
-          }
-          break;
-        case "check":
           response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
             method: "POST",
             headers: {
@@ -114,5 +132,5 @@ export function useIconClick(
     }
   }, [iconName, vagaId, onUpdate, accessToken, isAutoUpdateEnabled]);
 
-  return { handleAction, isProcessing };
+  return { handleAction, isProcessing, isPaymentDialogOpen, setSelectedPaymentMethod, handlePaymentDecision };
 }
