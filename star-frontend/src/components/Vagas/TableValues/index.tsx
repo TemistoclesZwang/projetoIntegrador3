@@ -400,6 +400,7 @@ export function TableValues({
                     iconName={"add"}
                     vagaId={record.vagaId}
                     onUpdate={atualizarInfosVagaLiberada}
+                    duracao={record.duracao}
                   />
                   <TableIcons iconName={"info"} />
                 </Flex>

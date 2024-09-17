@@ -8,6 +8,7 @@ import { useState } from "react";
 interface TableIconsProps {
   iconName: "time" | "add" | "check" | "info";
   vagaId?: number;
+  duracao?: number; // Valor da duração da vaga
   onUpdate?: (updatedVaga: any) => void;
   isAutoUpdateEnabled?: boolean;
 }
@@ -22,6 +23,7 @@ const iconMapping = {
 export function TableIcons({
   iconName,
   vagaId,
+  duracao, // Valor da duração da vaga
   onUpdate,
   isAutoUpdateEnabled,
 }: TableIconsProps) {
@@ -90,6 +92,7 @@ export function TableIcons({
         <UpdateVagaDuration
           vagaId={vagaId}
           triggerUpdate={triggerUpdate} // Passa o triggerUpdate para disparar a atualização
+          initialDuration={duracao} // Passa a duração atual da vaga
           onSuccess={() => {
             console.log("Duração da vaga atualizada com sucesso!");
             setTriggerUpdate(false); // Reseta o triggerUpdate após a atualização
