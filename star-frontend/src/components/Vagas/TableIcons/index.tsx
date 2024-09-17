@@ -1,4 +1,4 @@
-import { IconButton, useTheme } from "@chakra-ui/react";
+import { IconButton, useTheme, useToast } from "@chakra-ui/react";
 import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { PaymentDialog } from "../../Vagas/PaymentDialog";
@@ -23,11 +23,12 @@ const iconMapping = {
 export function TableIcons({
   iconName,
   vagaId,
-  duracao, // Valor da duração da vaga
+  duracao,
   onUpdate,
   isAutoUpdateEnabled,
 }: TableIconsProps) {
   const theme = useTheme();
+  const toast = useToast(); // Inicializa o hook para o toast
   const { handleAction, isProcessing, handlePaymentDecision } = useIconClick(
     iconName,
     vagaId,
@@ -52,14 +53,42 @@ export function TableIcons({
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (iconName === "add" && vagaId) {
       console.log("ID da vaga:", vagaId);
       setTriggerUpdate(true); // Dispara a atualização quando o ícone de "add" é clicado
     } else if (iconName === "check") {
       setPaymentDialogOpen(true);
     } else {
-      handleAction();
+      try {
+        await handleAction(); // Executa a ação
+        // Dispara o toast ao completar a ação com sucesso
+        toast({
+          title: "Sucesso",
+          description: getDescription(iconName), // Chama a função para obter a descrição
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } catch (error) {
+        console.error("Erro ao processar a ação:", error);
+      }
+    }
+  };
+
+  // Função para definir a descrição dinâmica para cada ícone
+  const getDescription = (iconName: "time" | "add" | "check" | "info") => {
+    switch (iconName) {
+      case "time":
+        return "A duração foi calculada com sucesso.";
+      case "add":
+        return "A duração foi atualizada com sucesso.";
+      case "check":
+        return "O pagamento foi confirmado com sucesso.";
+      case "info":
+        return "As informações da vaga foram obtidas com sucesso.";
+      default:
+        return "";
     }
   };
 
@@ -92,7 +121,7 @@ export function TableIcons({
         <UpdateVagaDuration
           vagaId={vagaId}
           triggerUpdate={triggerUpdate} // Passa o triggerUpdate para disparar a atualização
-          initialDuration={duracao} // Passa a duração atual da vaga
+          initialDuration={duracao} // Passa a duração atual
           onSuccess={() => {
             console.log("Duração da vaga atualizada com sucesso!");
             setTriggerUpdate(false); // Reseta o triggerUpdate após a atualização

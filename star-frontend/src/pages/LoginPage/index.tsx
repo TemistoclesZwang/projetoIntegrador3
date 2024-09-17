@@ -40,7 +40,7 @@ export function LoginPage() {
         title: "Failed to log in",
         description: error,
         status: "error",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
     } else if (result && result.access_token) {
@@ -50,7 +50,7 @@ export function LoginPage() {
         title: "Login Successful",
         description: "You have successfully logged in.",
         status: "success",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
       navigate("/vagas");
