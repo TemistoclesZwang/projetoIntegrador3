@@ -1,18 +1,19 @@
-import { useState } from "react";
 import { IconButton, useTheme } from "@chakra-ui/react";
-import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons"; // Importando os ícones
+import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { PaymentDialog } from "../../Vagas/PaymentDialog";
+import { UpdateVagaDuration } from "../UpdateVagaDuration";
+import { useState } from "react";
 
 interface TableIconsProps {
-  iconName: "time" | "add" | "check" | "info"; // Tipos permitidos para ícones
+  iconName: "time" | "add" | "check" | "info";
   vagaId?: number;
   onUpdate?: (updatedVaga: any) => void;
   isAutoUpdateEnabled?: boolean;
 }
 
 const iconMapping = {
-  time: <TimeIcon />, // Mapeamento do ícone correto
+  time: <TimeIcon />,
   add: <AddIcon />,
   check: <CheckIcon />,
   info: <InfoIcon />,
@@ -31,30 +32,31 @@ export function TableIcons({
     onUpdate
   );
 
-  const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false); // Adicionando o estado correto para o diálogo
-  const [isQrCodeVisible, setQrCodeVisible] = useState(false); // Controle para exibir o QR Code
+  const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [isQrCodeVisible, setQrCodeVisible] = useState(false);
+  const [triggerUpdate, setTriggerUpdate] = useState(false); // Controla o triggerUpdate para o UpdateVagaDuration
 
-  // Função que controla o fechamento do diálogo
   const handleCloseDialog = () => {
-    setPaymentDialogOpen(false); // Fechar o diálogo de pagamento
-    setQrCodeVisible(false); // Resetar o QR Code
+    setPaymentDialogOpen(false);
+    setQrCodeVisible(false);
   };
 
   const handleConfirmPayment = (method: "dinheiro" | "pix") => {
     if (method === "pix") {
-      setQrCodeVisible(true); // Mostra o QR Code quando PIX for selecionado
+      setQrCodeVisible(true);
     } else {
-      handlePaymentDecision(); // Processa o pagamento via dinheiro
-      setPaymentDialogOpen(false); // Fecha o diálogo após a confirmação do pagamento
+      handlePaymentDecision();
+      setPaymentDialogOpen(false);
     }
   };
 
   const handleClick = () => {
-    if (iconName === "check") {
-      // Se for o botão de check, abre o diálogo de pagamento
+    if (iconName === "add" && vagaId) {
+      console.log("ID da vaga:", vagaId);
+      setTriggerUpdate(true); // Dispara a atualização quando o ícone de "add" é clicado
+    } else if (iconName === "check") {
       setPaymentDialogOpen(true);
     } else {
-      // Caso contrário, executa a ação normal do ícone
       handleAction();
     }
   };
@@ -64,31 +66,44 @@ export function TableIcons({
       <IconButton
         ml={1}
         isLoading={isProcessing}
-        icon={iconMapping[iconName]} // Ícone correto baseado no nome
+        icon={iconMapping[iconName]}
         onClick={handleClick}
-        variant="outline" // Define o estilo como outline
-        backgroundColor="white" // Cor de fundo padrão
-        size="sm" // Tamanho pequeno
-        borderColor="gray.500" // Cor da borda
-        color="gray.700" // Cor do ícone e do texto
+        variant="outline"
+        backgroundColor="white"
+        size="sm"
+        borderColor="gray.500"
+        color="gray.700"
         _hover={{
-          bg: "gray.400", // No hover, mantém o fundo transparente
-          borderColor: "gray.700", // A borda fica mais escura
-          color: "gray.700", // O ícone/texto ficam mais escuros
+          bg: "gray.400",
+          borderColor: "gray.700",
+          color: "gray.700",
         }}
         _active={{
-          bg: "gray.400", // No clique, mantém o fundo transparente
-          borderColor: "gray.800", // A borda fica mais escura no clique
-          color: "gray.800", // O ícone/texto ficam ainda mais escuros
+          bg: "gray.400",
+          borderColor: "gray.800",
+          color: "gray.800",
         }}
         aria-label={""}
       />
+
+      {iconName === "add" && vagaId && (
+        <UpdateVagaDuration
+          vagaId={vagaId}
+          triggerUpdate={triggerUpdate} // Passa o triggerUpdate para disparar a atualização
+          onSuccess={() => {
+            console.log("Duração da vaga atualizada com sucesso!");
+            setTriggerUpdate(false); // Reseta o triggerUpdate após a atualização
+            onUpdate?.(vagaId);
+          }}
+        />
+      )}
+
       {iconName === "check" && (
         <PaymentDialog
           isOpen={isPaymentDialogOpen}
-          onClose={handleCloseDialog} // Função de fechamento
-          onConfirm={handleConfirmPayment} // Função de confirmação do pagamento
-          isQrCodeVisible={isQrCodeVisible} // Passa a visibilidade do QR Code
+          onClose={handleCloseDialog}
+          onConfirm={handleConfirmPayment}
+          isQrCodeVisible={isQrCodeVisible}
         />
       )}
     </>
