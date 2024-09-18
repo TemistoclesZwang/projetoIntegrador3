@@ -1,9 +1,10 @@
-import { IconButton, useTheme, useToast } from "@chakra-ui/react";
+import { IconButton, useTheme } from "@chakra-ui/react";
 import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { PaymentDialog } from "../../Vagas/PaymentDialog";
 import { UpdateVagaDuration } from "../UpdateVagaDuration";
 import { useState } from "react";
+import { CustomToast } from "../CustomToast"; // Importa o componente de Toast
 
 interface TableIconsProps {
   iconName: "time" | "add" | "check" | "info";
@@ -28,7 +29,6 @@ export function TableIcons({
   isAutoUpdateEnabled,
 }: TableIconsProps) {
   const theme = useTheme();
-  const toast = useToast(); // Inicializa o hook para o toast
   const { handleAction, isProcessing, handlePaymentDecision } = useIconClick(
     iconName,
     vagaId,
@@ -38,6 +38,7 @@ export function TableIcons({
   const [isPaymentDialogOpen, setPaymentDialogOpen] = useState(false);
   const [isQrCodeVisible, setQrCodeVisible] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false); // Controla o triggerUpdate para o UpdateVagaDuration
+  const [showToast, setShowToast] = useState(false); // Controla quando mostrar o toast
 
   const handleCloseDialog = () => {
     setPaymentDialogOpen(false);
@@ -62,14 +63,7 @@ export function TableIcons({
     } else {
       try {
         await handleAction(); // Executa a ação
-        // Dispara o toast ao completar a ação com sucesso
-        toast({
-          title: "Sucesso",
-          description: getDescription(iconName), // Chama a função para obter a descrição
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
+        setShowToast(true); // Dispara o toast
       } catch (error) {
         console.error("Erro ao processar a ação:", error);
       }
@@ -115,6 +109,14 @@ export function TableIcons({
           color: "gray.800",
         }}
         aria-label={""}
+      />
+
+      {/* Exibe o Toast usando o componente CustomToast */}
+      <CustomToast
+        title="Sucesso"
+        description={getDescription(iconName)} // Descrição dinâmica baseada no ícone
+        status="success"
+        trigger={showToast} // Controla quando o toast deve ser exibido
       />
 
       {iconName === "add" && vagaId && (

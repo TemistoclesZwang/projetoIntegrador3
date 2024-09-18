@@ -1,4 +1,4 @@
-import { Tag } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 
 interface StatusTagProps {
   value: string;
@@ -6,26 +6,30 @@ interface StatusTagProps {
 }
 
 export function StatusTag({ value, column }: StatusTagProps) {
-  let backgroundColor = "";
-  let textColor = "white"; // Cor do texto branco
+  let backgroundColor = ""; // Define a cor da bolinha
 
+  // Definindo a cor baseada no status e no pagamento
   if (column === "status") {
-    backgroundColor = value === "ocupado" ? "red.600" : "green.600"; // Cores mais saturadas
+    backgroundColor = value === "ocupado" ? "red.500" : "green.400"; // Vermelho para "ocupado", verde para outros status
   } else if (column === "pagamento") {
-    backgroundColor = value === "pendente" ? "orange.500" : "blue.500"; // Cores mais saturadas
+    backgroundColor = value === "pendente" ? "yellow.400" : "blue.400"; // Laranja para "pendente", azul para outros pagamentos
   }
 
   return (
-    <Tag
-      size="lg"
-      backgroundColor={backgroundColor}
-      color={textColor}
-      textAlign="center" // Centraliza o texto na tag
-      justifyContent="center" // Alinha o conteúdo no centro
-      display="flex" // Flexbox para ajudar no alinhamento central
-      alignItems="center" // Garante que o texto esteja centralizado verticalmente
-    >
-      {value}
-    </Tag>
+    <Flex alignItems="center">
+      {/* Bolinha colorida com borda preta */}
+      <Box
+        width="16px"
+        height="16px"
+        borderRadius="50%" // Torna o box circular
+        backgroundColor={backgroundColor} // Cor da bolinha inicial
+        border="3px solid black" // Borda preta ao redor da bolinha
+        mr={2} // Margem direita para separar a bolinha do texto
+      />
+      {/* Texto em preto e sem peso extra */}
+      <Text color="black">
+        {value}
+      </Text>
+    </Flex>
   );
 }
