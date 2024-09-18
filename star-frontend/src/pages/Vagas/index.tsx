@@ -37,6 +37,8 @@ export function Vagas() {
   const { addSteps } = useTutorial();
   const [stepsAdded, setStepsAdded] = useState(false);
   const [showOpenToast, setShowOpenToast] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
 
   useEffect(() => {
     if (!stepsAdded) {
@@ -71,7 +73,17 @@ export function Vagas() {
     },
     false
   );
-
+  useEffect(() => {
+    if (data) {
+      console.log("Incidentes atualizados com sucesso:", data);
+      setShowSuccessToast(true); // Exibir toast de sucesso
+      setRefreshTable(true); // Atualiza a tabela após o patch
+    }
+    if (error) {
+      console.error("Erro ao atualizar incidentes:", error);
+      setShowErrorToast(true); // Exibir toast de erro
+    }
+  }, [data, error]);
   const toggleMarkIncident = async () => {
     if (isMarkingIncident) {
       // Disparar o request usando o hook
@@ -202,28 +214,44 @@ export function Vagas() {
             color="black"
             placement="bottom"
           >
-            <Button
-              id="btnCriarIncidente"
-              size={"md"}
-              bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
-              color={"black"}
-              onClick={toggleMarkIncident}
-              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
-              w={"xsm"}
-              _hover={"black"}
-              justifyContent="center" // Centraliza o conteúdo dentro do botão
-            >
-              {/* Ícone à esquerda exibido apenas em telas maiores */}
-              <Box display={{ base: "none", md: "block" }}>
-                <TiInfo size={27} />
-              </Box>
-              <Box display={{ base: "block", md: "none" }}>
-                <TiInfo size={27} />
-              </Box>
-              <Box display={{ base: "none", md: "block" }}>
-                {isMarkingIncident ? "Concluir" : "Marcar incidente"}
-              </Box>
-            </Button>
+            <Box>
+              <Button
+                id="btnCriarIncidente"
+                size={"md"}
+                bg={isMarkingIncident ? "white" : theme.colors.highlights[50]}
+                color={"black"}
+                onClick={toggleMarkIncident}
+                _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+                w={"xsm"}
+                _hover={"black"}
+                justifyContent="center" // Centraliza o conteúdo dentro do botão
+              >
+                {/* Ícone à esquerda exibido apenas em telas maiores */}
+                <Box display={{ base: "none", md: "block" }}>
+                  <TiInfo size={27} />
+                </Box>
+                <Box display={{ base: "block", md: "none" }}>
+                  <TiInfo size={27} />
+                </Box>
+                <Box display={{ base: "none", md: "block" }}>
+                  {isMarkingIncident ? "Concluir" : "Marcar incidente"}
+                </Box>
+              </Button>
+
+              {/* Toast de sucesso e erro */}
+              <CustomToast
+                title="Sucesso"
+                description="Incidentes atualizados com sucesso!"
+                status="success"
+                trigger={showSuccessToast}
+              />
+              <CustomToast
+                title="Erro"
+                description="Erro ao atualizar incidentes."
+                status="error"
+                trigger={showErrorToast}
+              />
+            </Box>
           </Tooltip>
         </Box>
       </Flex>
