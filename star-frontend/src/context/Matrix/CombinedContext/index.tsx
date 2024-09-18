@@ -1,11 +1,12 @@
+// No componente BtnSendNewSpace
+import { AddIcon } from "@chakra-ui/icons";
+import { Button, Box, ButtonProps } from "@chakra-ui/react";
 import React from "react";
-import { Box, Button, ButtonProps } from "@chakra-ui/react";
+import { CustomToast } from "../../../components/Vagas/CustomToast";
+import { useVagas } from "../../../context/TableValues/VagasContext";
+import { useEndpoint } from "../../../hooks/api/useEndpoint";
 import { useTableInput } from "../../TableInput/TableInputContext";
 import { useOccupied } from "../OccupiedContext";
-import { useEndpoint } from "../../../hooks/api/useEndpoint";
-import { useVagas } from "../../../context/TableValues/VagasContext";
-import { CustomToast } from "../../../components/Vagas/CustomToast";
-import { AddIcon } from "@chakra-ui/icons";
 
 interface BtnSendNewSpaceProps extends ButtonProps {
   onClose: () => void; // Adicionando a prop onClose
@@ -16,7 +17,7 @@ export function BtnSendNewSpace(
 ) {
   const { name, plate, durationHours, durationMinutes } = useTableInput();
   const { occupied } = useOccupied();
-  const { refreshVagas } = useVagas();
+  const { refreshRecords } = useVagas(); // Substitua refreshVagas por refreshRecords
   const [showSuccessToast, setShowSuccessToast] = React.useState(false);
   const [showErrorToast, setShowErrorToast] = React.useState(false);
 
@@ -49,13 +50,13 @@ export function BtnSendNewSpace(
       setShowSuccessToast(true); // Ativa o toast de sucesso
       props.onClose(); // Fecha o modal
       setTimeout(() => {
-        refreshVagas();
+        refreshRecords(); // Use refreshRecords para atualizar os dados
       }, 1000);
     }
     if (error) {
       setShowErrorToast(true); // Ativa o toast de erro
     }
-  }, [data, error, refreshVagas, props]);
+  }, [data, error, refreshRecords, props]); // Certifique-se de que refreshRecords está sendo passado aqui
   const handleButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

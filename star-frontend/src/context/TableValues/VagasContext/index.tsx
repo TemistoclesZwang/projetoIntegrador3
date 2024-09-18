@@ -8,8 +8,7 @@ interface VagasContextType {
   error: Error | null;
   setSearchResults: (results: Vaga[] | null) => void;
   originalRecords: Vaga[] | null;
-  refreshRecords: () => void;
-  refreshVagas: () => void  // Alterar o nome para refreshRecords para consistência
+  refreshRecords: () => void;  // Alterar o nome para refreshRecords para consistência
 }
 
 export const VagasContext = createContext<VagasContextType>({
@@ -19,7 +18,6 @@ export const VagasContext = createContext<VagasContextType>({
   setSearchResults: () => {},
   originalRecords: [],
   refreshRecords: () => {},  // Alterar o nome para refreshRecords para consistência
-  refreshVagas: () => {},
 });
 
 export const useVagas = () => useContext(VagasContext);
