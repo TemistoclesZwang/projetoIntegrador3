@@ -25,6 +25,7 @@ import { useEndpoint } from "../../hooks/api/useEndpoint";
 import { TiInfo } from "react-icons/ti";
 import { TutorialProvider, useTutorial } from "../../context/TutorialPopover";
 import { TutorialPopover } from "../../components/Vagas/Tutorial";
+import { CustomToast } from "../../components/Vagas/CustomToast";
 
 export function Vagas() {
   const theme = useTheme();
@@ -35,9 +36,11 @@ export function Vagas() {
   const [refreshTable, setRefreshTable] = useState(false);
   const { addSteps } = useTutorial();
   const [stepsAdded, setStepsAdded] = useState(false);
+  const [showOpenToast, setShowOpenToast] = useState(false);
 
   useEffect(() => {
-    if (!stepsAdded) { // Adiciona os passos apenas uma vez
+    if (!stepsAdded) {
+      // Adiciona os passos apenas uma vez
       addSteps([
         {
           elementId: "btnCriarVaga",
@@ -116,25 +119,30 @@ export function Vagas() {
             color="black"
             placement="bottom"
           >
-            <Button
-              id="btnCriarVaga"
-              bg={theme.colors.highlights[50]}
-              color={"black"}
-              onClick={onOpen}
-              _active={{ bg: "gray.800", transform: "scale(0.95)" }}
-              w={"xsm"}
-              _hover={"black"}
-              justifyContent="center" // Centraliza o conteúdo dentro do botão
-            >
-              {/* Ícone à esquerda exibido apenas em telas maiores */}
-              <Box display={{ base: "none", md: "block" }}>
+            <>
+              <Button
+                id="btnCriarVaga"
+                bg={theme.colors.highlights[50]}
+                color={"black"}
+                onClick={() => {
+                  onOpen();
+                  setShowOpenToast(true); // Ativa o toast ao abrir o modal
+                }}
+                _active={{ bg: "gray.800", transform: "scale(0.95)" }}
+                w={"xsm"}
+                _hover={"black"}
+                justifyContent="center"
+              >
                 <AddIcon />
-              </Box>
-              <Box display={{ base: "block", md: "none" }}>
-                <AddIcon />
-              </Box>
-              <Box display={{ base: "none", md: "block" }}>Criar vaga</Box>
-            </Button>
+                <Box display={{ base: "none", md: "block" }}>Criar vaga</Box>
+              </Button>
+              <CustomToast
+                title="Criar Vaga"
+                description="Modal de criação de vaga aberto."
+                status="info"
+                trigger={showOpenToast}
+              />
+            </>
           </Tooltip>
         </Box>
         <Drawer

@@ -1,9 +1,11 @@
 import React from "react";
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Box, Button, ButtonProps } from "@chakra-ui/react";
 import { useTableInput } from "../../TableInput/TableInputContext";
 import { useOccupied } from "../OccupiedContext";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
 import { useVagas } from "../../../context/TableValues/VagasContext";
+import { CustomToast } from "../../../components/Vagas/CustomToast";
+import { AddIcon } from "@chakra-ui/icons";
 
 interface BtnSendNewSpaceProps extends ButtonProps {
   onClose: () => void; // Adicionando a prop onClose
@@ -15,6 +17,8 @@ export function BtnSendNewSpace(
   const { name, plate, durationHours, durationMinutes } = useTableInput();
   const { occupied } = useOccupied();
   const { refreshVagas } = useVagas();
+  const [showSuccessToast, setShowSuccessToast] = React.useState(false);
+  const [showErrorToast, setShowErrorToast] = React.useState(false);
 
   const { data, error, isLoading, sendRequest } = useEndpoint<
     { status: string },
@@ -42,17 +46,16 @@ export function BtnSendNewSpace(
 
   React.useEffect(() => {
     if (data) {
-      console.log("Resposta do servidor:", data);
-      props.onClose(); // Fechar o Drawer quando a resposta é recebida
+      setShowSuccessToast(true); // Ativa o toast de sucesso
+      props.onClose(); // Fecha o modal
       setTimeout(() => {
         refreshVagas();
-      }, 1000); // Espera 1 segundo antes de atualizar as vagas
+      }, 1000);
     }
     if (error) {
-      console.error("Erro ao enviar os dados:", error);
+      setShowErrorToast(true); // Ativa o toast de erro
     }
-  }, [data, error, refreshVagas, props]); // Adicionando props para evitar dependências incompletas
-
+  }, [data, error, refreshVagas, props]);
   const handleButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -71,8 +74,27 @@ export function BtnSendNewSpace(
   };
 
   return (
-    <Button {...props} onClick={handleButtonClick} isLoading={isLoading}>
-      {props.children}
-    </Button>
+    <>
+      <Button {...props} onClick={handleButtonClick} isLoading={isLoading}>
+        <>
+          <AddIcon />
+          <Box display={{ base: "none", md: "block" }}>Criar vaga</Box>
+        </>
+      </Button>
+
+      {/* Toasts para sucesso e erro */}
+      <CustomToast
+        title="Sucesso"
+        description="Vaga criada com sucesso!"
+        status="success"
+        trigger={showSuccessToast}
+      />
+      <CustomToast
+        title="Erro"
+        description="Erro ao criar a vaga."
+        status="error"
+        trigger={showErrorToast}
+      />
+    </>
   );
 }
