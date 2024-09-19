@@ -4,10 +4,23 @@ import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext
 
 type IconType = "time" | "add" | "check" | "info";
 
+interface Vaga {
+  vagaId: number;
+  duracao: number;
+  valor: number;
+  status: string;
+  placa: string;
+  nome: string;
+  pagamento: string;
+  entrada: string;
+  saida: string;
+  incidente?: boolean;
+}
+
 export function useIconClick(
   iconName: IconType,
   vagaId?: number,
-  onUpdate?: (updatedVaga: any) => void
+  onUpdate?: (updatedVaga: Vaga) => void
 ) {
   const [isProcessing, setIsProcessing] = useState(false);
   const { accessToken } = useAuth();
@@ -22,13 +35,15 @@ export function useIconClick(
   ) {
     if (response && response.ok) {
       const data = await response.json();
-      const dadosAtualizados: Record<string, any> = { vagaId };
+      const dadosAtualizados: Partial<Vaga> = { vagaId }; 
+
 
       Object.keys(camposMapeamento).forEach((chaveOriginal) => {
-        dadosAtualizados[camposMapeamento[chaveOriginal]] = data[chaveOriginal];
+        const campo = camposMapeamento[chaveOriginal];
+        dadosAtualizados[campo as keyof Vaga] = data[chaveOriginal];
       });
 
-      onUpdate?.(dadosAtualizados);
+      onUpdate?.(dadosAtualizados as Vaga);
     } else {
       throw new Error("Falha ao processar ação");
     }
@@ -85,12 +100,15 @@ export function useIconClick(
               }
             }
           );
+          {
           const camposMapeamentoEmail = {
             tempoTotalUsandoVaga: "duracao",
             valorPagar: "valor",
           };
+          
           await updatedThisFields(response, vagaId, camposMapeamentoEmail);
           break;
+        }
         case "add":
           response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
             method: "POST",

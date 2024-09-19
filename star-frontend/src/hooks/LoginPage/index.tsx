@@ -1,11 +1,16 @@
 // hooks/usePost.js
 import { useState } from "react";
+interface data {
+  email: string;
+  password: string;
+}
+
 
 function usePost() {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const postData = async (url: RequestInfo | URL, data: any) => {
+  const postData = async (url: RequestInfo | URL, data: data) => {
     setLoading(true);
     setError(null);
     try {

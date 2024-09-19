@@ -4,13 +4,14 @@ import { useIconClick } from "../../../hooks/TableIcons";
 import { PaymentDialog } from "../../Vagas/PaymentDialog";
 import { UpdateVagaDuration } from "../UpdateVagaDuration";
 import { useState } from "react";
-import { CustomToast } from "../CustomToast"; // Importa o componente de Toast
+import { CustomToast } from "../CustomToast";
+import { Vaga } from "../../../services/Interfaces/Vaga"; // Importando a interface correta
 
 interface TableIconsProps {
   iconName: "time" | "add" | "check" | "info";
   vagaId?: number;
   duracao?: number; // Valor da duração da vaga
-  onUpdate?: (updatedVaga: any) => void;
+  onUpdate?: (updatedVaga: Vaga) => void; // Substituímos o any por Vaga
   isAutoUpdateEnabled?: boolean;
 }
 
@@ -68,7 +69,6 @@ export function TableIcons({
     }
   };
 
-  // Função para definir a descrição dinâmica para cada ícone
   const getDescription = (iconName: "time" | "add" | "check" | "info") => {
     switch (iconName) {
       case "time":
@@ -109,23 +109,37 @@ export function TableIcons({
         aria-label={""}
       />
 
-      {/* Exibe o Toast usando o componente CustomToast */}
       <CustomToast
         title="Sucesso"
-        description={getDescription(iconName)} // Descrição dinâmica baseada no ícone
+        description={getDescription(iconName)}
         status="success"
-        trigger={showToast} // Controla quando o toast deve ser exibido
+        trigger={showToast}
       />
 
       {iconName === "add" && vagaId && (
         <UpdateVagaDuration
           vagaId={vagaId}
-          triggerUpdate={triggerUpdate} // Passa o triggerUpdate para disparar a atualização
-          initialDuration={duracao} // Passa a duração atual
+          triggerUpdate={triggerUpdate}
+          initialDuration={duracao}
           onSuccess={() => {
             console.log("Duração da vaga atualizada com sucesso!");
-            setTriggerUpdate(false); // Reseta o triggerUpdate após a atualização
-            onUpdate?.(vagaId);
+            setTriggerUpdate(false);
+
+            if (onUpdate) {
+              onUpdate({
+                vagaId,
+                duracao: duracao ?? 0,
+                status: "",
+                placa: "",
+                nome: "",
+                pagamento: "",
+                entrada: "",
+                saida: "",
+                valor: "",
+                vaga: "",
+                incidente: false, // Adicionando a propriedade incidente
+              });
+            }
           }}
         />
       )}

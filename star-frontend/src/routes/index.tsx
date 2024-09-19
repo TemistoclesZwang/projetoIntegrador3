@@ -6,7 +6,7 @@ import { HomePage } from "../pages/HomePage";
 import { Vagas } from "../pages/Vagas";
 import { LoginPage } from "../pages/LoginPage";
 import { Register } from "../components/Login/register";
-import { Estatisticas } from "../pages/Estatisticas";
+// import { Estatisticas } from "../pages/Estatisticas";
 import { useAuth } from "../context/Auth";
 
 const ProtectedRoute = ({ children }:{children:React.ReactNode}) => {
@@ -33,7 +33,7 @@ export const MyRouter = (
       <Route path="/vagas/*" element={<ProtectedRoute><Vagas /></ProtectedRoute>} />
       <Route path="/login/*" element={<LoginPage />} />
       <Route path="/register/*" element={<Register />} />
-      <Route path="/estatisticas/*" element={<ProtectedRoute><Estatisticas /></ProtectedRoute>} />
+      {/* <Route path="/estatisticas/*" element={<ProtectedRoute><Estatisticas /></ProtectedRoute>} /> */}
       
       {/* <Route path="/about/*" element={<ProtectedRoute element={<About />} />} /> */}
       {/* <Route path="*" element={<NotFound />} /> */}

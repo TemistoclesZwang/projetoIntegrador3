@@ -73,13 +73,10 @@ export function TableValues({
       )
     );
   };
+  
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
-  const [sortOrderDuration, setSortOrderDuration] = useState<
-    "asc" | "desc" | ""
-  >("");
-  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
-    ""
-  );
+  const [sortOrderDuration, setSortOrderDuration] = useState<"asc" | "desc" | "">("");
+  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
 
@@ -88,16 +85,10 @@ export function TableValues({
       setSortedRecords(event.detail);
     };
 
-    window.addEventListener(
-      "searchResults",
-      handleSearchResults as EventListener
-    );
+    window.addEventListener("searchResults", handleSearchResults as EventListener);
 
     return () => {
-      window.removeEventListener(
-        "searchResults",
-        handleSearchResults as EventListener
-      );
+      window.removeEventListener("searchResults", handleSearchResults as EventListener);
     };
   }, []);
 
@@ -303,7 +294,7 @@ export function TableValues({
     ));
   };
 
-  const atualizarInfosVagaLiberada = (updatedVaga: any) => {
+  const atualizarInfosVagaLiberada = (updatedVaga: Vaga) => {
     setSortedRecords((records) =>
       records.map((vaga) =>
         vaga.vagaId === updatedVaga.vagaId ? { ...vaga, ...updatedVaga } : vaga

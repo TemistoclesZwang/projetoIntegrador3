@@ -11,7 +11,7 @@ interface UsePostResponse<T> {
   data: T | null;
   error: Error | null;
   isLoading: boolean;
-  sendRequest: () => void;  // Adicionado para permitir disparo manual
+  sendRequest: () => void;
 }
 
 export function useEndpoint<T, U>({ url, method, body }: RequestOptions<U>, autoFetch: boolean = true): UsePostResponse<T> {
@@ -37,7 +37,6 @@ export function useEndpoint<T, U>({ url, method, body }: RequestOptions<U>, auto
         body: JSON.stringify(body),
       });
 
-
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
@@ -55,7 +54,6 @@ export function useEndpoint<T, U>({ url, method, body }: RequestOptions<U>, auto
     fetchData();
   }, [fetchData]);
 
-  // Executar automaticamente se autoFetch for true
   useEffect(() => {
     if (autoFetch) {
       fetchData();

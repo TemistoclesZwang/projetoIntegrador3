@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 interface SortableItem {
   nome: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const useSortByName = <T extends SortableItem>() => {
