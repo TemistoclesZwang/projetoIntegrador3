@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../../../context/Auth/index";
 
 interface RequestOptions {

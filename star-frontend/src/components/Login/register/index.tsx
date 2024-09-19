@@ -8,7 +8,6 @@ import {
   FormLabel,
   Input,
   Text,
-  Image,
   Menu,
   MenuButton,
   MenuList,

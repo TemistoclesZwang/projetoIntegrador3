@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { useAuth } from "../../context/Auth";
 import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
-import { Alert, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, Button } from "@chakra-ui/react";
 
 type IconType = "time" | "add" | "check" | "info";
 
@@ -42,7 +41,7 @@ export function useIconClick(
       // Lógica para gerar e exibir QR Code
     } else {
       // Fazer a requisição normal se for dinheiro
-      let response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

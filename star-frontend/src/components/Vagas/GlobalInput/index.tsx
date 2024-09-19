@@ -1,23 +1,14 @@
-import { AddIcon, InfoIcon } from "@chakra-ui/icons";
 import {
-  Button,
   Flex,
-  IconButton,
-  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Select,
-  Stack,
-  Switch,
   Text,
-  useTheme,
 } from "@chakra-ui/react";
 
 export function GlobalInput() {
-  const theme = useTheme();
 
   return (
     <Flex justifyContent={'space-between'}>

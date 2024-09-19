@@ -1,4 +1,4 @@
-import { IconButton, useTheme } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { TimeIcon, AddIcon, CheckIcon, InfoIcon } from "@chakra-ui/icons";
 import { useIconClick } from "../../../hooks/TableIcons";
 import { PaymentDialog } from "../../Vagas/PaymentDialog";
@@ -26,9 +26,7 @@ export function TableIcons({
   vagaId,
   duracao,
   onUpdate,
-  isAutoUpdateEnabled,
 }: TableIconsProps) {
-  const theme = useTheme();
   const { handleAction, isProcessing, handlePaymentDecision } = useIconClick(
     iconName,
     vagaId,

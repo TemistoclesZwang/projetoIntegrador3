@@ -2,24 +2,16 @@ import { useState, useEffect } from "react";
 import {
   Button,
   Flex,
-  FormControl,
-  FormLabel,
-  List,
-  ListItem,
-  Stack,
-  Switch,
 } from "@chakra-ui/react";
 import { useMatrix } from "../../../context/Matrix/MatrixContext";
 import { useOccupied } from "../../../context/Matrix/OccupiedContext";
-import { LastOccupiedButton } from "./LastOccupiedButton";
-import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 
 export function Matrix() {
-  const { sizeX, setSizeX, sizeY, setSizeY } = useMatrix();
+  const { sizeX, sizeY } = useMatrix();
   const [buttons, setButtons] = useState<JSX.Element[]>([]);
   const { occupied, setOccupied } = useOccupied();
-  const [free, setFree] = useState<string[]>([]);
-  const [highlighted, setHighlighted] = useState("");
+  const [_free, setFree] = useState<string[]>([]);
+  const [highlighted, _setHighlighted] = useState("");
 
   useEffect(() => {
     generateMatrix();

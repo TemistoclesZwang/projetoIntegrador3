@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 // Criação do contexto
 const AutoUpdateContext = createContext({
   isAutoUpdateEnabled: false,
-  toggleAutoUpdate: (checked: boolean) => {}
+  toggleAutoUpdate: (_checked: boolean) => {}
 });
 
 // Componente Provider

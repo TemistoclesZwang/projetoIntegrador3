@@ -14,7 +14,6 @@ import {
   Text,
   Checkbox,
   Button,
-  useTheme,
 } from "@chakra-ui/react";
 import {
   TriangleDownIcon,
@@ -66,7 +65,6 @@ export function TableValues({
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const { isAutoUpdateEnabled } = useAutoUpdate();
-  const theme = useTheme();
 
   const sortByIncident = () => {
     setSortedRecords((prevRecords) =>
@@ -321,9 +319,7 @@ export function TableValues({
   );
   const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
 
-  const handleSearchResults = (results: Vaga[]) => {
-    setSortedRecords(results);
-  };
+
 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>

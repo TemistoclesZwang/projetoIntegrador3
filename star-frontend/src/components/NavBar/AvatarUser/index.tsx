@@ -4,8 +4,6 @@ import {
   IconButton,
   WrapItem,
   Avatar,
-  Box,
-  Button,
   ButtonGroup,
   Popover,
   PopoverArrow,
@@ -15,13 +13,12 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-  Icon,
   FormControl,
   FormLabel,
   Stack,
   Switch,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import { IoLogOut } from "react-icons/io5";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";

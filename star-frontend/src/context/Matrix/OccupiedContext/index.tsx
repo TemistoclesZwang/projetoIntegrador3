@@ -26,7 +26,7 @@ interface VagaPositions {
 
 export const OccupiedProvider: React.FC<OccupiedProviderProps> = ({ children }) => {
   const [occupied, setOccupied] = useState<string[]>([]);
-  const { data: response, error, isLoading } = useGet<VagaPositions>({
+  const { data: response } = useGet<VagaPositions>({
     url: 'http://localhost:3000/vagas/todas-posicoes'
   });
 

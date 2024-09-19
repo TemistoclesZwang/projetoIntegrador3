@@ -2,10 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { ChakraProvider, Highlight, extendTheme } from "@chakra-ui/react";
-import { color } from "framer-motion";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AuthProvider } from "./context/Auth/index.tsx";
-import { DrawerVagas } from "./components/Vagas/DrawerVagas/index.tsx";
 
 const theme = extendTheme({
   fonts: {

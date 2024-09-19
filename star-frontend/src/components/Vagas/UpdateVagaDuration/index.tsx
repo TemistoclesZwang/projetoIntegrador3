@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useEndpoint } from "../../../hooks/api/useEndpoint";
 import {
   Modal,
@@ -28,7 +28,7 @@ export function UpdateVagaDuration({
 }: UpdateVagaDurationProps) {
   const [inputValue, setInputValue] = useState<number>(initialDuration); // Inicializa com a duração atual
 
-  const { sendRequest, isLoading, error } = useEndpoint<any, { field: string; value: number }>(
+  const { sendRequest, isLoading } = useEndpoint<any, { field: string; value: number }>(
     {
       url: `http://localhost:3000/vagas/atualiza-campo/${vagaId}`,
       method: "POST",

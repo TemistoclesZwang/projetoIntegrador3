@@ -1,23 +1,15 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
-  Button,
   Flex,
   Input,
-  Select,
-  Stack,
   Text,
-  useTheme,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  Badge,
-  Box,
 } from "@chakra-ui/react";
 import { DisableInput } from "../Matrix/DisableInputs";
 import { useTableInput } from "../../../context/TableInput/TableInputContext";
-import { BtnSendNewSpace } from "../../../context/Matrix/CombinedContext";
 // import { DrawerExample } from "../DrawerVagas";
 
 export function TableInput() {
@@ -33,8 +25,6 @@ export function TableInput() {
     // handleSubmitTableInputContext,
   } = useTableInput();
   // const theme = useTheme();
-  const now = new Date();
-  const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
 
   // function handleButtonClick(event: MouseEvent<HTMLButtonElement, MouseEvent>): void {
   //   throw new Error("Function not implemented.");

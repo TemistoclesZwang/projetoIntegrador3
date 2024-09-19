@@ -3,17 +3,13 @@ import { TiChartBarOutline, TiInfo, TiLocation } from "react-icons/ti";
 import { FaBars } from "react-icons/fa";
 import { Link as ReactRouterLink } from "react-router-dom";
 import {
-  Avatar,
-  Button,
   Link as ChakraLink,
   Icon,
   LinkProps,
   Stack,
   Tooltip,
-  WrapItem,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
@@ -27,7 +23,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useTheme } from "@chakra-ui/react";
-import { IoLogOut, IoSparklesSharp } from "react-icons/io5";
+import { IoSparklesSharp } from "react-icons/io5";
 import { AvatarUser } from "./AvatarUser";
 import { AllProviders } from "../../context/AllProviders";
 import { SearchInput } from "../Vagas/SearchInput";

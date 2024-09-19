@@ -1,4 +1,3 @@
-import { useContext, useEffect } from "react";
 import { useAuth } from "../../context/Auth";
 import { useState } from "react";
 import { Link as LinkRouter, useNavigate } from "react-router-dom";
@@ -25,10 +24,9 @@ export function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { postData, isLoading, error } = usePost();
+  const { postData, error } = usePost();
   const toast = useToast();
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
 
   const handleLogin = async () => {
     const url = "http://localhost:3000/auth/login";

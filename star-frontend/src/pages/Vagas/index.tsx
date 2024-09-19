@@ -23,7 +23,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BtnSendNewSpace } from "../../context/Matrix/CombinedContext";
 import { useEndpoint } from "../../hooks/api/useEndpoint";
 import { TiInfo } from "react-icons/ti";
-import { TutorialProvider, useTutorial } from "../../context/TutorialPopover";
+import { useTutorial } from "../../context/TutorialPopover";
 import { TutorialPopover } from "../../components/Vagas/Tutorial";
 import { CustomToast } from "../../components/Vagas/CustomToast";
 
@@ -60,7 +60,7 @@ export function Vagas() {
   }, [addSteps, stepsAdded]);
 
   // Configure o hook useEndpoint
-  const { data, error, isLoading, sendRequest } = useEndpoint<
+  const { data, error, sendRequest } = useEndpoint<
     { message: string },
     { vagas: { vagaId: number; incidente: boolean }[] }
   >(
