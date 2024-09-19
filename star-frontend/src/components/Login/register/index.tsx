@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import textureFloor from "/home/temistocles/IFPI/5periodo/projeto3/github/projetoIntegrador3/star-frontend/src/assets/textureFloor.jpg";
 import {
   Box,
   Button,
@@ -147,7 +146,7 @@ export function Register() {
       align="center"
       width="100vw"
       height="100vh"
-      background={(textureFloor)}
+      // background={(textureFloor)}
     >
       
       <Box width="500px" bgColor="gray.800" p="5rem" h="auto" borderRadius="xl">
