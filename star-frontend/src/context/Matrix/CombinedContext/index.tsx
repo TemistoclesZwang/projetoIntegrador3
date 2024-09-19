@@ -32,7 +32,7 @@ export function BtnSendNewSpace(
     }
   >(
     {
-      url: "http://localhost:3000/vagas/criar",
+      url: "https://apistar.onrender.com/vagas/criar",
       method: "POST",
       body: {
         placa: plate,

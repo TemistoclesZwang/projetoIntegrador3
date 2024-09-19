@@ -27,7 +27,7 @@ interface VagaPositions {
 export const OccupiedProvider: React.FC<OccupiedProviderProps> = ({ children }) => {
   const [occupied, setOccupied] = useState<string[]>([]);
   const { data: response } = useGet<VagaPositions>({
-    url: 'http://localhost:3000/vagas/todas-posicoes'
+    url: 'https://apistar.onrender.com/vagas/todas-posicoes'
   });
 
   useEffect(() => {

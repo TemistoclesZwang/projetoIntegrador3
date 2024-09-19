@@ -51,7 +51,7 @@ export function Register() {
     RegisterFormState
   >(
     {
-      url: "http://localhost:3000/cadastro/novo-usuario",
+      url: "https://apistar.onrender.com/cadastro/novo-usuario",
       method: "POST",
       body: formState,
     },

@@ -101,7 +101,7 @@ export function TableValues({
       const updates = await Promise.all(
         records.map(async (record) => {
           const response = await fetch(
-            `http://localhost:3000/vagas/previa-valor/${record.vagaId}`,
+            `https://apistar.onrender.com/vagas/previa-valor/${record.vagaId}`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -112,7 +112,7 @@ export function TableValues({
 
           const data = await response.json();
           const incidentResponse = await fetch(
-            `http://localhost:3000/vagas/${record.vagaId}`
+            `https://apistar.onrender.com/vagas/${record.vagaId}`
           );
           const incidentData = await incidentResponse.json();
 

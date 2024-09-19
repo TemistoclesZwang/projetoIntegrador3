@@ -29,7 +29,7 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const url = "http://localhost:3000/auth/login";
+    const url = "https://apistar.onrender.com/auth/login";
     const data = { email, password };
     const result = await postData(url, data);
 

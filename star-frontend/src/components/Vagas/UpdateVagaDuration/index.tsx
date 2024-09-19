@@ -46,7 +46,7 @@ export function UpdateVagaDuration({
   // Usando Vaga como tipo de resposta e { field: string; value: number } como tipo de body
   const { sendRequest, isLoading } = useEndpoint<Vaga, { field: string; value: number }>(
     {
-      url: `http://localhost:3000/vagas/atualiza-campo/${vagaId}`,
+      url: `https://apistar.onrender.com/vagas/atualiza-campo/${vagaId}`,
       method: "POST",
       body: { field: "duracao", value: inputValue },
     },

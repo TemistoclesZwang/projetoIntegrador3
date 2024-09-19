@@ -24,7 +24,7 @@ export const useVagas = () => useContext(VagasContext);
 
 export const VagasProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { data: originalRecords, error, isLoading, refetch } = useGet<Vaga[]>({
-    url: "http://localhost:3000/vagas",
+    url: "https://apistar.onrender.com/vagas",
   });
   const [allRecords, setAllRecords] = useState<Vaga[]>([]);
 

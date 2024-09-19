@@ -44,7 +44,7 @@ export function useIconClick(
       // Lógica para gerar e exibir QR Code
     } else {
       // Fazer a requisição normal se for dinheiro
-      const response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+      const response = await fetch(`https://apistar.onrender.com/vagas/${vagaId}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export function useIconClick(
       switch (iconName) {
         case "time":
           response = await fetch(
-            `http://localhost:3000/vagas/previa-valor/${vagaId}`,
+            `https://apistar.onrender.com/vagas/previa-valor/${vagaId}`,
             {
               method: "GET",
               headers: {
@@ -98,7 +98,7 @@ export function useIconClick(
           break;
         }
         case "add":
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}`, {
+          response = await fetch(`https://apistar.onrender.com/vagas/${vagaId}`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export function useIconClick(
           }
           break;
         case "info":
-          response = await fetch(`http://localhost:3000/vagas/${vagaId}/info`, {
+          response = await fetch(`https://apistar.onrender.com/vagas/${vagaId}/info`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',

@@ -65,7 +65,7 @@ export function Vagas() {
     { vagas: { vagaId: number; incidente: boolean }[] }
   >(
     {
-      url: "http://localhost:3000/vagas/incidentes/update-multi-fields",
+      url: "https://apistar.onrender.com/vagas/incidentes/update-multi-fields",
       method: "PATCH",
       body: {
         vagas: selectedIncidents.map((vagaId) => ({ vagaId, incidente: true })),
