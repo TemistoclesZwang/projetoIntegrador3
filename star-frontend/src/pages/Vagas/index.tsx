@@ -142,7 +142,7 @@ export function Vagas() {
                 }}
                 _active={{ bg: "gray.800", transform: "scale(0.95)" }}
                 w={"xsm"}
-                _hover={"black"}
+                // _hover={"black"}
                 justifyContent="center"
               >
                 <AddIcon />
@@ -223,7 +223,7 @@ export function Vagas() {
                 onClick={toggleMarkIncident}
                 _active={{ bg: "gray.800", transform: "scale(0.95)" }}
                 w={"xsm"}
-                _hover={"black"}
+                // _hover={"black"}
                 justifyContent="center" // Centraliza o conteúdo dentro do botão
               >
                 {/* Ícone à esquerda exibido apenas em telas maiores */}

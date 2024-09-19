@@ -1,5 +1,4 @@
 // AutoUpdateToggle.tsx
-import React from 'react';
 import { Switch, FormControl, FormLabel, Stack } from '@chakra-ui/react';
 import { useAutoUpdate } from '../../../context/AutoUpdateContext/AutoUpdateContext';
 
