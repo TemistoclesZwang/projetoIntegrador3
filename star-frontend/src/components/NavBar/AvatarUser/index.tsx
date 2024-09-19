@@ -18,7 +18,6 @@ import {
   Stack,
   Switch,
 } from "@chakra-ui/react";
-import React from "react";
 import { IoLogOut } from "react-icons/io5";
 import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateContext";
 import { useAuth } from "../../../context/Auth";

@@ -29,20 +29,8 @@ import { useAutoUpdate } from "../../../context/AutoUpdateContext/AutoUpdateCont
 import { useAuth } from "../../../context/Auth";
 import { Pagination } from "../../../hooks/TableValues/usePagination";
 import { StatusTag } from "../../../hooks/TableValues/useStatusTag";
+import { Vaga } from "../../../services/Interfaces/Vaga";
 
-interface Vaga {
-  vagaId: number;
-  status: string;
-  placa: string;
-  nome: string;
-  pagamento: string;
-  duracao: number;
-  entrada: string;
-  saida: string;
-  valor: string;
-  vaga: string;
-  incidente?: boolean;
-}
 
 interface TableValuesProps {
   isMarkingIncident: boolean;
@@ -73,10 +61,14 @@ export function TableValues({
       )
     );
   };
-  
+
   const { sortedByName, sortOrderName } = useSortByName<Vaga>();
-  const [sortOrderDuration, setSortOrderDuration] = useState<"asc" | "desc" | "">("");
-  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">("");
+  const [sortOrderDuration, setSortOrderDuration] = useState<
+    "asc" | "desc" | ""
+  >("");
+  const [sortOrderEntrada, setSortOrderEntrada] = useState<"asc" | "desc" | "">(
+    ""
+  );
   const { sortByValor, sortOrderValor } = useSortByValor<Vaga>();
   const { sortByPagamento, sortOrderPagamento } = useSortByPagamento<Vaga>();
 
@@ -85,10 +77,16 @@ export function TableValues({
       setSortedRecords(event.detail);
     };
 
-    window.addEventListener("searchResults", handleSearchResults as EventListener);
+    window.addEventListener(
+      "searchResults",
+      handleSearchResults as EventListener
+    );
 
     return () => {
-      window.removeEventListener("searchResults", handleSearchResults as EventListener);
+      window.removeEventListener(
+        "searchResults",
+        handleSearchResults as EventListener
+      );
     };
   }, []);
 
@@ -309,8 +307,6 @@ export function TableValues({
     indexOfLastRecord
   );
   const totalPages = Math.ceil(sortedRecords.length / recordsPerPage);
-
-
 
   return (
     <TableContainer backgroundColor={"gray.300"} borderRadius={"md"}>

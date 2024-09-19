@@ -1,11 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-interface SortableItem {
-  nome: string;
-  [key: string]: unknown;
-}
-
-export const useSortByName = <T extends SortableItem>() => {
+export const useSortByName = <T extends { nome: string }>() => {
   const [sortOrderName, setSortOrderName] = useState<"asc" | "desc" | "">("");
 
   const sortByName = (items: T[]): T[] => {

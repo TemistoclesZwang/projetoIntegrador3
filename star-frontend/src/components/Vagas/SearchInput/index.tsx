@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Input, Flex, Button, InputGroup, InputRightElement } from "@chakra-ui/react";
 import { useVagas } from "../../../context/TableValues/VagasContext";
 import { Search2Icon } from "@chakra-ui/icons";

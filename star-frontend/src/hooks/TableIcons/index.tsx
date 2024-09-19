@@ -1,21 +1,9 @@
 import { useCallback, useState } from "react";
 import { useAuth } from "../../context/Auth";
 import { useAutoUpdate } from "../../context/AutoUpdateContext/AutoUpdateContext";
+import { Vaga } from "../../services/Interfaces/Vaga";
 
 type IconType = "time" | "add" | "check" | "info";
-
-interface Vaga {
-  vagaId: number;
-  duracao: number;
-  valor: number;
-  status: string;
-  placa: string;
-  nome: string;
-  pagamento: string;
-  entrada: string;
-  saida: string;
-  incidente?: boolean;
-}
 
 export function useIconClick(
   iconName: IconType,

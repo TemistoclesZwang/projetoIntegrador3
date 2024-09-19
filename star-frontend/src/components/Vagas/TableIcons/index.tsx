@@ -5,13 +5,14 @@ import { PaymentDialog } from "../../Vagas/PaymentDialog";
 import { UpdateVagaDuration } from "../UpdateVagaDuration";
 import { useState } from "react";
 import { CustomToast } from "../CustomToast";
-import { Vaga } from "../../../services/Interfaces/Vaga"; // Importando a interface correta
+import { Vaga } from "../../../services/Interfaces/Vaga";
+
 
 interface TableIconsProps {
   iconName: "time" | "add" | "check" | "info";
   vagaId?: number;
   duracao?: number; // Valor da duração da vaga
-  onUpdate?: (updatedVaga: Vaga) => void; // Substituímos o any por Vaga
+  onUpdate?: (updatedVaga: Vaga) => void;
   isAutoUpdateEnabled?: boolean;
 }
 
@@ -136,8 +137,8 @@ export function TableIcons({
                 entrada: "",
                 saida: "",
                 valor: "",
-                vaga: "",
-                incidente: false, // Adicionando a propriedade incidente
+                vaga: "",  // Propriedade vaga está sendo preenchida corretamente
+                incidente: false,
               });
             }
           }}
