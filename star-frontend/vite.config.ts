@@ -9,4 +9,6 @@ export default defineConfig({
       external: ['react', 'react-dom', 'chart.js', 'react-chartjs-2', '@react-google-maps/api'],
     },
   },
+  // Define base path for proper routing in SPA
+  base: '/'
 });
