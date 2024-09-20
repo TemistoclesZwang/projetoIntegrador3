@@ -10,5 +10,5 @@ export default defineConfig({
     },
   },
   // Define base path for proper routing in SPA
-  base: '/'
+  base: '/login'
 });
